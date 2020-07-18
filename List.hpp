@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/18 04:40:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/18 09:36:18 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,39 @@
 
 namespace ft
 {
-	/* ********************************************* */
-	/* references:                                   */
-	/* https://www.cplusplus.com/reference/list/list */
-	/* ********************************************* */
+	/* ********************************************************************** */
+	/* references:                                                            */
+	/* https://www.cplusplus.com/reference/list/list                          */
+	/* ********************************************************************** */
+
+	template <class T>
+	struct DoublyLinkedList
+	{
+		DoublyLinkedList	*prev;	
+		DoublyLinkedList	*next;
+		T					element;
+	};
+
 	template <class T, class Alloc = allocator<T>>
 	class List
 	{
 
 	private:
-		
+		DoublyLinkedList		*start;
+		size_t					size;
 
 	public:
+
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+	
+		typedef size_t			size_type;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+
 		/* Coplien form */
 		List(void);
 		~List(void);
@@ -89,11 +110,12 @@ namespace ft
 		template <class Compare>
 		void					sort(Compare comp);
 		void					reverse(void);
-
-		/* Observers */
-		allocator_type			get_allocator const;
 		
 	};
+
+/* ************************************************************************** */
+/*   Non-member functions                                                     */
+/* ************************************************************************** */
 
 	/* Function overloads */
 	template <class T, class Alloc>
