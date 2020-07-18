@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/18 10:27:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/18 11:16:47 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ namespace ft
 		Iterator(void);
 
 	protected:
-		pointer								*ptr;
 
 	public:
 
@@ -50,7 +49,6 @@ namespace ft
 		typedef std::ptrdiff_t				difference_type;
 		typedef T							*pointer;
 		typedef T							&reference;
-		typedef random_access_iterator_tag	iterator_category;
 
 	/* ********************************************************************** */
 	/*   Member functions                                                     */
@@ -61,14 +59,172 @@ namespace ft
 		Iterator(const Iterator &it);
 		Iterator							&operator=(const Iterator &it);
 
-		Iterator(pointer ptr);
 		virtual Iterator					&operator++(void);
 		virtual Iterator					operator++(int n);
-		virtual bool						operator==(const Iterator &rhs);
-		virtual bool						operator!=(const Iterator &rhs);
-		virtual bool						operator!=(const Iterator &rhs);
 		reference							operator*(void);
 
+	};
+
+	template <class T>
+	class InputIterator: public Iterator
+	{
+
+	private:
+		InputIterator(void);
+
+	protected:
+
+	public:
+
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef input_iterator_tag			iterator_category;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+	
+		/* Coplien form */
+		~InputIterator(void);
+		InputIterator(const InputIterator &it);
+		InputIterator						&operator=(const InputIterator &it);
+
+		Iterator							&operator++(void);
+		Iterator							operator++(int n);
+  		bool								operator==(const InputIterator &rhs) const;
+  		bool								operator!=(const InputIterator &rhs) const;
+
+	};	
+
+	template <class T>
+	class OutputIterator: public Iterator
+	{
+
+	private:
+		OutputIterator(void);
+
+	protected:
+
+	public:
+
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef output_iterator_tag			iterator_category;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+	
+		/* Coplien form */
+		~OutputIterator(void);
+		OutputIterator(const OutputIterator &it);
+		OutputIterator						&operator=(const OutputIterator &it);
+
+		Iterator							&operator++(void);
+		Iterator							operator++(int n);
+	};	
+
+	template <class T>
+	class ForwardIterator: public Iterator
+	{
+
+	private:
+		ForwardIterator(void);
+
+	protected:
+
+	public:
+
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef forward_iterator_tag			iterator_category;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+	
+		/* Coplien form */
+		~ForwardIterator(void);
+		ForwardIterator(const ForwardIterator &it);
+		ForwardIterator						&operator=(const ForwardIterator &it);
+
+		Iterator							&operator++(void);
+		Iterator							operator++(int n);
+  		bool								operator==(const ForwardIterator &rhs) const;
+  		bool								operator!=(const ForwardIterator &rhs) const;
+	};	
+
+	template <class T>
+	class BidirectionalIterator: public Iterator
+	{
+
+	private:
+		pointer								left;
+		pointer								right;
+
+		BidirectionalIterator(void);
+
+	protected:
+
+	public:
+
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef bidirectional_iterator_tag	iterator_category;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+	
+		/* Coplien form */
+		~BidirectionalIterator(void);
+		BidirectionalIterator(const BidirectionalIterator &it);
+		BidirectionalIterator				&operator=(const BidirectionalIterator &it);
+
+		Iterator							&operator++(void);
+		Iterator							operator++(int n);
+  		bool								operator==(const BidirectionalIterator &rhs) const;
+  		bool								operator!=(const BidirectionalIterator &rhs) const;
+	};	
+
+	template <class T>
+	class RandomAccessIterator: public Iterator
+	{
+
+	private:
+		RandomAccessIterator(void);
+
+	protected:
+
+	public:
+
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef random_access_iterator_tag	iterator_category;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+	
+		/* Coplien form */
+		~RandomAccessIterator(void);
+		RandomAccessIterator(const RandomAccessIterator &it);
+		RandomAccessIterator				&operator=(const RandomAccessIterator &it);
+
+		Iterator							&operator++(void);
+		Iterator							operator++(int n);
+  		bool								operator==(const RandomAccessIterator &rhs) const;
+  		bool								operator!=(const RandomAccessIterator &rhs) const;
 	};
 
 };
