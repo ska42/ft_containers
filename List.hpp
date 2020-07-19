@@ -6,13 +6,14 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/19 06:03:00 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/19 08:42:40 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_HPP
 # define LIST_HPP
 
+# include <iterator>
 # include "Iterator.hpp"
 
 namespace ft
@@ -22,21 +23,14 @@ namespace ft
 	/* https://www.cplusplus.com/reference/list/list                          */
 	/* ********************************************************************** */
 
-	template <class T>
-	struct DoublyLinkedList
-	{
-		DoublyLinkedList	*prev;	
-		DoublyLinkedList	*next;
-		T					element;
-	};
 
 	template <class T, class Alloc = allocator<T>>
 	class List
 	{
 
 	private:
-		DoublyLinkedList		*start;
-		size_t					size;
+		IteratorList<T>			iterator;
+		size_type					size;
 
 	public:
 
@@ -44,7 +38,18 @@ namespace ft
 	/*   Member types                                                         */
 	/* ********************************************************************** */
 	
-		typedef size_t			size_type;
+		typedef T								value_type;
+		typedef Alloc							allocator_type;
+		typedef T								&reference;
+		typedef const T							&const_reference;
+		typedef	T								*pointer;
+		typedef	const T							*const_pointer;
+		typedef IteratorList<T>					iterator;
+		typedef IteratorList<const T>			const_iterator;
+		typedef ReverseIteratorList<T>			reverse_iterator;
+		typedef ReverseIteratorList<const T>	const_reverse_iterator;
+		typedef IteratorList::differencetype	difference_type;
+		typedef size_t							size_type;
 
 	/* ********************************************************************** */
 	/*   Member functions                                                     */
