@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 06:01:38 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/19 06:02:45 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/21 12:13:55 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 int		main(void)
 {
+	ft::List<int> list = ft::List<int>();
 	return (0);
 }

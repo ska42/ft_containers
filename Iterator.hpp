@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/19 08:39:01 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/21 14:27:46 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ namespace ft
 	template <class T>
 	struct DoublyLinkedList
 	{
-		DoublyLinkedList	*prev;	
+		DoublyLinkedList	*prev;
 		DoublyLinkedList	*next;
 		T					element;
 	};
@@ -57,7 +57,7 @@ namespace ft
 		IteratorList				&operator[](int n) const;
 
 	protected:
-		DoublyLinkedList<T>			list;
+		DoublyLinkedList<T>			*ptr;
 
 	public:
 		
@@ -76,20 +76,75 @@ namespace ft
 	/* ********************************************************************** */
 
 		/* Coplien Form */
-		IteratorList(void);
-		~IteratorList(void);
-		IteratorList(const IteratorList &it);
-		IteratorList				&operator=(const IteratorList &it);
+		IteratorList(void) {}
 
-		IteratorList				&operator++(void);
-		IteratorList				operator++(int n);
-  		bool						operator==(const IteratorList &rhs) const;
-  		bool						operator!=(const IteratorList &rhs) const;
-		IteratorList				&operator*(void); // dereferenced lvalue
-		IteratorList				*operator->(void); // dereferenced rvalue
-		IteratorList				&&operator*(void); // dereferenced rvalue
-		IteratorList				&operator--(void);
-		IteratorList				operator--(int n);
+		~IteratorList(void) {}
+
+		IteratorList(const IteratorList &it)
+		{
+			*this = it;
+		}
+
+		IteratorList				&operator=(const IteratorList &rhs)
+		{
+			this->ptr = rhs.ptr;
+			return (*this);
+		}
+
+		
+		IteratorList(DoublyLinkedList<T> *list)
+		{
+			this->ptr = list;
+		}
+
+		IteratorList				&operator++(void)
+		{
+			if (this->ptr->next)
+				this->ptr = this->ptr->next;
+			return (*this);
+		}
+
+		IteratorList				operator++(int)
+		{
+			IteratorList tmp(*this);
+			this->operator++();	
+			return (tmp);
+		}
+
+		IteratorList				&operator--(void)
+		{
+			if (this->ptr->prev)
+				this->ptr = this->ptr->prev;	
+			return (*this);
+		}
+
+		IteratorList				operator--(int)
+		{
+			IteratorList tmp(*this);
+			this->operator--();
+			return (tmp);
+		}
+
+  		bool						operator==(const IteratorList &rhs) const
+		{
+			return (this->ptr == rhs.ptr);			
+		}
+
+  		bool						operator!=(const IteratorList &rhs) const
+		{
+			return (this->ptr != rhs.ptr);
+		}
+
+		T							&operator*(void) // dereferenced lvalue
+		{
+			return (this->ptr.element);	
+		}
+
+		T							*operator->(void) // dereferenced rvalue
+		{
+			return (&this->ptr.element);	
+		}
+
 	};
 
 	template <class T>
@@ -99,16 +154,69 @@ namespace ft
 	private:
 
 	public:
-		ReverseIteratorList(void);
-		~ReverseIteratorList(void);
-		ReverseIteratorList(const ReverseIteratorList &it);
-		ReverseIteratorList			&operator=(const ReverseIteratorList &it);
+		ReverseIteratorList(void) {}
+		~ReverseIteratorList(void) {}
 
-		ReverseIteratorList			&operator++(void);
-		ReverseIteratorList			operator++(int n);
-		ReverseIteratorList			&operator--(void);
-		ReverseIteratorList			operator--(int n);
+		ReverseIteratorList(DoublyLinkedList<T> *list)
+		{
+			this->ptr = list;
+		}
+
+		ReverseIteratorList(const ReverseIteratorList &it)
+		{
+			*this = it;
+		}
+
+		ReverseIteratorList			&operator=(const ReverseIteratorList &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		ReverseIteratorList			&operator++(void)
+		{
+			if (this->ptr->prev)
+				this->ptr = this->ptr->prev;
+			return (*this);
+		}
+
+		ReverseIteratorList			operator++(int)
+		{
+			ReverseIteratorList tmp(*this);
+			this->operator++();
+			return (tmp);
+		}
+
+		ReverseIteratorList			&operator--(void)
+		{
+			if (this->ptr->next)
+				this->ptr = this->ptr->next;
+			return (*this);
+		}
+
+		ReverseIteratorList			operator--(int)
+		{
+			ReverseIteratorList tmp(*this);
+			this->operator--();
+			return (tmp);
+		}
 	};
+
+	template <class Iterator>
+	void							advance(Iterator it, int n)
+	{
+		while (n < 0)
+		{
+			n++;
+			it--;
+		}
+		while (n > 0)
+		{
+			n--;
+			it++;
+		}
+	}
+
 };
 
 #endif
