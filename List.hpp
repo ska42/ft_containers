@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/21 16:31:21 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/21 17:19:39 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,17 +429,200 @@ namespace ft
 		}
 
 		template <class Predicate>
-		void					remove_if(Predicate pred);
-		void					unique(void);
+		void					remove_if(Predicate pred)
+		{
+			iterator	it;
+			iterator	tmp;
+			iterator	end;
+			
+			it = iterator(this->head);
+			end = iterator(this->tail);
+			while (it != end)
+			{
+				tmp = it;
+				it++;
+				if (pred(*tmp))
+					this->erase(tmp);
+			}
+			if (pred(*tmp))
+				this->erase(tmp);		
+		}
+
+		void					unique(void)
+		{
+			iterator it;
+			iterator tmp;
+			iterator tmp2;
+			iterator end;
+
+			it = iterator(this->head);	
+			end = iterator(this->tail);
+			while (it != end)
+			{
+				tmp = it;	
+				while (it != end)
+				{
+					tmp2 = it;
+					it++;
+					if (*it == *tmp)
+						this->erase(it);
+					it = tmp2;
+					it++;
+				}
+				if (*it == *tmp)
+					this->erase(it);
+				end = iterator(this->tail);
+				it = tmp;
+				it++;
+			}
+		}
+
 		template <class BinaryPredicate>
-		void					unique(BinaryPredicate binary_pred);
-		void					merge(List &x);
+		void					unique(BinaryPredicate binary_pred)
+		{
+			iterator it;
+			iterator tmp;
+			iterator tmp2;
+			iterator end;
+
+			it = iterator(this->head);	
+			end = iterator(this->tail);
+			while (it != end)
+			{
+				tmp = it;	
+				while (it != end)
+				{
+					tmp2 = it;
+					it++;
+					if (binary_pred(*it, *tmp))
+						this->erase(it);
+					it = tmp2;
+					it++;
+				}
+				if (binary_pred(*it, *tmp))
+					this->erase(it);
+				end = iterator(this->tail);
+				it = tmp;
+				it++;
+			}
+		}
+
+		void					merge(List &x)
+		{
+			iterator it;
+			iterator itx;
+			iterator next;
+
+			it = this->begin();
+			itx = x.begin();
+			while (itx != x.end())
+			{
+				while (it != this->end() && !(*itx < *it))
+					it++;
+				next = it;
+				next++;
+				splice(it, x, itx);
+				itx = next;
+			}
+		}
+
 		template <class Compare>
-		void					merge(List &x, Compare comp);
-		void					sort(void);
+		void					merge(List &x, Compare comp)
+		{
+			iterator it;
+			iterator itx;
+			iterator next;
+
+			it = this->begin();
+			itx = x.begin();
+			while (itx != x.end())
+			{
+				while (it != this->end() && comp(*itx, *it))
+					it++;
+				next = it;
+				next++;
+				splice(it, x, itx);
+				itx = next;
+			}
+		}
+
+		void					sort(void)
+		{
+			iterator it;
+			iterator tmp;
+			iterator tmp2;
+			iterator end;
+
+			it = iterator(this->head);	
+			end = iterator(this->tail);
+			while (it != end)
+			{
+				tmp = it;	
+				while (it != end)
+				{
+					tmp2 = it;
+					it++;
+					if (*it < *tmp)
+						this->splice(tmp, *this, it);
+					it = tmp2;
+					it++;
+				}
+				if (*it < *tmp)
+					this->splice(tmp, *this, it);
+				end = iterator(this->tail);
+				it = tmp; it++;
+			}
+		}
+
 		template <class Compare>
-		void					sort(Compare comp);
-		void					reverse(void);
+		void					sort(Compare comp)
+		{
+			iterator it;
+			iterator tmp;
+			iterator tmp2;
+			iterator end;
+
+			it = iterator(this->head);	
+			end = iterator(this->tail);
+			while (it != end)
+			{
+				tmp = it;	
+				while (it != end)
+				{
+					tmp2 = it;
+					it++;
+					if (comp(*it, *tmp))
+						this->splice(tmp, *this, it);
+					it = tmp2;
+					it++;
+				}
+				if (comp(*it, *tmp))
+					this->splice(tmp, *this, it);
+				end = iterator(this->tail);
+				it = tmp;
+				it++;
+			}		
+		}
+
+		void					reverse(void)
+		{
+			iterator	start;
+			iterator	tmp;
+			iterator	it;
+			size_type	n;
+
+			start = iterator(this->head);
+			it = iterator(this->head);
+			n = this->length - 1;
+			while (n--)
+			{
+				tmp = it;
+				tmp++;
+				this->splice(start, *this, it);
+				start = iterator(this->head);
+				it = tmp;
+			}
+		}
 		
 	};
 
