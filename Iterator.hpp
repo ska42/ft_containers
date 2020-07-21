@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/21 14:27:46 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/21 15:27:58 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ namespace ft
 
 		IteratorList				&operator++(void)
 		{
-			if (this->ptr->next)
+			if (this->ptr && this->ptr->next)
 				this->ptr = this->ptr->next;
 			return (*this);
 		}
@@ -113,7 +113,7 @@ namespace ft
 
 		IteratorList				&operator--(void)
 		{
-			if (this->ptr->prev)
+			if (this->ptr && this->ptr->prev)
 				this->ptr = this->ptr->prev;	
 			return (*this);
 		}
@@ -141,9 +141,14 @@ namespace ft
 		}
 
 		T							*operator->(void) // dereferenced rvalue
-		{
+		{ 
 			return (&this->ptr.element);	
 		}
+		
+		DoublyLinkedList<T>			*getPtr(void)
+		{
+			return (this->ptr);
+		}	
 
 	};
 
@@ -175,7 +180,7 @@ namespace ft
 
 		ReverseIteratorList			&operator++(void)
 		{
-			if (this->ptr->prev)
+			if (this->ptr && this->ptr->prev)
 				this->ptr = this->ptr->prev;
 			return (*this);
 		}
@@ -189,7 +194,7 @@ namespace ft
 
 		ReverseIteratorList			&operator--(void)
 		{
-			if (this->ptr->next)
+			if (this->ptr && this->ptr->next)
 				this->ptr = this->ptr->next;
 			return (*this);
 		}
