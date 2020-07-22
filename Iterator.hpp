@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/21 15:27:58 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/22 03:31:59 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,12 @@ namespace ft
 
 		T							&operator*(void) // dereferenced lvalue
 		{
-			return (this->ptr.element);	
+			return (this->ptr->element);	
 		}
 
 		T							*operator->(void) // dereferenced rvalue
 		{ 
-			return (&this->ptr.element);	
+			return (&this->ptr->element);	
 		}
 		
 		DoublyLinkedList<T>			*getPtr(void)

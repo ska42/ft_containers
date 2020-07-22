@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/22 02:39:12 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/22 03:53:22 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,11 @@ namespace ft
 			if (!this->length)
 				this->tail = this->head = ptr;
 			else
-				this->tail = this->tail->next = ptr;	
+			{
+				this->head->prev = ptr;
+				ptr->next = this->head;
+				this->head = ptr;
+			}
 			this->length++;
 		}
 
@@ -276,7 +280,11 @@ namespace ft
 			if (!this->length)
 				this->head = this->tail = ptr;
 			else
-				this->tail = this->tail->next = ptr;	
+			{
+				this->tail->next = ptr;
+				ptr->prev = this->tail;
+				this->tail = this->tail->next;
+			}
 			this->length++;
 		}
 

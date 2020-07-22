@@ -6,7 +6,7 @@
 #    By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/30 21:31:46 by lmartin           #+#    #+#              #
-#    Updated: 2020/07/21 12:05:11 by lmartin          ###   ########.fr        #
+#    Updated: 2020/07/22 04:23:17 by lmartin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #
@@ -67,7 +67,7 @@ DIR_OBJS	=	./compiled_srcs/
 
 # FILES #
 
-SRC			=	main.cpp
+SRC			=	test_list.cpp
 
 SRCS		=	$(SRC)
 
@@ -75,7 +75,7 @@ SRCS		=	$(SRC)
 
 OBJS 		=	$(SRCS:%.cpp=$(DIR_OBJS)%.o)
 
-NAME 		=	test
+NAME 		=	test_list
 
 
 # **************************************************************************** #
