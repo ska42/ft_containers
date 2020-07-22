@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/22 03:53:22 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/22 12:37:33 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,12 +225,11 @@ namespace ft
 			this->push_back(*last);
 		}
 
-		void					assign(size_type n, const value_type& val)
+		void					assign(size_type n, const value_type &val)
 		{
 			this->clear();	
 			while (n--)
 				this->push_back(val);
-			return (*this);		
 		}
 
 		void					push_front(const value_type &val)
