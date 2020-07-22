@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/21 17:19:39 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/22 02:39:12 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ namespace ft
 		explicit List (size_type n, const value_type &val = value_type(),
 			const allocator_type &alloc = allocator_type())
 		{
+			(void) alloc;
 			this->head = NULL;
 			this->tail = NULL;
 			this->length = 0;
@@ -118,6 +119,7 @@ namespace ft
   		List (InputIterator first, InputIterator last,
 			const allocator_type& alloc = allocator_type())
 		{
+			(void) alloc;
 			this->head = NULL;
 			this->tail = NULL;
 			this->length = 0;
@@ -632,19 +634,46 @@ namespace ft
 
 	/* Function overloads */
 	template <class T, class Alloc>
-	bool						operator==(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs);
+	bool						operator==(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
+	{
+		return (lhs == rhs);
+	}
+
 	template <class T, class Alloc>
-	bool						operator!=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs);
+	bool						operator!=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
+	{
+		return (lhs != rhs);
+	}
+
 	template <class T, class Alloc>
-	bool						operator<(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs);
+	bool						operator<(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
+	{
+		return (lhs < rhs);
+	}
+
 	template <class T, class Alloc>
-	bool						operator<=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs);
+	bool						operator<=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
+	{
+		return (lhs <= rhs);
+	}
+
 	template <class T, class Alloc>
-	bool						operator>(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs);
+	bool						operator>(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
+	{
+		return (lhs > rhs);
+	}
+
 	template <class T, class Alloc>
-	bool						operator>=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs);
+	bool						operator>=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
+	{
+		return (lhs >= rhs);
+	}
+
 	template <class T, class Alloc>
-	void						swap(List<T, Alloc> &x, List <T, Alloc> &y);
+	void						swap(List<T, Alloc> &x, List <T, Alloc> &y)
+	{
+		x.swap(y);
+	}
 }
 
 #endif
