@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/26 08:47:17 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/26 23:59:25 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,15 @@ void	compareList(std::string function, ft::List<T> mylist, std::list<T> list)
 			my_it++;
 		}
 		std::cout << _GREEN << "OK " << _END;
-		printList(list);
+		printMyList(mylist);
 	}
 }
 
 int		main(void)
 {
+	/* ********************************************************************** */
+	/*                          BASIC TESTS                                   */
+	/* ********************************************************************** */
 	ft::List<int> mylist = ft::List<int>();
 	std::list<int> list = std::list<int>();
 
@@ -168,5 +171,23 @@ int		main(void)
 	list.clear();
 	mylist.clear();
 	compareList("list.clear()", mylist, list);
+
+	/* ********************************************************************** */
+	/*                           ADVANCED TESTS                               */
+	/* ********************************************************************** */
+	int n;
+
+	srand(time(NULL));
+	for(int i = 0; i < 5; i++)
+	{
+		n = rand();
+		list.push_back(n);
+		mylist.push_back(n);
+		std::string thing = "list.push_back(" + std::to_string(n) + ")";
+		compareList(thing, mylist, list);
+	}
+	list.sort();
+	mylist.sort();
+	compareList("list.sort()", mylist, list);
 	return (0);
 }
