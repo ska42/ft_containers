@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/26 08:32:00 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 00:59:46 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -558,28 +558,30 @@ namespace ft
 		void					sort(void)
 		{
 			iterator it;
+			iterator it2;
 			iterator tmp;
 			iterator tmp2;
-			iterator end;
 
-			it = iterator(this->head);	
-			end = iterator(this->tail);
-			while (it != end)
+			it = this->begin();	
+			while (it != this->end())
 			{
-				tmp = it;	
-				while (it != end)
+				tmp = it;
+				tmp++;
+				it2 = it;
+				it2++;
+				while (it2 != this->end())
 				{
-					tmp2 = it;
-					it++;
-					if (*it < *tmp)
-						this->splice(tmp, *this, it);
-					it = tmp2;
-					it++;
+					tmp2 = it2;
+					tmp2++;
+					if (*it2 < *it)
+					{
+						this->splice(it, *this, it2);
+						it = tmp2;
+						it--;
+					}
+					it2 = tmp2;
 				}
-				if (*it < *tmp)
-					this->splice(tmp, *this, it);
-				end = iterator(this->tail);
-				it = tmp; it++;
+				it = tmp;
 			}
 		}
 
@@ -595,7 +597,7 @@ namespace ft
 			end = iterator(this->tail);
 			while (it != end)
 			{
-				tmp = it;	
+				tmp = it;
 				while (it != end)
 				{
 					tmp2 = it;

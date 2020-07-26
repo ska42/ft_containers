@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/26 23:59:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 00:25:06 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,16 @@
 template <class T>
 void	printMyList(ft::List<T> list)
 {
-	int								d;
 	typename ft::IteratorList<T> 	i;
 	
 	i = list.begin();
-	d = 0;
 	std::cout << _YELLOW << "---------------------- " << "[" << _GREEN;
 	while (i != list.end())
 	{
 		std::cout << _GREEN << *i << ", ";
 		i++;
-		d++;
 	}
-	if (d)
+	if (list.size())
 		std::cout << *i << _YELLOW << "]" << _END << std::endl;
 	else
 		std::cout << _YELLOW << "]" << _END << std::endl;
@@ -42,19 +39,16 @@ void	printMyList(ft::List<T> list)
 template <class T>
 void	printList(std::list<T> list)
 {
-	int								d;
 	typename std::list<T>::iterator	i;
 	
 	i = list.begin();
-	d = 0;
 	std::cout << _YELLOW << "---------------------- " << "[" << _GREEN;
 	while (i != list.end())
 	{
 		std::cout << _GREEN << *i << ", ";
 		i++;
-		d++;
 	}
-	if (d)
+	if (list.size())
 		std::cout << *i << _YELLOW << "]" << _END << std::endl;
 	else
 		std::cout << _YELLOW << "]" << _END << std::endl;
