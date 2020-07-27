@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 20:20:59 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 21:03:11 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,5 +231,25 @@ int		main(void)
 	list.remove(-1);
 	mylist.remove(-1);
 	compareList("list.remove(-1)", mylist, list);
+
+	ft::List<int> mylist2 = ft::List<int>((size_t)5, 500);
+	std::list<int> list2 = std::list<int>((size_t)5, 500);
+	
+	std::cout << "ft::List<" << _PURPLE << "int" << _END << "> mylist2 = ft::List<" << _PURPLE << "int" << _END << ">(5, 500);" << std::endl;
+	std::cout << "std::list<" << _PURPLE << "int" << _END << "> list2 = std::list<" << _PURPLE << "int" << _END << ">(5, 500);" << std::endl;
+	std::cout << std::endl;
+
+	list.swap(list2);
+	mylist.swap(mylist2);
+	compareList("list.swap(list2)", mylist, list);
+	list.resize(10);
+	mylist.resize(10);
+	compareList("list.resize(10, 6)", mylist, list);
+	list.resize(1);
+	mylist.resize(1);
+	compareList("list.resize(1)", mylist, list);
+	list.resize(0);
+	mylist.resize(0);
+	compareList("list.resize(0)", mylist, list);
 	return (0);
 }

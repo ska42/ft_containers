@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 20:20:39 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 20:54:53 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ namespace ft
 			this->head = NULL;
 			this->tail = NULL;
 			this->length = 0;
-			assign(n, val);
+			assign(static_cast<size_type>(n), static_cast<value_type>(val));
 		}
 		
 		template <class InputIterator>
@@ -123,7 +123,7 @@ namespace ft
 			this->head = NULL;
 			this->tail = NULL;
 			this->length = 0;
-			assign(first, last);
+			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
 		}
 
 		/* Iterators */
