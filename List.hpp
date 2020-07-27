@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 13:14:19 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 13:32:06 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,29 +480,22 @@ namespace ft
 
 		void					unique(void)
 		{
-			iterator it;
-			iterator tmp;
-			iterator tmp2;
-			iterator end;
+			iterator 	it;
+			iterator	it2;
+			iterator 	tmp;
 
 			it = iterator(this->head);	
-			end = iterator(this->tail);
-			while (it != end)
+			while (it != this->end())
 			{
-				tmp = it;	
-				while (it != end)
+				it2 = it;
+				while (it2 != this->end())
 				{
-					tmp2 = it;
-					it++;
-					if (*it == *tmp)
-						this->erase(it);
-					it = tmp2;
-					it++;
+					tmp = it2;
+					it2++;
+					if (*it2 == *it)
+						this->erase(it2);
+					it2 = tmp;
 				}
-				if (*it == *tmp)
-					this->erase(it);
-				end = iterator(this->tail);
-				it = tmp;
 				it++;
 			}
 		}
@@ -510,29 +503,22 @@ namespace ft
 		template <class BinaryPredicate>
 		void					unique(BinaryPredicate binary_pred)
 		{
-			iterator it;
-			iterator tmp;
-			iterator tmp2;
-			iterator end;
+			iterator 	it;
+			iterator	it2;
+			iterator 	tmp;
 
 			it = iterator(this->head);	
-			end = iterator(this->tail);
-			while (it != end)
+			while (it != this->end())
 			{
-				tmp = it;	
-				while (it != end)
+				it2 = it;
+				while (it2 != this->end())
 				{
-					tmp2 = it;
-					it++;
-					if (binary_pred(*it, *tmp))
-						this->erase(it);
-					it = tmp2;
-					it++;
+					tmp = it2;
+					it2++;
+					if (binary_pred(*it2, *it))
+						this->erase(it2);
+					it2 = tmp;
 				}
-				if (binary_pred(*it, *tmp))
-					this->erase(it);
-				end = iterator(this->tail);
-				it = tmp;
 				it++;
 			}
 		}

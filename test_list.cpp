@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 13:09:05 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 13:18:14 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,10 @@ int		main(void)
 	mylist.pop_front();
 	compareList("list.pop_front()", mylist, list);
 	
+	list.unique();
+	mylist.unique();
+	compareList("list.unique()", mylist, list);
+	
 	list.clear();
 	mylist.clear();
 	compareList("list.clear()", mylist, list);
@@ -220,5 +224,8 @@ int		main(void)
 	list.remove(n);
 	mylist.remove(n);
 	compareList("list.remove(" + std::to_string(n) + ")", mylist, list);
+	list.remove(-1);
+	mylist.remove(-1);
+	compareList("list.remove(-1)", mylist, list);
 	return (0);
 }
