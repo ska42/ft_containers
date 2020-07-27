@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 00:25:06 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 04:03:15 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,16 @@ void	compareList(std::string function, ft::List<T> mylist, std::list<T> list)
 
 int		main(void)
 {
-	/* ********************************************************************** */
-	/*                          BASIC TESTS                                   */
-	/* ********************************************************************** */
+	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
+	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
+	std::cout << "/* ********************************************************************** */" << _END << std::endl;
+	std::cout << std::endl;
 	ft::List<int> mylist = ft::List<int>();
 	std::list<int> list = std::list<int>();
 
-	std::cout << "ft::List<int> mylist = ft::List<int>();" << std::endl;
-	std::cout << "std::list<int> list = std::list<int>();" << std::endl;
+	std::cout << "ft::List<" << _PURPLE << "int" << _END << "> mylist = ft::List<" << _PURPLE << "int" << _END << ">();" << std::endl;
+	std::cout << "std::list<" << _PURPLE << "int" << _END << "> list = std::list<" << _PURPLE << "int" << _END << ">();" << std::endl;
+	std::cout << std::endl;
 
 	compareList("list.empty()", mylist, list);
 	compareList("list.size()", mylist, list);
@@ -166,15 +168,16 @@ int		main(void)
 	mylist.clear();
 	compareList("list.clear()", mylist, list);
 
-	/* ********************************************************************** */
-	/*                           ADVANCED TESTS                               */
-	/* ********************************************************************** */
+	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
+	std::cout << "/*                        "<< _WHITE << "ADVANCED TESTS" << _YELLOW << "                                  */" << std::endl;
+	std::cout << "/* ********************************************************************** */" << _END << std::endl;
+	std::cout << std::endl;
 	int n;
 
 	srand(time(NULL));
 	for(int i = 0; i < 5; i++)
 	{
-		n = rand();
+		n = rand() % 1000;
 		list.push_back(n);
 		mylist.push_back(n);
 		std::string thing = "list.push_back(" + std::to_string(n) + ")";
@@ -183,5 +186,8 @@ int		main(void)
 	list.sort();
 	mylist.sort();
 	compareList("list.sort()", mylist, list);
+	list.reverse();
+	mylist.reverse();
+	compareList("list.reverse()", mylist, list);
 	return (0);
 }

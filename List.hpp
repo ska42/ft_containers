@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 00:59:46 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 04:21:14 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,8 +316,13 @@ namespace ft
 			add->prev = NULL;
 			add->element = val;
 			ptr = position.getPtr();
+			if (!ptr->prev)
+				this->head = add;
+			if (!ptr->next)
+				this->tail = add;
 			add->prev = ptr->prev;
-			ptr->prev->next = add;
+			if (ptr->prev)
+				ptr->prev->next = add;
 			add->next = ptr;
 			ptr->prev = add;
 			this->length++;
@@ -409,7 +414,7 @@ namespace ft
 		void					splice(iterator position, List &x, iterator i)
 		{
 			this->insert(position, *i);
-			x.erase(i);			
+			x.erase(i);
 		}
 
 		void					splice(iterator position, List &x, iterator first, iterator last)
@@ -557,82 +562,58 @@ namespace ft
 
 		void					sort(void)
 		{
-			iterator it;
-			iterator it2;
-			iterator tmp;
-			iterator tmp2;
+			size_type	size;
+			iterator 	it;
+			iterator 	it2;
 
-			it = this->begin();	
-			while (it != this->end())
+			size = this->length;
+			while (size--)
 			{
-				tmp = it;
-				tmp++;
-				it2 = it;
-				it2++;
-				while (it2 != this->end())
+				it = this->begin();
+				while (it != this->end())
 				{
-					tmp2 = it2;
-					tmp2++;
+					it2 = it;
+					it2++;
 					if (*it2 < *it)
-					{
 						this->splice(it, *this, it2);
-						it = tmp2;
-						it--;
-					}
-					it2 = tmp2;
+					else
+						it++;
 				}
-				it = tmp;
 			}
 		}
 
 		template <class Compare>
 		void					sort(Compare comp)
 		{
-			iterator it;
-			iterator tmp;
-			iterator tmp2;
-			iterator end;
+			size_type	size;
+			iterator 	it;
+			iterator 	it2;
 
-			it = iterator(this->head);	
-			end = iterator(this->tail);
-			while (it != end)
+			size = this->length;
+			while (size--)
 			{
-				tmp = it;
-				while (it != end)
+				it = this->begin();
+				while (it != this->end())
 				{
-					tmp2 = it;
-					it++;
-					if (comp(*it, *tmp))
-						this->splice(tmp, *this, it);
-					it = tmp2;
-					it++;
+					it2 = it;
+					it2++;
+					if (comp(*it2, *it))
+						this->splice(it, *this, it2);
+					else
+						it++;
 				}
-				if (comp(*it, *tmp))
-					this->splice(tmp, *this, it);
-				end = iterator(this->tail);
-				it = tmp;
-				it++;
-			}		
+			}
 		}
 
 		void					reverse(void)
 		{
-			iterator	start;
-			iterator	tmp;
-			iterator	it;
 			size_type	n;
+			iterator	it;
 
-			start = iterator(this->head);
-			it = iterator(this->head);
+			it = this->begin();
 			n = this->length - 1;
 			while (n--)
-			{
-				tmp = it;
-				tmp++;
-				this->splice(start, *this, it);
-				start = iterator(this->head);
-				it = tmp;
-			}
+				this->splice(it, *this, this->end());
 		}
 		
 	};
