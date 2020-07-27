@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 13:32:06 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 20:20:39 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ namespace ft
 
 		size_type				max_size(void) const
 		{
-			return (SIZE_MAX/sizeof(value_type));
+			return (std::numeric_limits<size_type>::max()/sizeof(*this));
 		}
 
 		/* Element access */

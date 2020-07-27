@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 13:18:14 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 20:20:59 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,10 @@ int		main(void)
 
 	std::cout << "ft::List<" << _PURPLE << "int" << _END << "> mylist = ft::List<" << _PURPLE << "int" << _END << ">();" << std::endl;
 	std::cout << "std::list<" << _PURPLE << "int" << _END << "> list = std::list<" << _PURPLE << "int" << _END << ">();" << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "list.max_size(): " << list.max_size() << std::endl;
+	std::cout << "mylist.max_size(): " << mylist.max_size() << std::endl;
 	std::cout << std::endl;
 
 	compareList("list.empty()", mylist, list);
