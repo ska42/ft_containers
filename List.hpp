@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 12:43:12 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 13:14:19 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,11 +348,19 @@ namespace ft
 
 			ptr = position.getPtr();
 			if (!ptr->prev)
+			{
 				this->head = ptr->next;
+				if (this->head)
+					this->head->prev = NULL;
+			}
 			else
 				ptr->prev->next = ptr->next;
 			if (!ptr->next)
+			{
 				this->tail = ptr->prev;
+				if (this->tail)
+					this->tail->next = NULL;
+			}
 			else
 				ptr->next->prev = ptr->prev;
 			delete(ptr);
@@ -429,17 +437,21 @@ namespace ft
 			iterator	tmp;
 			iterator	end;
 			
-			it = iterator(this->head);
-			end = iterator(this->tail);
-			while (it != end)
+			if (this->length)
 			{
+				it = iterator(this->head);
+				end = iterator(this->tail);
+				while (it != end)
+				{
+					tmp = it;
+					it++;
+					if (*tmp == val)
+						this->erase(tmp);
+				}
 				tmp = it;
-				it++;
 				if (*tmp == val)
 					this->erase(tmp);
 			}
-			if (*tmp == val)
-					this->erase(tmp);
 		}
 
 		template <class Predicate>
@@ -449,17 +461,21 @@ namespace ft
 			iterator	tmp;
 			iterator	end;
 			
-			it = iterator(this->head);
-			end = iterator(this->tail);
-			while (it != end)
+			if (this->length)
 			{
+				it = iterator(this->head);
+				end = iterator(this->tail);
+				while (it != end)
+				{
+					tmp = it;
+					it++;
+					if (pred(*tmp))
+						this->erase(tmp);
+				}
 				tmp = it;
-				it++;
 				if (pred(*tmp))
 					this->erase(tmp);
 			}
-			if (pred(*tmp))
-				this->erase(tmp);		
 		}
 
 		void					unique(void)

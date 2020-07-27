@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 12:51:10 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 13:09:05 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,9 @@ int		main(void)
 	list.sort();
 	mylist.sort();
 	compareList("list.sort()", mylist, list);
+	list.remove(-1);
+	mylist.remove(-1);
+	compareList("list.remove(-1)", mylist, list);
 
 	std::cout << _WHITE << "// 1 ELEMENT LIST" << _END << std::endl;
 	srand(time(NULL));
@@ -193,9 +196,9 @@ int		main(void)
 	list.sort();
 	mylist.sort();
 	compareList("list.sort()", mylist, list);
-	list.pop_front();
-	mylist.pop_front();
-	compareList("list.pop_front()", mylist, list);
+	list.remove(-1);
+	mylist.remove(-1);
+	compareList("list.remove(-1)", mylist, list);
 	std::cout << _WHITE << "// MULTIPLE ELEMENTS LIST" << _END << std::endl;
 	for(int i = 0; i < 5; i++)
 	{
@@ -214,5 +217,8 @@ int		main(void)
 	list.reverse();
 	mylist.reverse();
 	compareList("list.reverse()", mylist, list);
+	list.remove(n);
+	mylist.remove(n);
+	compareList("list.remove(" + std::to_string(n) + ")", mylist, list);
 	return (0);
 }
