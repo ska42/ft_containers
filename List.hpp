@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 04:21:14 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 12:43:12 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -610,10 +610,13 @@ namespace ft
 			size_type	n;
 			iterator	it;
 
-			it = this->begin();
-			n = this->length - 1;
-			while (n--)
-				this->splice(it, *this, this->end());
+			if (this->length)
+			{
+				n = this->length - 1;
+				it = this->begin();
+				while (n--)
+					this->splice(it, *this, this->end());
+			}
 		}
 		
 	};

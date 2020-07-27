@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 04:03:15 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/27 12:51:10 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	error_diff(ft::List<T> mylist, std::list<T> list)
 template <class T>
 void	compareList(std::string function, ft::List<T> mylist, std::list<T> list)
 {
-	std::cout << std::setw(20) << function << ": ";
+	std::cout << std::setw(30) << function << ": ";
 	if (mylist.empty() != list.empty())
 		error_diff(mylist, list);
 	else if (mylist.size() != list.size())
@@ -174,7 +174,29 @@ int		main(void)
 	std::cout << std::endl;
 	int n;
 
+	std::cout << _WHITE << "// EMPTY LIST" << _END << std::endl;
+	list.reverse();
+	mylist.reverse();
+	compareList("list.reverse()", mylist, list);
+	list.sort();
+	mylist.sort();
+	compareList("list.sort()", mylist, list);
+
+	std::cout << _WHITE << "// 1 ELEMENT LIST" << _END << std::endl;
 	srand(time(NULL));
+	list.push_back(-1);
+	mylist.push_back(-1);
+	compareList("list.push_back(-1)", mylist, list);
+	list.reverse();
+	mylist.reverse();
+	compareList("list.reverse()", mylist, list);
+	list.sort();
+	mylist.sort();
+	compareList("list.sort()", mylist, list);
+	list.pop_front();
+	mylist.pop_front();
+	compareList("list.pop_front()", mylist, list);
+	std::cout << _WHITE << "// MULTIPLE ELEMENTS LIST" << _END << std::endl;
 	for(int i = 0; i < 5; i++)
 	{
 		n = rand() % 1000;
@@ -186,6 +208,9 @@ int		main(void)
 	list.sort();
 	mylist.sort();
 	compareList("list.sort()", mylist, list);
+	list.sort(std::greater<int>());
+	mylist.sort(std::greater<int>());
+	compareList("list.sort(std::greater<int>())", mylist, list);
 	list.reverse();
 	mylist.reverse();
 	compareList("list.reverse()", mylist, list);
