@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 20:54:53 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 02:35:36 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -525,19 +525,30 @@ namespace ft
 
 		void					merge(List &x)
 		{
-			iterator it;
-			iterator itx;
-			iterator next;
+			size_type	size;
+			iterator	it;
+			iterator	itx;
+			iterator	next;
 
-			it = this->begin();
-			itx = x.begin();
-			while (itx != x.end())
+			size = this->length;
+			if (size)
+				it = this->begin();
+			if (x.length)
+				itx = x.begin();
+			while (x.length)
 			{
-				while (it != this->end() && !(*itx < *it))
+				while (size && (it != this->end()) && !(*itx < *it))
 					it++;
-				next = it;
-				next++;
-				splice(it, x, itx);
+				next = itx;
+				if (x.length != 1)
+					next++;
+				if (size && it != this->end())
+					splice(it, x, itx);
+				else
+				{
+					this->push_back(*itx);
+					x.erase(itx);
+				}
 				itx = next;
 			}
 		}
@@ -545,19 +556,30 @@ namespace ft
 		template <class Compare>
 		void					merge(List &x, Compare comp)
 		{
-			iterator it;
-			iterator itx;
-			iterator next;
+			size_type	size;
+			iterator	it;
+			iterator	itx;
+			iterator	next;
 
-			it = this->begin();
-			itx = x.begin();
-			while (itx != x.end())
+			size = this->length;
+			if (size)
+				it = this->begin();
+			if (x.length)
+				itx = x.begin();
+			while (x.length)
 			{
-				while (it != this->end() && comp(*itx, *it))
+				while (size && (it != this->end()) && comp(*itx, *it))
 					it++;
-				next = it;
-				next++;
-				splice(it, x, itx);
+				next = itx;
+				if (x.length != 1)
+					next++;
+				if (size && it != this->end())
+					splice(it, x, itx);
+				else
+				{
+					this->push_back(*itx);
+					x.erase(itx);
+				}
 				itx = next;
 			}
 		}

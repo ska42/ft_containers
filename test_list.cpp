@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/27 21:03:11 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 01:59:09 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	compareList(std::string function, ft::List<T> mylist, std::list<T> list)
 		typename std::list<T>::iterator	i;
 		my_it = mylist.begin();
 		i = list.begin();
-		while (my_it != mylist.end())
+		while (i != list.end())
 		{
 			if (*i != *my_it)
 			{
@@ -242,8 +242,8 @@ int		main(void)
 	list.swap(list2);
 	mylist.swap(mylist2);
 	compareList("list.swap(list2)", mylist, list);
-	list.resize(10);
-	mylist.resize(10);
+	list.resize(10, 6);
+	mylist.resize(10, 6);
 	compareList("list.resize(10, 6)", mylist, list);
 	list.resize(1);
 	mylist.resize(1);
@@ -251,5 +251,14 @@ int		main(void)
 	list.resize(0);
 	mylist.resize(0);
 	compareList("list.resize(0)", mylist, list);
+	list.merge(list2);
+	mylist.merge(mylist2);
+	compareList("list.merge(list2)", mylist, list);
+	list.resize(3, 6);
+	mylist.resize(3, 6);
+	compareList("list.resize(3, 6)", mylist, list);
+	list.merge(list2);
+	mylist.merge(mylist2);
+	compareList("list.merge(list2)", mylist, list);
 	return (0);
 }
