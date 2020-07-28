@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 02:35:36 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 03:50:38 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ namespace ft
 			this->head = NULL;
 			this->tail = NULL;
 			this->length = 0;
+			return ;
 		}
 
 		~List(void)
