@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/29 00:45:30 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/29 00:48:35 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,6 +320,33 @@ namespace ft
 			return (*(*this + n));
 		}
 
+	};
+
+	template <class T>
+	class ReverseIteratorVector : public ReverseIteratorVector<T>, public IteratorVector<T>
+	{
+
+	private:
+
+	public:
+		ReverseIteratorVector(void) {}
+		~ReverseIteratorVector(void) {}
+
+		ReverseIteratorVector(DoublyLinkedList<T> *list)
+		{
+			this->ptr = list;
+		}
+
+		ReverseIteratorVector(const ReverseIteratorVector &it)
+		{
+			*this = it;
+		}
+
+		ReverseIteratorVector			&operator=(const ReverseIteratorVector &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
 	};
 
 };
