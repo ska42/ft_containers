@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/22 03:31:59 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 22:08:23 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ namespace ft
 		IteratorList				operator+(int n) const;
 		IteratorList				operator-(const IteratorList &rhs) const;
 		IteratorList				operator-(int n) const;
-		IteratorList				operator<(const IteratorList &rhs) const;
-		IteratorList				operator>(const IteratorList &rhs) const;
-		IteratorList				operator<=(const IteratorList &rhs) const;
-		IteratorList				operator>=(const IteratorList &rhs) const;
+		bool						operator<(const IteratorList &rhs) const;
+		bool						operator>(const IteratorList &rhs) const;
+		bool						operator<=(const IteratorList &rhs) const;
+		bool						operator>=(const IteratorList &rhs) const;
 		IteratorList				operator+=(int n) const;
 		IteratorList				operator-=(int n) const;
 		IteratorList				&operator[](int n) const;
@@ -207,20 +207,104 @@ namespace ft
 		}
 	};
 
-	template <class Iterator>
-	void							advance(Iterator it, int n)
+	template <class T, class Category = random_access_iterator_tag>
+	class IteratorVector: public IteratorList
 	{
-		while (n < 0)
+	private:
+		
+	public:
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef T								value_type;
+		typedef T								&reference;
+		typedef T								*pointer;
+		typedef Category						category;
+		typedef std::ptrdiff_t					difference_type;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+
+		/* Coplien Form */
+		IteratorVector(void) {}
+
+		~IteratorVector(void) {}
+
+		IteratorVector(const IteratorVector &it)
 		{
-			n++;
-			it--;
+			*this = it;
 		}
-		while (n > 0)
+
+		IteratorVector				&operator=(const IteratorVector &rhs)
 		{
-			n--;
-			it++;
+			this->ptr = rhs.ptr;
+			return (*this);
 		}
-	}
+
+		
+		IteratorVector(DoublyLinkedList<T> *list)
+		{
+			this->ptr = list;
+		}
+
+		IteratorVector				operator+(const IteratorVector &rhs) const
+		{
+
+		}
+
+		IteratorVector				operator+(int n) const
+		{
+			while (n--)
+				*this++;
+			return (*this);
+		}
+
+		IteratorVector				operator-(const IteratorVector &rhs) const
+		{
+		}
+
+		IteratorVector				operator-(int n) const
+		{
+			while (n--)
+				*this--;
+			return (*this);
+		}
+
+		bool						operator<(const IteratorVector &rhs) const
+		{
+			return (this->ptr->element < rhs.ptr->element);
+		}
+
+		bool						operator>(const IteratorVector &rhs) const
+		{
+			return (this->ptr->element > rhs.ptr->element);
+		}
+
+		bool						operator<=(const IteratorVector &rhs) const
+		{
+			return (this->ptr->element <= rhs.ptr->element);
+		}
+
+		bool						operator>=(const IteratorVector &rhs) const
+		{
+			return (this->ptr->element >= rhs.ptr->element);
+		}
+
+		IteratorVector				operator+=(int n) const
+		
+		}
+
+		IteratorVector				operator-=(int n) const
+		{
+		}
+
+		IteratorVector				operator[](int n) const
+		{
+		}
+
+	};
 
 };
 

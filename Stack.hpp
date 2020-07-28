@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 03:38:54 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 04:43:53 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 17:58:30 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
 	/* https://www.cplusplus.com/reference/stack/stack                        */
 	/* ********************************************************************** */
 
-	template <class T, class Container = deque<T> >
+	template <class T, class C>
 	class Stack
 	{
 
@@ -32,7 +32,7 @@ namespace ft
 	/* ********************************************************************** */
 	
 		typedef T				value_type;
-		typedef Container		container_type;
+		typedef C				container_type;
 		typedef size_t			syze_type;
 
 	public:
@@ -41,7 +41,7 @@ namespace ft
 	/*   Member functions                                                     */
 	/* ********************************************************************** */
 		
-		explicit Stack (const container_type& ctnr = container_type())
+		explicit Stack (const container_type &ctnr = container_type())
 		{
 			return ;
 		}
@@ -69,15 +69,15 @@ namespace ft
 		{
 		}
 
-		size_type size(void) const
+		size_type				size(void) const
 		{
 		}
 
-		value_type& top(void)
+		value_type				&top(void)
 		{
 		}
 
-		const value_type& top(void) const
+		const value_type		&top(void) const
 		{
 		}
 	};
@@ -86,33 +86,33 @@ namespace ft
 /*   Non-member functions                                                     */
 /* ************************************************************************** */
 
-template <class T, class Container>
-bool	operator==(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
+template <class T, class C>
+bool	operator==(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool	operator!=(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
+template <class T, class C>
+bool	operator!=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool	operator<(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
+template <class T, class C>
+bool	operator<(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool	operator<=(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
+template <class T, class C>
+bool	operator<=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool	operator>(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
+template <class T, class C>
+bool	operator>(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool	operator>=(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
+template <class T, class C>
+bool	operator>=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
 }
 

@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 04:32:17 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 04:44:34 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 17:59:34 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
 	/* https://www.cplusplus.com/reference/queue/queue                        */
 	/* ********************************************************************** */
 
-	template <class T, class Container = deque<T> >
+	template <class T, class C>
 	class Queue
 	{
 
@@ -32,7 +32,7 @@ namespace ft
 	/* ********************************************************************** */
 	
 		typedef T					value_type;
-		typedef Container			container_type;
+		typedef C					container_type;
 		typedef size_t				syze_type;
 
 	
@@ -95,33 +95,33 @@ namespace ft
 /*   Non-member functions                                                     */
 /* ************************************************************************** */
 
-template <class T, class Container>
-bool		operator==(const Queue<T,Container> &lhs, const Queue<T,Container> &rhs)
+template <class T, class C>
+bool		operator==(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool		operator!=(const Queue<T,Container> &lhs, const Queue<T,Container> &rhs)
+template <class T, class C>
+bool		operator!=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool		operator<(const Queue<T,Container> &lhs, const Queue<T,Container> &rhs)
+template <class T, class C>
+bool		operator<(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool		operator<=(const Queue<T,Container> &lhs, const Queue<T,Container> &rhs)
+template <class T, class C>
+bool		operator<=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool		operator>(const Queue<T,Container> &lhs, const Queue<T,Container> &rhs)
+template <class T, class C>
+bool		operator>(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
 {
 }
 
-template <class T, class Container>
-bool		operator>=(const Queue<T,Container> &lhs, const Queue<T,Container> &rhs)
+template <class T, class C>
+bool		operator>=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
 {
 }
 
