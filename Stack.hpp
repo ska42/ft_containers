@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 03:38:54 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 03:50:37 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 04:43:53 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ namespace ft
 	/* ********************************************************************** */
 	/*   Member functions                                                     */
 	/* ********************************************************************** */
+		
 		explicit Stack (const container_type& ctnr = container_type())
 		{
 			return ;
@@ -64,7 +65,7 @@ namespace ft
 		{
 		}
 
-		void push (const value_type& val)
+		void push (const value_type &val)
 		{
 		}
 
@@ -86,32 +87,32 @@ namespace ft
 /* ************************************************************************** */
 
 template <class T, class Container>
-bool	operator==(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+bool	operator==(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
 {
 }
 
 template <class T, class Container>
-bool	operator!=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+bool	operator!=(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
 {
 }
 
 template <class T, class Container>
-bool	operator<(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+bool	operator<(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
 {
 }
 
 template <class T, class Container>
-bool	operator<=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+bool	operator<=(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
 {
 }
 
 template <class T, class Container>
-bool	operator>(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+bool	operator>(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
 {
 }
 
 template <class T, class Container>
-bool	operator>=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+bool	operator>=(const Stack<T,Container> &lhs, const Stack<T,Container> &rhs)
 {
 }
 
