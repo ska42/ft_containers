@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 22:08:23 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/29 00:45:30 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ namespace ft
 		bool						operator>(const IteratorList &rhs) const;
 		bool						operator<=(const IteratorList &rhs) const;
 		bool						operator>=(const IteratorList &rhs) const;
-		IteratorList				operator+=(int n) const;
-		IteratorList				operator-=(int n) const;
-		IteratorList				&operator[](int n) const;
+		IteratorList				&operator+=(int n) const;
+		IteratorList				&operator-=(int n) const;
+		T							&operator[](int n) const;
 
 	protected:
 		DoublyLinkedList<T>			*ptr;
@@ -249,27 +249,20 @@ namespace ft
 			this->ptr = list;
 		}
 
-		IteratorVector				operator+(const IteratorVector &rhs) const
-		{
-
-		}
-
 		IteratorVector				operator+(int n) const
 		{
-			while (n--)
-				*this++;
-			return (*this);
-		}
+			IteratorVector		iv(*this);
 
-		IteratorVector				operator-(const IteratorVector &rhs) const
-		{
+			iv += n;
+			return (iv);	
 		}
 
 		IteratorVector				operator-(int n) const
 		{
-			while (n--)
-				*this--;
-			return (*this);
+			IteratorVector		iv(*this);
+
+			iv -= n;
+			return (iv);
 		}
 
 		bool						operator<(const IteratorVector &rhs) const
@@ -292,16 +285,39 @@ namespace ft
 			return (this->ptr->element >= rhs.ptr->element);
 		}
 
-		IteratorVector				operator+=(int n) const
-		
+		IteratorVector				&operator+=(int n) const
+		{
+			while (n > 0)	
+			{
+				n--;
+				this++;
+			}
+			while (n < 0)
+			{
+				n++;
+				this--;
+			}
+			return (*this);
 		}
 
-		IteratorVector				operator-=(int n) const
+		IteratorVector				&operator-=(int n) const
 		{
+			while (n > 0)	
+			{
+				n--;
+				this--;
+			}
+			while (n < 0)
+			{
+				n++;
+				this++;
+			}
+			return (*this);
 		}
 
-		IteratorVector				operator[](int n) const
+		T							&operator[](int n) const
 		{
+			return (*(*this + n));
 		}
 
 	};
