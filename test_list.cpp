@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 01:59:09 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/28 03:38:22 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,5 +260,11 @@ int		main(void)
 	list.merge(list2);
 	mylist.merge(mylist2);
 	compareList("list.merge(list2)", mylist, list);
+	ft::swap<int>(mylist, mylist2);
+	std::swap<int>(list, list2);
+	compareList("ft::swap(list, list2)", mylist, list);
+	ft::swap<int>(mylist, mylist2);
+	std::swap<int>(list, list2);
+	compareList("ft::swap(list, list2)", mylist, list);
 	return (0);
 }
