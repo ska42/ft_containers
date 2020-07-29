@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/29 05:34:32 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/29 06:22:31 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,23 +193,28 @@ const allocator_type& alloc = allocator_type())
 
 		void					reserve(size_type n)
 		{
+			// A FAIRE
 		}
 
 		/* Element access */
 		reference				operator[](size_type n)
 		{
+			return (iterator(this->head)[n]);
 		}
 
 		const_reference			operator[](size_type n) const
 		{
+			return (iterator(this->head)[n]);
 		}
 
 		reference				at(size_type n)
 		{
+			return (iterator(this->head)[n]);
 		}
 
 		const_reference			at(size_type n) const
 		{
+			return (iterator(this->head)[n]);
 		}
 
 		reference				front(void)
@@ -244,47 +249,157 @@ const allocator_type& alloc = allocator_type())
 		template <class InputIterator>
 		void					assign(InputIterator first, InputIterator last)
 		{
+			this->clear();
+			while (first != last)
+			{
+				this->push_back(*first);
+				first++;
+			}
+			this->push_back(*last);
 		}
 
 		void					assign(size_type n, const value_type &val)
 		{
+			this->clear();	
+			while (n--)
+				this->push_back(val);
 		}
 
 		void					push_back(const value_type &val)
 		{
+			DoublyLinkedList <T>	*tail;
+			DoublyLinkedList <T>	*ptr = new DoublyLinkedList<T>();
+
+			ptr->next = NULL;
+			ptr->prev = NULL;
+			ptr->element = val;
+			if (!this->length)
+				this->head = ptr;
+			else
+			{
+				tail = this->head;
+				while (tail->next)
+					tail = tail->next;
+				tail->next = ptr;
+				ptr->prev = tail;
+			}
+			this->length++;
 		}
 
 		void					pop_back(void)
 		{
+			DoublyLinkedList <T>	*tail;
+
+			if (this->length)
+			{
+				tail = this->head;
+				while (tail->next)
+					tail = tail->next;
+				if (this->length == 1)
+				{
+					delete(tail);
+					this->head = NULL;
+				}
+				else
+				{
+					tail = tail->prev;
+					delete(tail->next);
+					tail->next = NULL;
+				}
+				this->length--;
+			}
 		}
 
 		iterator				insert(iterator position, const value_type &val)
 		{
+			DoublyLinkedList<T>		*add;
+			DoublyLinkedList<T>		*ptr;
+			
+			add = new DoublyLinkedList<T>();
+			add->next = NULL;
+			add->prev = NULL;
+			add->element = val;
+			ptr = position.getPtr();
+			if (!ptr->prev)
+				this->head = add;
+			add->prev = ptr->prev;
+			if (ptr->prev)
+				ptr->prev->next = add;
+			add->next = ptr;
+			ptr->prev = add;
+			this->length++;
+			return (iterator(add));
 		}
 
 		void					insert(iterator position, size_type n, const value_type &val)
 		{
+			while (n--)
+				this->insert(position, val);
 		}
 
 		template <class InputIterator>
 		void					insert(iterator position, InputIterator first, InputIterator last)
 		{
+			for (InputIterator it = first; it != last; it++)
+				this->insert(position, first);
 		}
 
 		iterator				erase(iterator position)
 		{
+			DoublyLinkedList<T>		*ptr;
+
+			ptr = position.getPtr();
+			if (!ptr->prev)
+			{
+				this->head = ptr->next;
+				if (this->head)
+					this->head->prev = NULL;
+			}
+			else
+				ptr->prev->next = ptr->next;
+			if (!ptr->next)
+			{
+				if (ptr->prev)
+					ptr->prev->next = NULL;
+			}
+			else
+				ptr->next->prev = ptr->prev;
+			delete(ptr);
+			this->length--;
+			return (iterator(this->head));
 		}
 
 		iterator				erase(iterator first, iterator last)
 		{
+			iterator tmp;
+		
+			while (first != last)
+			{
+				tmp = first;
+				first++;
+				this->erase(tmp);
+			}
+			this->erase(last);
+			return (iterator(this->head));
 		}
 
-		void					swap(vector &x)
+		void					swap(Vector &x)
 		{
+			DoublyLinkedList<T>	*tmp;
+			size_type			tmp_length;
+			
+			tmp = x.head;
+			x.head = this->head;
+			this->head = tmp;
+			tmp_length = x.length;
+			x.length = this->length;
+			this->length = tmp_length;
 		}
 
 		void					clear(void)
 		{
+			while (this->length)
+				this->pop_back();
 		}
 
 	};
@@ -297,36 +412,43 @@ const allocator_type& alloc = allocator_type())
 	template <class T, class Alloc>
 	bool						operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
+		return (lhs == rhs);
 	}
 
 	template <class T, class Alloc>
 	bool						operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
+		return (lhs != rhs);
 	}
 
 	template <class T, class Alloc>
 	bool						operator<(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
+		return (lhs < rhs);
 	}
 
 	template <class T, class Alloc>
 	bool						operator<=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
+		return (lhs <= rhs);
 	}
 
 	template <class T, class Alloc>
 	bool						operator>(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
+		return (lhs > rhs);
 	}
 
 	template <class T, class Alloc>
 	bool						operator>=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
+		return (lhs >= rhs);
 	}
 
 	template <class T, class Alloc>
 	void						swap(vector<T,Alloc> &x, vector<T,Alloc> &y)
 	{
+		x.swap(y);
 	}
 
 };
