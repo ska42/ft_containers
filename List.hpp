@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 03:50:38 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/29 06:59:51 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ namespace ft
 		}
 
 		/* Non-Default Constructor */
-
 		explicit List (size_type n, const value_type &val = value_type(),
 			const allocator_type &alloc = allocator_type())
 		{
