@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/29 00:48:35 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/29 05:14:01 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,6 +347,58 @@ namespace ft
 			this->ptr = it.ptr;
 			return (*this);
 		}
+
+		IteratorVector					operator+(int n) const
+		{
+			IteratorVector				iv(*this);
+
+			iv -= n;
+			return (iv);	
+		}
+
+		IteratorVector					operator-(int n) const
+		{
+			IteratorVector				iv(*this);
+
+			iv += n;
+			return (iv);
+		}
+
+		IteratorVector					&operator+=(int n) const
+		{
+			while (n > 0)	
+			{
+				n--;
+				this--;
+			}
+			while (n < 0)
+			{
+				n++;
+				this++;
+			}
+			return (*this);
+		}
+
+		IteratorVector					&operator-=(int n) const
+		{
+			while (n > 0)	
+			{
+				n--;
+				this++;
+			}
+			while (n < 0)
+			{
+				n++;
+				this--;
+			}
+			return (*this);
+		}
+
+		T								&operator[](int n) const
+		{
+			return (*(*this + n));
+		}
+
 	};
 
 };

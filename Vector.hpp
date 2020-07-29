@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/29 02:50:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/29 05:34:32 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ namespace ft
 		typedef typename ft::ReverseIteratorVector<T>::difference_type		difference_type;
 		typedef size_t														size_type;
 
+	private:
+		DoublyLinkedList<T>		*head;
+		size_type				length;
+
 	public:
 
 	/* ********************************************************************** */
@@ -56,88 +60,135 @@ namespace ft
 
 		explicit Vector(const allocator_type& alloc = allocator_type())
 		{
+			(void)alloc;
+			this->head = NULL;
+			this->length = 0;
+			return ;
 		}
 
 		~Vector(void)
 		{
+			DoublyLinkedList<T>		*tmp;
+
+			while(this->head)
+			{
+				tmp = this->head->next;
+				delete(this->head);
+				this->head = this->head->next;
+			}
+			return ;
 		}
 
 		Vector(const Vector &vector)
 		{
+			*this = vector;
+			return ;
 		}
 
 		Vector				&operator=(const Vector &vector)
 		{
+			DoublyLinkedList<T>		*tmp;
+
+			this->head = NULL;
+			this->length = 0;
+			tmp = list.head;
+			while (tmp)
+			{
+				this->push_back(tmp->element);
+				tmp = tmp->next;
+			}
+			return (*this);
+
 		}
 
 		/* Non-Default Constructor */
 		explicit Vector(size_type n, const value_type &val = value_type(),
 const allocator_type &alloc = allocator_type())
 		{
+			(void) alloc;
+			this->head = NULL;
+			this->length = 0;
+			assign(static_cast<size_type>(n), static_cast<value_type>(val));
 		}
 
 		template <class InputIterator>
 		Vector(InputIterator first, InputIterator last,
 const allocator_type& alloc = allocator_type())
 		{
-		}
-		
-		Vector(const Vector &x)
-		{
+			(void) alloc;
+			this->head = NULL;
+			this->length = 0;
+			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
 		}
 
 		/* Iterators */
 		iterator				begin(void)
 		{
+			return (iterator(this->head));
 		}
 
 		const_iterator			begin(void) const
 		{
+			return (iterator(this->head));
 		}
 
 		iterator				end(void)
 		{
+			return (iterator(this->tail) + this->length);
 		}
 
 		const_iterator			end(void) const
 		{
+			return (iterator(this->tail) + this->length);
 		}
 
 		reverse_iterator		rbegin(void)
 		{
+			return (reverse_iterator(this->head));
 		}
 
 		const_reverse_iterator	rbegin(void) const
 		{
+			return (reverse_iterator(this->head));
 		}
 
 		reverse_iterator		rend(void)
 		{
+			return (reverse_iterator(this->tail) - this->length);
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
+			return (reverse_iterator(this->tail) - this->length);
 		}
 
 		/* Capacity */
 		size_type				size(void) const
 		{
+			return (this->length);
 		}
 
 		size_type				max_size(void) const
 		{
+			// A FAIRE
 		}
 
 		void					resize(size_type n, value_type val = value_type())
 		{
+			while (this->length > n)
+				this->pop_back();
+			while (this->length < n)
+				this->push_back(val);
 		}
 
 		size_type				capacity(void) const
 		{
+			// A FAIRE
 		}
 
 		bool					empty(void) const
 		{
+			return (!this->length);
 		}
 
 		void					reserve(size_type n)
@@ -163,18 +214,30 @@ const allocator_type& alloc = allocator_type())
 
 		reference				front(void)
 		{
+			if (!this->head)
+				throw(std::exception());
+			return (this->head->element);
 		}
 
 		const_reference			front(void) const
 		{
+			if (!this->head)
+				throw(std::exception());
+			return (this->head->element);
 		}
 
 		reference				back(void)
 		{
+			if (!this->head)
+				throw(std::exception());
+			return (iterator(this->head)[this->length]);
 		}
 
 		const_reference			back(void) const
 		{
+			if (!this->head)
+				throw(std::exception());
+			return (iterator(this->head)[this->length]);
 		}
 
 		/* Modifiers */
