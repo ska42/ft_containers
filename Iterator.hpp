@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/30 02:41:51 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/30 06:57:13 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ namespace ft
 	{
 		BinaryTreeMap		*parent;
 		BinaryTreeMap		*left;
-		BinaryTreeMap		*right
+		BinaryTreeMap		*right;
 		Key					key;
 		T					value;
+		size_t				left_height;
+		size_t				right_height;
 	};
 
 	template <class T>
@@ -395,7 +397,7 @@ namespace ft
 
 	};
 	
-	template <class T, class Category = bidirectional_iterator_tag>
+	template <class Key, class T, class Category = bidirectional_iterator_tag>
 	class IteratorMap
 	{
 	
@@ -414,7 +416,7 @@ namespace ft
 		T							&operator[](int n) const;
 
 	protected:
-		BinaryTreeMap<T>			*ptr;
+		BinaryTreeMap<Key, T>			*ptr;
 
 	public:
 		
@@ -460,8 +462,8 @@ namespace ft
 				this-ptr = this->ptr->right;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<T> tmp = this->ptr;
-				BinaryTreeMap<T> prev = this->ptr;
+				BinaryTreeMap<Key, T> tmp = this->ptr;
+				BinaryTreeMap<Key, T> prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->right)
 				{
@@ -487,8 +489,8 @@ namespace ft
 				this-ptr = this->ptr->left;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<T> tmp = this->ptr;
-				BinaryTreeMap<T> prev = this->ptr;
+				BinaryTreeMap<Key, T> tmp = this->ptr;
+				BinaryTreeMap<Key, T> prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->left)
 				{
@@ -536,7 +538,7 @@ namespace ft
 	};
 
 
-	template <class T>
+	template <class Key, class T>
 	class ReverseIteratorMap : public IteratorMap<T>
 	{
 
@@ -546,7 +548,7 @@ namespace ft
 		ReverseIteratorMap(void) {}
 		~ReverseIteratorMap(void) {}
 
-		ReverseIteratorMap(BinaryTreeMap<T> *map)
+		ReverseIteratorMap(BinaryTreeMap<Key, T> *map)
 		{
 			this->ptr = map;
 		}
@@ -568,8 +570,8 @@ namespace ft
 				this-ptr = this->ptr->left;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<T> tmp = this->ptr;
-				BinaryTreeMap<T> prev = this->ptr;
+				BinaryTreeMap<Key, T> tmp = this->ptr;
+				BinaryTreeMap<Key, T> prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->left)
 				{
@@ -595,8 +597,8 @@ namespace ft
 				this-ptr = this->ptr->right;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<T> tmp = this->ptr;
-				BinaryTreeMap<T> prev = this->ptr;
+				BinaryTreeMap<Key, T> tmp = this->ptr;
+				BinaryTreeMap<Key, T> prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->right)
 				{
