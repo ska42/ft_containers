@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/29 05:14:01 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/30 02:41:51 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,16 @@ namespace ft
 	/* https://www.cplusplus.com/references/iterator/iterator                 */
 	/* https://www.cplusplus.com/reference/iterator/iterator_traits/          */
 	/* ********************************************************************** */
+
+	template <class Key, class T>
+	struct BinaryTreeMap
+	{
+		BinaryTreeMap		*parent;
+		BinaryTreeMap		*left;
+		BinaryTreeMap		*right
+		Key					key;
+		T					value;
+	};
 
 	template <class T>
 	struct DoublyLinkedList
@@ -348,23 +358,7 @@ namespace ft
 			return (*this);
 		}
 
-		IteratorVector					operator+(int n) const
-		{
-			IteratorVector				iv(*this);
-
-			iv -= n;
-			return (iv);	
-		}
-
-		IteratorVector					operator-(int n) const
-		{
-			IteratorVector				iv(*this);
-
-			iv += n;
-			return (iv);
-		}
-
-		IteratorVector					&operator+=(int n) const
+		ReverseIteratorVector			&operator+=(int n) const
 		{
 			while (n > 0)	
 			{
@@ -379,7 +373,7 @@ namespace ft
 			return (*this);
 		}
 
-		IteratorVector					&operator-=(int n) const
+		ReverseIteratorVector			&operator-=(int n) const
 		{
 			while (n > 0)	
 			{
@@ -399,6 +393,229 @@ namespace ft
 			return (*(*this + n));
 		}
 
+	};
+	
+	template <class T, class Category = bidirectional_iterator_tag>
+	class IteratorMap
+	{
+	
+	private:
+		/* Lock to compile error on use */
+		IteratorMap					operator+(const IteratorMap &rhs) const;
+		IteratorMap					operator+(int n) const;
+		IteratorMap					operator-(const IteratorMap &rhs) const;
+		IteratorMap					operator-(int n) const;
+		bool						operator<(const IteratorMap &rhs) const;
+		bool						operator>(const IteratorMap &rhs) const;
+		bool						operator<=(const IteratorMap &rhs) const;
+		bool						operator>=(const IteratorMap &rhs) const;
+		IteratorMap					&operator+=(int n) const;
+		IteratorMap					&operator-=(int n) const;
+		T							&operator[](int n) const;
+
+	protected:
+		BinaryTreeMap<T>			*ptr;
+
+	public:
+		
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef T								value_type;
+		typedef T								&reference;
+		typedef T								*pointer;
+		typedef Category						category;
+		typedef std::ptrdiff_t					difference_type;
+
+	/* ********************************************************************** */
+	/*   Member functions                                                     */
+	/* ********************************************************************** */
+
+		/* Coplien Form */
+		IteratorMap(void) {}
+
+		~IteratorMap(void) {}
+
+		IteratorMap(const IteratorMap &it)
+		{
+			*this = it;
+		}
+
+		IteratorMap				&operator=(const IteratorMap &rhs)
+		{
+			this->ptr = rhs.ptr;
+			return (*this);
+		}
+
+		
+		IteratorMap(BinaryTreeMap<T> *map)
+		{
+			this->ptr = map;
+		}
+
+		IteratorMap				&operator++(void)
+		{
+			if (this->ptr && this->ptr->right)
+				this-ptr = this->ptr->right;
+			else if (this->ptr)
+			{
+				BinaryTreeMap<T> tmp = this->ptr;
+				BinaryTreeMap<T> prev = this->ptr;
+				this->ptr = this->ptr->parent;
+				while (this->ptr && prev == this->ptr->right)
+				{
+					prev = this->ptr;
+					this->ptr = this->ptr->parent;
+				}
+				if (!this->ptr)
+					this->ptr = tmp;
+			}
+			return (*this);
+		}
+
+		IteratorMap				operator++(int)
+		{
+			IteratorMap tmp(*this);
+			this->operator++();	
+			return (tmp);
+		}
+
+		IteratorMap				&operator--(void)
+		{
+			if (this->ptr && this->ptr->left)
+				this-ptr = this->ptr->left;
+			else if (this->ptr)
+			{
+				BinaryTreeMap<T> tmp = this->ptr;
+				BinaryTreeMap<T> prev = this->ptr;
+				this->ptr = this->ptr->parent;
+				while (this->ptr && prev == this->ptr->left)
+				{
+					prev = this->ptr;
+					this->ptr = this->ptr->parent;
+				}
+				if (!this->ptr)
+					this->ptr = tmp;
+			}
+			return (*this);
+		}
+
+		IteratorMap				operator--(int)
+		{
+			IteratorMap tmp(*this);
+			this->operator--();
+			return (tmp);
+		}
+
+  		bool						operator==(const IteratorMap &rhs) const
+		{
+			return (this->ptr == rhs.ptr);			
+		}
+
+  		bool						operator!=(const IteratorMap &rhs) const
+		{
+			return (this->ptr != rhs.ptr);
+		}
+
+		T							&operator*(void) // dereferenced lvalue
+		{
+			return (this->ptr->value);	
+		}
+
+		T							*operator->(void) // dereferenced rvalue
+		{ 
+			return (&this->ptr->value);	
+		}
+		
+		BinaryTreeMap<T>			*getPtr(void)
+		{
+			return (this->ptr);
+		}	
+
+	};
+
+
+	template <class T>
+	class ReverseIteratorMap : public IteratorMap<T>
+	{
+
+	private:
+
+	public:
+		ReverseIteratorMap(void) {}
+		~ReverseIteratorMap(void) {}
+
+		ReverseIteratorMap(BinaryTreeMap<T> *map)
+		{
+			this->ptr = map;
+		}
+
+		ReverseIteratorMap(const ReverseIteratorMap &it)
+		{
+			*this = it;
+		}
+
+		ReverseIteratorMap			&operator=(const ReverseIteratorMap &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		ReverseIteratorMap			&operator++(void)
+		{
+			if (this->ptr && this->ptr->left)
+				this-ptr = this->ptr->left;
+			else if (this->ptr)
+			{
+				BinaryTreeMap<T> tmp = this->ptr;
+				BinaryTreeMap<T> prev = this->ptr;
+				this->ptr = this->ptr->parent;
+				while (this->ptr && prev == this->ptr->left)
+				{
+					prev = this->ptr;
+					this->ptr = this->ptr->parent;
+				}
+				if (!this->ptr)
+					this->ptr = tmp;
+			}
+			return (*this);
+		}
+
+		ReverseIteratorMap			operator++(int)
+		{
+			ReverseIteratorMap tmp(*this);
+			this->operator++();
+			return (tmp);
+		}
+
+		ReverseIteratorMap			&operator--(void)
+		{
+			if (this->ptr && this->ptr->right)
+				this-ptr = this->ptr->right;
+			else if (this->ptr)
+			{
+				BinaryTreeMap<T> tmp = this->ptr;
+				BinaryTreeMap<T> prev = this->ptr;
+				this->ptr = this->ptr->parent;
+				while (this->ptr && prev == this->ptr->right)
+				{
+					prev = this->ptr;
+					this->ptr = this->ptr->parent;
+				}
+				if (!this->ptr)
+					this->ptr = tmp;
+			}
+			return (*this);
+
+		}
+
+		ReverseIteratorMap			operator--(int)
+		{
+			ReverseIteratorMap tmp(*this);
+			this->operator--();
+			return (tmp);
+		}
 	};
 
 };

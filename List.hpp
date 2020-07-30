@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/29 06:59:51 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/07/29 18:43:25 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ namespace ft
 		{
 			DoublyLinkedList<T>		*tmp;
 
-			while(this->head)
+			while (this->head)
 			{
 				tmp = this->head->next;
 				delete(this->head);
