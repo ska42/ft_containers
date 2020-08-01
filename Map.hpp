@@ -6,12 +6,18 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/30 07:56:05 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/02 00:14:26 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
+
+# include <iostream>
+
+# include <algorithm>
+# include <functional>
+# include "Iterator.hpp"
 
 namespace ft
 {
@@ -21,7 +27,7 @@ namespace ft
 	/* https://www.cplusplus.com/reference/map/map                            */
 	/* ********************************************************************** */
 
-	template <class Key, class T, class Compare = less<Key>, class Alloc = allocator<pair<const Key,T> > >
+	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
 	class Map
 	{
 	
@@ -34,17 +40,17 @@ namespace ft
 		typedef Key												key_type;
 		typedef T												mapped_type;
 		typedef std::pair<const key_type,mapped_type>			value_type;
-		typedef less<key_type>									key_compare;
+		typedef std::less<key_type>								key_compare;
 		typedef Alloc											allocator_type;
 		typedef T												&reference;
 		typedef const T											&const_reference;
 		typedef	T												*pointer;
 		typedef	const T											*const_pointer;
-		typedef ft::IteratorMap<T>								iterator;
-		typedef ft::IteratorMap<const T>						const_iterator;
-		typedef ft::ReverseIteratorMap<T>						reverse_iterator;
-		typedef ft::ReverseIteratorMap<const T>					const_reverse_iterator;
-		typedef typename ft::IteratorMap<T>::difference_type	difference_type;
+		typedef ft::IteratorMap<Key, T>							iterator;
+		typedef ft::IteratorMap<Key, const T>					const_iterator;
+		typedef ft::ReverseIteratorMap<Key, T>					reverse_iterator;
+		typedef ft::ReverseIteratorMap<Key, const T>			const_reverse_iterator;
+		typedef typename ft::IteratorMap<Key, T>::difference_type	difference_type;
 		typedef size_t											size_type;
 
 
@@ -72,11 +78,28 @@ namespace ft
 		{
 			return comp(x.first, y.first);
 		}
-	}
+	};
 
 	private:
+		Compare						comp;
 		BinaryTreeMap<Key, T>		*root;
 		size_type					length;
+
+		/* TEST PURPOSE */
+		void	print_binary_tree(BinaryTreeMap<Key, T> *x, int n = 0)
+		{
+			int i;
+
+			i = n;
+			if (x->left)
+				print_binary_tree(x->left, n + 1);
+			while (i--)
+				std::cout << "   ";
+			std::cout << x->key;
+			std::cout << std::endl;
+			if (x->right)
+				print_binary_tree(x->right, n + 1);
+		}
 
 	   /* ******************************************************************* */
 	   /* references:                                                         */
@@ -158,11 +181,11 @@ namespace ft
 			while (root)
 			{
 				if (root->left == branch)
-					root->left_height = std::max(branch->left_height, branch->right_height) + 1;
+					root->left_height = std::max<int>(branch->left_height, branch->right_height) + 1;
 				else if (root->right == branch)
-					root->right_height = std::max(branch->left_height, branch->right_height) + 1;
+					root->right_height = std::max<int>(branch->left_height, branch->right_height) + 1;
 				balance_factor = static_cast<int>(root->left_height - root->right_height);
-				if (balance_factor > 1 || balance_factor < 1)
+				if (balance_factor > 1 || balance_factor < -1)
 					rebalance(balance_factor, grand_child);
 				grand_child = branch;
 				branch = root;
@@ -198,6 +221,8 @@ namespace ft
 		explicit Map (const key_compare &comp = key_compare(),
 const allocator_type &alloc = allocator_type())
 		{
+			this->comp = comp;
+			(void) alloc;
 			this->root = NULL;
 			this->length = 0;
 			return ;
@@ -217,13 +242,18 @@ const allocator_type &alloc = allocator_type())
 		Map						&operator=(const Map &map)
 		{
 			//TO COMPLETE
+			(void) map;
+			return (*this);
 		}
 
 		/* Non-Default Constructor */
 		template <class InputIterator>
 		Map (InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
 		{
-
+			this->comp = comp;
+			(void) first;
+			(void) last;
+			(void) alloc;
 		}
 
 		/* Iterators */
@@ -326,11 +356,11 @@ const allocator_type &alloc = allocator_type())
 		/* Element access */
 		mapped_type				&operator[](const key_type &k)
 		{
-			
+			(void) k;	
 		}
 
 		/* Modifiers */
-		pair<iterator, bool>	insert(const value_type &val)
+		std::pair<iterator, bool>	insert(const value_type &val)
 		{
 			BinaryTreeMap<Key, T>	*node;
 			BinaryTreeMap<Key, T>	*new_node;
@@ -345,16 +375,16 @@ const allocator_type &alloc = allocator_type())
 			new_node->right_height = 0;
 			if (this->root)
 			{
+				node = this->root;
 				while (!new_node->parent)
 				{
-					node = this->root;
 					if (new_node->key == node->key)
 					{
 						node->value = new_node->value;
 						delete(new_node);
-						return (std::pair(iterator(node, false)));
+						return (std::pair<iterator, bool>(iterator(node), false));
 					}
-					if (key_compare(new_node->key, node->key))
+					if (this->comp(new_node->key, node->key))
 					{
 						if (node->left)
 							node = node->left;
@@ -378,33 +408,46 @@ const allocator_type &alloc = allocator_type())
 			}
 			else
 				this->root = new_node;
+			std::cout << "before balance" << std::endl;
+			print_binary_tree(this->root);
 			this->balance(new_node);
-			return (std::pair(iterator(new_node, true));
+			std::cout << "after balance" << std::endl;
+			print_binary_tree(this->root);
+			return (std::pair<iterator, bool>(iterator(new_node), true));
 		}
 
 		iterator				insert(iterator position, const value_type &val)
 		{
+			(void) position;
+			(void) val;
 		}
 
 		template <class InputIterator>
 		void					insert(InputIterator first, InputIterator last)
 		{
+			(void) first;
+			(void) last;
 		}
 
 		void					erase(iterator position)
 		{
+			(void) position;
 		}
 
 		size_type				erase(const key_type &k)
 		{
+			(void) k;
 		}
 
 		void					erase(iterator first, iterator last)
 		{
+			(void) first;
+			(void) last;
 		}
 
 		void					swap(Map &x)
 		{
+			(void) x;
 		}
 
 		void					clear(void)
@@ -423,38 +466,47 @@ const allocator_type &alloc = allocator_type())
 		/* Operations */
 		iterator				find(const key_type &k)
 		{
+			(void) k;
 		}
 
 		const_iterator			find(const key_type &k) const
 		{
+			(void) k;
 		}
 
 		size_type				count(const key_type &k) const
 		{
+			(void) k;
 		}
 
 		iterator				lower_bound(const key_type &k)
 		{
+			(void) k;
 		}
 
 		const_iterator			lower_bound(const key_type &k) const
 		{
+			(void) k;
 		}
 
 		iterator				upper_bound(const key_type &k)
 		{
+			(void) k;
 		}
 
 		const_iterator			upper_bound(const key_type &k) const
 		{
+			(void) k;
 		}
 
-		pair<const_iterator,const_iterator>		equal_range(const key_type &k) const
+		std::pair<const_iterator,const_iterator>		equal_range(const key_type &k) const
 		{
+			(void) k;
 		}
 
-		pair<iterator,iterator>					equal_range(const key_type &k)
+		std::pair<iterator,iterator>					equal_range(const key_type &k)
 		{
+			(void) k;
 		}
 
 	};

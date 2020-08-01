@@ -6,7 +6,7 @@
 #    By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/30 21:31:46 by lmartin           #+#    #+#              #
-#    Updated: 2020/07/26 02:43:43 by lmartin          ###   ########.fr        #
+#    Updated: 2020/08/01 21:06:36 by lmartin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #
@@ -67,34 +67,47 @@ DIR_OBJS	=	./compiled_srcs/
 
 # FILES #
 
-SRC			=	test_list.cpp
+MAP_SRC			=	test_map.cpp
 
-SRCS		=	$(SRC)
+MAP_SRCS		=	$(MAP_SRC)
+
+LIST_SRC		=	test_list.cpp
+
+LIST_SRCS		=	$(LIST_SRC)
 
 # COMPILED_SOURCES #
 
-OBJS 		=	$(SRCS:%.cpp=$(DIR_OBJS)%.o)
+MAP_OBJS	=	$(MAP_SRCS:%.cpp=$(DIR_OBJS)%.o)
 
-NAME 		=	test_list
+LIST_OBJS	=	$(LIST_SRCS:%.cpp=$(DIR_OBJS)%.o)
 
+TEST_MAP	=	test_map
+
+TEST_LIST 	=	test_list
 
 # **************************************************************************** #
 
 ## RULES ##
 
-all:			$(NAME)
+all:			$(TEST_LIST) $(TEST_MAP)
 
 # VARIABLES RULES #
 
-$(NAME):		$(OBJS)
-				@printf "\033[2K\r$(_GREEN) All files compiled into '$(DIR_OBJS)'. $(_END)✅\n"
-				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(OBJS) -o $(NAME)
-				@printf "$(_GREEN) Executable '$(NAME)' created. $(_END)✅\n"
+$(TEST_MAP):	$(MAP_OBJS)
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(MAP_OBJS)'. $(_END)✅\n"
+				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(MAP_OBJS) -o $(TEST_MAP)
+				@printf "$(_GREEN) Executable '$(TEST_MAP)' created. $(_END)✅\n"
+
+$(TEST_LIST):	$(LIST_OBJS)
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(LIST_OBJS)'. $(_END)✅\n"
+				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(LIST_OBJS) -o $(TEST_LIST)
+				@printf "$(_GREEN) Executable '$(TEST_LIST)' created. $(_END)✅\n"
 
 # COMPILED_SOURCES RULES #
 
-$(OBJS):		| $(DIR_OBJS)
+$(MAP_OBJS):		| $(DIR_OBJS)
 
+$(LIST_OBJS):		| $(DIR_OBJS)
 
 $(DIR_OBJS)%.o: $(DIR_SRCS)%.cpp
 				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) -c $< -o $@
@@ -111,8 +124,10 @@ clean:
 				@printf "$(_RED) '"$(DIR_OBJS)"' has been deleted. $(_END)🗑️\n"
 
 fclean:			clean
-				@$(RM) $(NAME)
-				@printf "$(_RED) '"$(NAME)"' has been deleted. $(_END)🗑️\n"
+				@$(RM) $(TEST_MAP)
+				@printf "$(_RED) '"$(TEST_MAP)"' has been deleted. $(_END)🗑️\n"
+				@$(RM) $(TEST_LIST)
+				@printf "$(_RED) '"$(TEST_LIST)"' has been deleted. $(_END)🗑️\n"
 
 re:				fclean all
 

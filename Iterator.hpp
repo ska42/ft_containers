@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/30 06:57:13 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/01 21:09:49 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ namespace ft
 	};
 
 	template <class T, class Category = random_access_iterator_tag>
-	class IteratorVector: public IteratorList
+	class IteratorVector: public IteratorList<T>
 	{
 	private:
 		
@@ -335,7 +335,7 @@ namespace ft
 	};
 
 	template <class T>
-	class ReverseIteratorVector : public ReverseIteratorVector<T>, public IteratorVector<T>
+	class ReverseIteratorVector : public ReverseIteratorList<T>, public IteratorVector<T>
 	{
 
 	private:
@@ -451,7 +451,7 @@ namespace ft
 		}
 
 		
-		IteratorMap(BinaryTreeMap<T> *map)
+		IteratorMap(BinaryTreeMap<Key, T> *map)
 		{
 			this->ptr = map;
 		}
@@ -530,7 +530,7 @@ namespace ft
 			return (&this->ptr->value);	
 		}
 		
-		BinaryTreeMap<T>			*getPtr(void)
+		BinaryTreeMap<Key, T>			*getPtr(void)
 		{
 			return (this->ptr);
 		}	
@@ -539,7 +539,7 @@ namespace ft
 
 
 	template <class Key, class T>
-	class ReverseIteratorMap : public IteratorMap<T>
+	class ReverseIteratorMap : public IteratorMap<Key, T>
 	{
 
 	private:
@@ -567,7 +567,7 @@ namespace ft
 		ReverseIteratorMap			&operator++(void)
 		{
 			if (this->ptr && this->ptr->left)
-				this-ptr = this->ptr->left;
+				this->ptr = this->ptr->left;
 			else if (this->ptr)
 			{
 				BinaryTreeMap<Key, T> tmp = this->ptr;
@@ -594,7 +594,7 @@ namespace ft
 		ReverseIteratorMap			&operator--(void)
 		{
 			if (this->ptr && this->ptr->right)
-				this-ptr = this->ptr->right;
+				this->ptr = this->ptr->right;
 			else if (this->ptr)
 			{
 				BinaryTreeMap<Key, T> tmp = this->ptr;
