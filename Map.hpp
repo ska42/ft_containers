@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/02 00:14:26 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/02 03:36:28 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,10 @@ namespace ft
 				y->left->parent = x;
 			x->right = y->left;
 			y->left = x;
-			this->balance(x->right);
+			if (!x->right)
+				x->right_height = 0;
+			else
+				balance(x->right);
 		}
 
 		/*
@@ -155,7 +158,10 @@ namespace ft
 				x->right->parent = y;
 			y->left = x->right;
 			x->right = y;
-			this->balance(y->left);
+			if (!y->left)
+				y->left_height = 0;
+			else
+				balance(y->left);
 		}
 
 		void	left_right_rotate(BinaryTreeMap<Key, T> *x, BinaryTreeMap<Key, T> *y, BinaryTreeMap<Key, T> *z)
