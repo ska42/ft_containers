@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/02 03:36:28 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/03 21:34:47 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ namespace ft
 			if (!x->right)
 				x->right_height = 0;
 			else
-				balance(x->right);
+				calcul_height(x->right);
 		}
 
 		/*
@@ -161,19 +161,35 @@ namespace ft
 			if (!y->left)
 				y->left_height = 0;
 			else
-				balance(y->left);
+				calcul_height(y->left);
 		}
 
 		void	left_right_rotate(BinaryTreeMap<Key, T> *x, BinaryTreeMap<Key, T> *y, BinaryTreeMap<Key, T> *z)
 		{
-			left_rotate(x, y);
-			right_rotate(y, z);
+			left_rotate(y, x);
+			right_rotate(z, y);
 		}
 
 		void	right_left_rotate(BinaryTreeMap<Key, T> *x, BinaryTreeMap<Key, T> *y, BinaryTreeMap<Key, T> *z)
 		{
-			right_rotate(x, y);
-			left_rotate(y, z);
+			right_rotate(y, x);
+			left_rotate(z, y);
+		}
+
+		void	calcul_height(BinaryTreeMap<Key, T> *branch)
+		{
+			BinaryTreeMap<Key, T>	*root;
+
+			root = (branch) ? branch->parent : NULL;
+			while (root)
+			{
+				if (root->left == branch)
+					root->left_height = std::max<int>(branch->left_height, branch->right_height) + 1;
+				else if (root->right == branch)
+					root->right_height = std::max<int>(branch->left_height, branch->right_height) + 1;
+				branch = root;
+				root = branch->parent;
+			}
 		}
 
 		void	balance(BinaryTreeMap<Key, T> *branch)
@@ -182,14 +198,11 @@ namespace ft
 			BinaryTreeMap<Key, T>	*grand_child;
 			BinaryTreeMap<Key, T>	*root;
 
+			calcul_height(branch);
 			grand_child = branch;
-			root = branch->parent;
+			root = (branch) ? branch->parent : NULL;
 			while (root)
 			{
-				if (root->left == branch)
-					root->left_height = std::max<int>(branch->left_height, branch->right_height) + 1;
-				else if (root->right == branch)
-					root->right_height = std::max<int>(branch->left_height, branch->right_height) + 1;
 				balance_factor = static_cast<int>(root->left_height - root->right_height);
 				if (balance_factor > 1 || balance_factor < -1)
 					rebalance(balance_factor, grand_child);
@@ -197,6 +210,9 @@ namespace ft
 				branch = root;
 				root = branch->parent;
 			}
+			balance_factor = static_cast<int>(this->root->left_height - this->root->right_height);
+			if (balance_factor > 1 || balance_factor < -1)
+					rebalance(balance_factor, grand_child);
 		}
 
 		void	rebalance(int balance_factor, BinaryTreeMap<Key, T> *branch)
@@ -204,14 +220,14 @@ namespace ft
 			if (balance_factor > 1)
 			{
 				if (branch == branch->parent->left)
-					right_rotate(branch, branch->parent);
+					right_rotate(branch->parent, branch);
 				else if (branch == branch->parent->right)
 					left_right_rotate(branch->parent, branch, branch->parent->parent);
 			}
 			else if (balance_factor < 1)
 			{
 				if (branch == branch->parent->right)	
-					left_rotate(branch, branch->parent);
+					left_rotate(branch->parent, branch);
 				else if (branch == branch->parent->left)
 					right_left_rotate(branch->parent, branch, branch->parent->parent);
 			}
@@ -414,11 +430,11 @@ const allocator_type &alloc = allocator_type())
 			}
 			else
 				this->root = new_node;
-			std::cout << "before balance" << std::endl;
 			print_binary_tree(this->root);
+			std::cout << "==============================" << std::endl;
 			this->balance(new_node);
-			std::cout << "after balance" << std::endl;
 			print_binary_tree(this->root);
+			std::cout << "==============================" << std::endl;
 			return (std::pair<iterator, bool>(iterator(new_node), true));
 		}
 

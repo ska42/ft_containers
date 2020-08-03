@@ -6,7 +6,7 @@
 #    By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/30 21:31:46 by lmartin           #+#    #+#              #
-#    Updated: 2020/08/01 21:06:36 by lmartin          ###   ########.fr        #
+#    Updated: 2020/08/03 20:54:33 by lmartin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #
@@ -48,7 +48,7 @@ _IWHITE		=	\e[47m
 
 CC			=	clang++
 
-CC_FLAGS	=	-Wall -Wextra -Werror
+CC_FLAGS	=	-g3 -fsanitize=address -Wall -Wextra -Werror
 
 
 # DELETE #
