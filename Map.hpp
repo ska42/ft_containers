@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/04 04:15:13 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/04 23:21:00 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,87 +245,77 @@ namespace ft
 			}
 		}
 
-		void	cpy_links(BinaryTreeMap<Key, T> *cpy, BinaryTreeMap<Key, T> *x)
-		{
-			cpy->parent = x->parent;
-			cpy->left = x->left;
-			cpy->right = x->right;
-			cpy->left_height = x->left_height;
-			cpy->right_height = x->right_height;
-		}
-
-		void	swap_nodes(BinaryTreeMap<Key, T> *x, BinaryTreeMap<Key, T> *y)
-		{
-			BinaryTreeMap<Key, T> tmp;
-
-			cpy_links(&tmp, x);
-			if (x->parent && x->parent->left == x)
-				x->parent->left = y;
-			else if (x->parent && x->parent->right == x)
-				x->parent->right = y;
-			if (x->left && x->left != y)
-				x->left->parent = y;
-			if (x->right && x->right != y)
-				x->right->parent = y;
-			if (y->left && y->left != x)
-				y->left->parent = x;
-			if (y->right && y->right != x)
-				y->right->parent = x;
-			cpy_links(x, y);
-			x->parent = y;
-			cpy_links(y, &tmp);
-			if (y->left == y)
-				y->left = x;
-			if (y->right == y)
-				y->right = x;
-			if (!y->parent)
-				this->root = y;
-			x->key = y->key;
-			x->value = y->value;
-		}
-
-		void	remove_leaf(BinaryTreeMap<Key, T> *leaf)
-		{
-			if (leaf->parent)
-			{
-				if (leaf->parent->left == leaf)
-				{
-					leaf->parent->left = NULL;
-					leaf->parent->left_height = 0;
-				}
-				else if (leaf->parent->right == leaf)
-				{
-					leaf->parent->right = NULL;
-					leaf->parent->right_height = 0;
-				}
-				leaf->parent = NULL;
-			}
-			else
-				this->root = NULL;
-			delete(leaf);
-		}
-
 		void	remove_node(BinaryTreeMap<Key, T> *node)
 		{
-			BinaryTreeMap<Key, T> *tmp;
+			BinaryTreeMap<Key, T>	*child;
+			BinaryTreeMap<Key, T>	*to_balance;
 
-			tmp = NULL;
 			if (!node->left && !node->right)
-				remove_leaf(node);
-			else if (node->left && !this->comp(node->key, node->left->key))
 			{
-				swap_nodes(node, node->left);
-				tmp = node->left;
+				// 0 CHILD
+				if (node->parent && node->parent->left == node)
+					node->parent->left = NULL;
+				else if (node->parent && node->parent->right == node)
+					node->parent->right = NULL;
+				else
+					this->root = NULL;
+				to_balance = node->parent;
+				delete (node);
+			}
+			else if (node->left && node->right)
+			{
+				BinaryTreeMap<Key, T>	*tmp;
+
+				// 2 CHILD
+				child = node->left;
+				while (child->right)
+					child = child->right;
+				tmp = new BinaryTreeMap<Key, T>();
+				tmp->parent = node->parent;
+				tmp->left = node->left;
+				tmp->right = node->right;
+				tmp->left_height = node->left_height;
+				tmp->right_height = node->right_height;
+				node->parent = child->parent;
+				node->left = child->left;
+				node->right = child->right;
+				node->left_height = child->left_height;
+				node->right_height = child->right_height;
+				if (node->left)
+					node->left->parent = node;
+				if (node->right)
+					node->right->parent = node;
+				if (node->parent && node->parent->left == child)
+					node->parent->left = node;
+				else if (node->parent && node->parent->right == child)
+					node->parent->right = node;
+				else if (node->parent && node->parent == node)
+				{
+					node->parent = child;
+					node->parent->left = node;
+				}
+				child->parent = tmp->parent;
+				if (!child->parent)
+					this->root = child;
+				delete(tmp);
 				remove_node(node);
 			}
-			else if (node->right && this->comp(node->key, node->right->key))
+			else
 			{
-				swap_nodes(node, node->right);
-				tmp = node->right;
-				remove_node(node);
+				// 1 CHILD
+				child = (node->left) ? node->left : node->right;
+				child->parent = node->parent;
+				if (child->parent && child->parent->left == node)
+					child->parent->left = child;
+				else if (child->parent && child->parent->right == node)
+					child->parent->right = child;
+				else
+					this->root = child;
+				to_balance = child;
+				delete(node);
 			}
-			if (tmp)
-				balance(tmp);
+			if (to_balance)
+				balance(to_balance);
 		}
 
 	public:
