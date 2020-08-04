@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/04 23:21:00 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/05 01:31:41 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ namespace ft
 			}
 		}
 
-		void	balance(BinaryTreeMap<Key, T> *branch)
+		void	balance(BinaryTreeMap<Key, T> *branch, int type)
 		{
 			BinaryTreeMap<Key, T>	*start;
 			int						balance_factor;
@@ -208,14 +208,14 @@ namespace ft
 			start = branch;
 			calcul_height(branch);
 			grand_child = branch;
-			root = (branch) ? branch->parent : NULL;
+			root = (branch && branch->parent) ? branch->parent : branch;
 			while (root)
 			{
 				balance_factor = static_cast<int>(root->left_height - root->right_height);
 				if (balance_factor > 1 || balance_factor < -1)
 				{
-					rebalance(balance_factor, grand_child);
-					balance(branch);
+					rebalance(balance_factor, grand_child, type);
+					balance(branch, type);
 				}
 				grand_child = branch;
 				branch = root;
@@ -224,26 +224,57 @@ namespace ft
 			calcul_height(start);
 			balance_factor = static_cast<int>(this->root->left_height - this->root->right_height);
 			if (balance_factor > 1 || balance_factor < -1)
-				balance(start);
+				balance(start, type);
 		}
 
-		void	rebalance(int balance_factor, BinaryTreeMap<Key, T> *branch)
+		void	rebalance(int balance_factor, BinaryTreeMap<Key, T> *branch, int type)
 		{
-			if (balance_factor > 1)
+			if (type == 0) // INSERTION
 			{
-				if (branch == branch->parent->left)
-					right_rotate(branch, branch->parent);
-				else if (branch == branch->parent->right)
-					left_right_rotate(branch, branch->parent, branch->parent->parent);
+				if (balance_factor > 1)
+				{
+					if (branch == branch->parent->left)
+						right_rotate(branch, branch->parent);
+					else if (branch == branch->parent->right)
+						left_right_rotate(branch, branch->parent, branch->parent->parent);
+				}
+				else if (balance_factor < 1)
+				{
+					if (branch == branch->parent->right)	
+						left_rotate(branch->parent, branch);
+					else if (branch == branch->parent->left)
+						right_left_rotate(branch, branch->parent, branch->parent->parent);
+				}
 			}
-			else if (balance_factor < 1)
+			else if (type == 1) // DELETION
 			{
-				if (branch == branch->parent->right)	
-					left_rotate(branch->parent, branch);
-				else if (branch == branch->parent->left)
-					right_left_rotate(branch, branch->parent, branch->parent->parent);
+				std::cout << "DELETION"  << std::endl;
+				int		balance_factor2;
+
+				std::cout << balance_factor << std::endl;
+				if (balance_factor > 1)
+				{
+					balance_factor2 = static_cast<int>(branch->left->left_height - branch->left->right_height);
+					if (balance_factor2 >= 0)
+						right_rotate(branch->left, branch);
+					else
+						left_right_rotate(branch->left->left, branch->left, branch);
+				}
+				else if (balance_factor < -1)
+				{
+					balance_factor2 = static_cast<int>(branch->right->left_height - branch->right->right_height);
+					if (balance_factor2 <= 0)
+						left_rotate(branch, branch->right);
+					else 
+						right_left_rotate(branch->right->right, branch->right, branch);
+				}
 			}
 		}
+
+		/* ****************************************************************** */
+		/* references:                                                        */
+		/* https://www.youtube.com/watch?v=cySVml6e_Fc                        */
+		/* ****************************************************************** */
 
 		void	remove_node(BinaryTreeMap<Key, T> *node)
 		{
@@ -266,6 +297,7 @@ namespace ft
 			{
 				BinaryTreeMap<Key, T>	*tmp;
 
+				to_balance = NULL;
 				// 2 CHILD
 				child = node->left;
 				while (child->right)
@@ -285,18 +317,34 @@ namespace ft
 					node->left->parent = node;
 				if (node->right)
 					node->right->parent = node;
-				if (node->parent && node->parent->left == child)
-					node->parent->left = node;
-				else if (node->parent && node->parent->right == child)
-					node->parent->right = node;
-				else if (node->parent && node->parent == node)
+				if (node->parent == node)
 				{
 					node->parent = child;
 					node->parent->left = node;
 				}
+				else if (node->parent->left == child)
+					node->parent->left = node;
+				else if (node->parent->right == child)
+					node->parent->right = node;
 				child->parent = tmp->parent;
 				if (!child->parent)
 					this->root = child;
+				else if (child->parent->left == node)
+					child->parent->left = child;
+				else if (child->parent->right == node)
+					child->parent->right = child;
+				child->left = tmp->left;
+				child->right = tmp->right;
+				child->left_height = tmp->left_height;
+				child->right_height = tmp->right_height;
+				if (child->left == child)
+					child->left = node;
+				else if (child->right == child)
+					child->right = node;
+				if (child->left)
+					child->left->parent = child;
+				if (child->right)
+					child->right->parent = child;
 				delete(tmp);
 				remove_node(node);
 			}
@@ -305,17 +353,18 @@ namespace ft
 				// 1 CHILD
 				child = (node->left) ? node->left : node->right;
 				child->parent = node->parent;
-				if (child->parent && child->parent->left == node)
-					child->parent->left = child;
-				else if (child->parent && child->parent->right == node)
-					child->parent->right = child;
-				else
+				if (!child->parent)
 					this->root = child;
-				to_balance = child;
+				else if (child->parent->left == node)
+					child->parent->left = child;
+				else if (child->parent->right == node)
+					child->parent->right = child;
+				to_balance = (child->parent) ? child->parent : child;
+				calcul_height(child);
 				delete(node);
 			}
 			if (to_balance)
-				balance(to_balance);
+				balance(to_balance, 1);
 		}
 
 	public:
@@ -519,7 +568,7 @@ const allocator_type &alloc = allocator_type())
 			std::cout << "BEFORE BALANCE " << std::endl;
 			print_binary_tree(this->root);
 			std::cout << "==============================" << std::endl;
-			this->balance(new_node);
+			this->balance(new_node, 0);
 			std::cout << "AFTER BALANCE " << std::endl;
 			print_binary_tree(this->root);
 			std::cout << "==============================" << std::endl;
@@ -575,7 +624,7 @@ const allocator_type &alloc = allocator_type())
 			}
 			else
 				this->root = new_node;
-			this->balance(new_node);
+			this->balance(new_node, 0);
 			this->length++;
 			return (std::pair<iterator, bool>(iterator(new_node), true));
 		}
