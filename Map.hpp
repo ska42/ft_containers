@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/03 22:34:50 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/04 04:15:13 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,10 @@ namespace ft
 			{
 				balance_factor = static_cast<int>(root->left_height - root->right_height);
 				if (balance_factor > 1 || balance_factor < -1)
+				{
 					rebalance(balance_factor, grand_child);
+					balance(branch);
+				}
 				grand_child = branch;
 				branch = root;
 				root = branch->parent;
@@ -240,6 +243,89 @@ namespace ft
 				else if (branch == branch->parent->left)
 					right_left_rotate(branch, branch->parent, branch->parent->parent);
 			}
+		}
+
+		void	cpy_links(BinaryTreeMap<Key, T> *cpy, BinaryTreeMap<Key, T> *x)
+		{
+			cpy->parent = x->parent;
+			cpy->left = x->left;
+			cpy->right = x->right;
+			cpy->left_height = x->left_height;
+			cpy->right_height = x->right_height;
+		}
+
+		void	swap_nodes(BinaryTreeMap<Key, T> *x, BinaryTreeMap<Key, T> *y)
+		{
+			BinaryTreeMap<Key, T> tmp;
+
+			cpy_links(&tmp, x);
+			if (x->parent && x->parent->left == x)
+				x->parent->left = y;
+			else if (x->parent && x->parent->right == x)
+				x->parent->right = y;
+			if (x->left && x->left != y)
+				x->left->parent = y;
+			if (x->right && x->right != y)
+				x->right->parent = y;
+			if (y->left && y->left != x)
+				y->left->parent = x;
+			if (y->right && y->right != x)
+				y->right->parent = x;
+			cpy_links(x, y);
+			x->parent = y;
+			cpy_links(y, &tmp);
+			if (y->left == y)
+				y->left = x;
+			if (y->right == y)
+				y->right = x;
+			if (!y->parent)
+				this->root = y;
+			x->key = y->key;
+			x->value = y->value;
+		}
+
+		void	remove_leaf(BinaryTreeMap<Key, T> *leaf)
+		{
+			if (leaf->parent)
+			{
+				if (leaf->parent->left == leaf)
+				{
+					leaf->parent->left = NULL;
+					leaf->parent->left_height = 0;
+				}
+				else if (leaf->parent->right == leaf)
+				{
+					leaf->parent->right = NULL;
+					leaf->parent->right_height = 0;
+				}
+				leaf->parent = NULL;
+			}
+			else
+				this->root = NULL;
+			delete(leaf);
+		}
+
+		void	remove_node(BinaryTreeMap<Key, T> *node)
+		{
+			BinaryTreeMap<Key, T> *tmp;
+
+			tmp = NULL;
+			if (!node->left && !node->right)
+				remove_leaf(node);
+			else if (node->left && !this->comp(node->key, node->left->key))
+			{
+				swap_nodes(node, node->left);
+				tmp = node->left;
+				remove_node(node);
+			}
+			else if (node->right && this->comp(node->key, node->right->key))
+			{
+				swap_nodes(node, node->right);
+				tmp = node->right;
+				remove_node(node);
+			}
+			if (tmp)
+				balance(tmp);
 		}
 
 	public:
@@ -396,6 +482,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>	*node;
 			BinaryTreeMap<Key, T>	*new_node;
 
+			std::cout << "INSERTING " << val.first << std::endl;
 			new_node = new BinaryTreeMap<Key, T>();
 			new_node->parent = NULL;
 			new_node->left = NULL;
@@ -446,36 +533,125 @@ const allocator_type &alloc = allocator_type())
 			std::cout << "AFTER BALANCE " << std::endl;
 			print_binary_tree(this->root);
 			std::cout << "==============================" << std::endl;
+			this->length++;
 			return (std::pair<iterator, bool>(iterator(new_node), true));
 		}
 
 		iterator				insert(iterator position, const value_type &val)
 		{
-			(void) position;
-			(void) val;
+			BinaryTreeMap<Key, T>	*node;
+			BinaryTreeMap<Key, T>	*new_node;
+
+			new_node = new BinaryTreeMap<Key, T>();
+			new_node->parent = NULL;
+			new_node->left = NULL;
+			new_node->right = NULL;
+			new_node->key = val.first;
+			new_node->value = val.second;
+			new_node->left_height = 0;
+			new_node->right_height = 0;
+			if (this->root)
+			{
+				node = position.getPtr();
+				while (!new_node->parent)
+				{
+					if (new_node->key == node->key)
+					{
+						node->value = new_node->value;
+						delete(new_node);
+						return (std::pair<iterator, bool>(iterator(node), false));
+					}
+					if (this->comp(new_node->key, node->key))
+					{
+						if (node->left)
+							node = node->left;
+						else
+						{
+							node->left = new_node;
+							new_node->parent = node;
+						}
+					}
+					else
+					{
+						if (node->right)
+							node = node->right;	
+						else
+						{
+							node->right = new_node;
+							new_node->parent = node;
+						}
+					}
+				}
+			}
+			else
+				this->root = new_node;
+			this->balance(new_node);
+			this->length++;
+			return (std::pair<iterator, bool>(iterator(new_node), true));
 		}
 
 		template <class InputIterator>
 		void					insert(InputIterator first, InputIterator last)
 		{
-			(void) first;
-			(void) last;
+			while (first != last)
+			{
+				insert(value_type(first.getPtr()->key, first.getPtr()->value));
+				first++;
+			}
 		}
 
 		void					erase(iterator position)
 		{
-			(void) position;
+			std::cout << "DELETE " << position.getPtr()->key << std::endl;
+			remove_node(position.getPtr());
+			this->length--;
+			print_binary_tree(this->root);
 		}
 
 		size_type				erase(const key_type &k)
 		{
-			(void) k;
+			BinaryTreeMap<Key, T>	*node;
+
+			if (this->root)
+			{
+				node = this->root;
+				while (node)
+				{
+					if (k == node->key)
+					{
+						erase(iterator(node));
+						return (1);
+					}
+					if (this->comp(k, node->key))
+					{
+						if (node->left)
+							node = node->left;
+						else
+							return (0);
+					}
+					else
+					{
+						if (node->right)
+							node = node->right;	
+						else
+							return (0);
+					}
+				}
+			}
+			return (0);
 		}
 
 		void					erase(iterator first, iterator last)
 		{
-			(void) first;
-			(void) last;
+			iterator next;
+
+			while (first != last)
+			{
+				next = first;
+				next++;
+				erase(first);
+				first = next;
+			}
 		}
 
 		void					swap(Map &x)
