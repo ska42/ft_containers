@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 20:58:37 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/04 03:30:52 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/05 02:04:45 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,9 @@ int					main(void)
 	map.erase(2);
 	map.erase(8);
 	map.erase(1);
+	map.erase(5);
+	map.erase(4);
+	map.erase(0);
+	map.erase(9);
 	return (0);
 }

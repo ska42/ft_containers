@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/05 01:31:41 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/05 02:05:40 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ namespace ft
 		{
 			int i;
 
+			if (!x)
+				return ;
 			i = n;
 			if (x->left)
 				print_binary_tree(x->left, n + 1);
@@ -248,7 +250,6 @@ namespace ft
 			}
 			else if (type == 1) // DELETION
 			{
-				std::cout << "DELETION"  << std::endl;
 				int		balance_factor2;
 
 				std::cout << balance_factor << std::endl;
@@ -258,7 +259,7 @@ namespace ft
 					if (balance_factor2 >= 0)
 						right_rotate(branch->left, branch);
 					else
-						left_right_rotate(branch->left->left, branch->left, branch);
+						left_right_rotate(branch->left, branch, branch->parent);
 				}
 				else if (balance_factor < -1)
 				{
@@ -266,7 +267,7 @@ namespace ft
 					if (balance_factor2 <= 0)
 						left_rotate(branch, branch->right);
 					else 
-						right_left_rotate(branch->right->right, branch->right, branch);
+						right_left_rotate(branch->right, branch, branch->parent);
 				}
 			}
 		}
