@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/05 03:09:01 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/06 01:04:21 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,15 @@ namespace ft
 		{
 			int i;
 
-			if (!x)
-				return ;
 			i = n;
 			if (x->left)
 				print_binary_tree(x->left, n + 1);
 			while (i--)
 				std::cout << "   ";
-			std::cout << x->key;
+			if (x == this->_end)
+				std::cout << "N";
+			else
+				std::cout << x->key;
 			std::cout << std::endl;
 			if (x->right)
 				print_binary_tree(x->right, n + 1);
@@ -248,7 +249,6 @@ namespace ft
 			{
 				int		balance_factor2;
 
-				std::cout << balance_factor << std::endl;
 				if (balance_factor > 1)
 				{
 					balance_factor2 = static_cast<int>(branch->left->left_height - branch->left->right_height);
@@ -278,26 +278,31 @@ namespace ft
 			BinaryTreeMap<Key, T>	*child;
 			BinaryTreeMap<Key, T>	*to_balance;
 
-			if (!node->left && !node->right)
+			if (!node->left && (!node->right || node->right == this->_end))
 			{
 				// 0 CHILD
 				if (node->parent && node->parent->left == node)
 					node->parent->left = NULL;
 				else if (node->parent && node->parent->right == node)
-					node->parent->right = NULL;
+				{
+					if (node->right == this->_end)
+						node->parent->right = this->_end;
+					else
+						node->parent->right = NULL;
+				}
 				else
-					this->root = NULL;
+					this->root = this->_end;
 				to_balance = node->parent;
 				delete (node);
 			}
-			else if (node->left && node->right)
+			else if (node->left && node->right && node->right != this->_end)
 			{
 				// 2 CHILD
 				BinaryTreeMap<Key, T>	*tmp;
 
 				to_balance = NULL;
 				child = node->left;
-				while (child->right)
+				while (child->right && child->right != this->_end)
 					child = child->right;
 				tmp = new BinaryTreeMap<Key, T>();
 				tmp->parent = node->parent;
@@ -365,8 +370,9 @@ namespace ft
 		}
 
 		allocator_type				alloc;
-		Compare						comp;
+		key_compare					comp;
 		BinaryTreeMap<Key, T>		*root;
+		BinaryTreeMap<Key, T>		*_end;
 		size_type					length;
 
 	public:
@@ -381,7 +387,11 @@ const allocator_type &alloc = allocator_type())
 		{
 			this->comp = comp;
 			this->alloc = alloc;
-			this->root = NULL;
+			this->_end = new BinaryTreeMap<Key, T>();
+			this->_end->left = NULL;
+			this->_end->right = NULL;
+			this->_end->parent = NULL;
+			this->root = this->_end;
 			this->length = 0;
 			return ;
 		}
@@ -439,22 +449,12 @@ const allocator_type &alloc = allocator_type())
 
      	iterator				end(void)
 		{
-			BinaryTreeMap<Key, T>		*node;
-
-			node = this->root;
-			while (node->right)
-				node = node->right;
-			return (iterator(node));
+			return (iterator(this->_end));
 		}
 
 		const_iterator			end(void) const
 		{
-			BinaryTreeMap<Key, T>		*node;
-
-			node = this->root;
-			while (node->right)
-				node = node->right;
-			return (iterator(node));
+			return (iterator(this->_end));
 		}
 
 		reverse_iterator		rbegin(void)
@@ -479,22 +479,12 @@ const allocator_type &alloc = allocator_type())
 
 		reverse_iterator		rend(void)
 		{
-			BinaryTreeMap<Key, T>		*node;
-
-			node = this->root;
-			while (node->right)
-				node = node->right;
-			return (reverse_iterator(node));
+			return (reverse_iterator(this->_end));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			BinaryTreeMap<Key, T>		*node;
-
-			node = this->root;
-			while (node->right)
-				node = node->right;
-			return (reverse_iterator(node));
+			return (reverse_iterator(this->_end));
 		}
 
 		/* Capacity */
@@ -518,30 +508,28 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>	*node;
 
-			if (this->root)
+			node = this->root;
+			while (node != this->_end)
 			{
-				node = this->root;
-				while (node)
+				if (k == node->key)
+					return (node->value);
+				if (this->comp(k, node->key))
 				{
-					if (k == node->key)
-						return (node->value);
-					if (this->comp(k, node->key))
-					{
-						if (node->left)
-							node = node->left;
-						else
-							throw(CannotFindKeyException());
-					}
+					if (node->left)
+						node = node->left;
 					else
-					{
-						if (node->right)
-							node = node->right;	
-						else
-							throw(CannotFindKeyException());
-					}
+						insert(iterator(node), value_type(k, 0));
+				}
+				else
+				{
+					if (node->right && node->right != this->_end)
+						node = node->right;	
+					else
+						insert(iterator(node), value_type(k, 0));
 				}
 			}
-			throw(EmptyMapException());
+			insert(value_type(k, 0));
+			return (this->root->value);
 		}
 
 		/* Modifiers */
@@ -559,7 +547,7 @@ const allocator_type &alloc = allocator_type())
 			new_node->value = val.second;
 			new_node->left_height = 0;
 			new_node->right_height = 0;
-			if (this->root)
+			if (this->root != this->_end)
 			{
 				node = this->root;
 				while (!new_node->parent)
@@ -582,18 +570,26 @@ const allocator_type &alloc = allocator_type())
 					}
 					else
 					{
-						if (node->right)
+						if (node->right && node->right != this->_end)
 							node = node->right;	
 						else
 						{
+							if (node->right == this->_end)
+								this->_end->parent = new_node;
 							node->right = new_node;
 							new_node->parent = node;
+							if (this->_end->parent == new_node)
+								new_node->right = this->_end;
 						}
 					}
 				}
 			}
 			else
+			{
 				this->root = new_node;
+				this->root->right = this->_end;
+				this->_end->parent = this->root;
+			}
 			std::cout << "BEFORE BALANCE " << std::endl;
 			print_binary_tree(this->root);
 			std::cout << "==============================" << std::endl;
@@ -618,7 +614,7 @@ const allocator_type &alloc = allocator_type())
 			new_node->value = val.second;
 			new_node->left_height = 0;
 			new_node->right_height = 0;
-			if (this->root)
+			if (this->root != this->_end)
 			{
 				node = position.getPtr();
 				while (!new_node->parent)
@@ -627,7 +623,7 @@ const allocator_type &alloc = allocator_type())
 					{
 						node->value = new_node->value;
 						delete(new_node);
-						return (std::pair<iterator, bool>(iterator(node), false));
+						return (iterator(node));
 					}
 					if (this->comp(new_node->key, node->key))
 					{
@@ -641,21 +637,29 @@ const allocator_type &alloc = allocator_type())
 					}
 					else
 					{
-						if (node->right)
+						if (node->right && node->right != this->_end)
 							node = node->right;	
 						else
 						{
+							if (node->right == this->_end)
+								this->_end->parent = new_node;
 							node->right = new_node;
 							new_node->parent = node;
+							if (this->_end->parent == new_node)
+								new_node->right = this->_end;
 						}
 					}
 				}
 			}
 			else
+			{
 				this->root = new_node;
+				this->root->right = this->_end;
+				this->_end->parent = this->root;
+			}
 			this->balance(new_node, 0);
 			this->length++;
-			return (std::pair<iterator, bool>(iterator(new_node), true));
+			return (iterator(new_node));
 		}
 
 		template <class InputIterator>
@@ -680,7 +684,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>	*node;
 
-			if (this->root)
+			if (this->root != this->_end)
 			{
 				node = this->root;
 				while (node)
@@ -699,7 +703,7 @@ const allocator_type &alloc = allocator_type())
 					}
 					else
 					{
-						if (node->right)
+						if (node->right && node->right != this->_end)
 							node = node->right;	
 						else
 							return (0);
@@ -724,41 +728,75 @@ const allocator_type &alloc = allocator_type())
 
 		void					swap(Map &x)
 		{
-			(void) x;
+			BinaryTreeMap <Key, T>	*tmp;
+			size_type				length;
+
+			tmp = this->root;
+			this->root = x.root;
+			x.root = tmp;
+			tmp = this->_end;
+			this->_end = x._end;
+			x._end = tmp;
+			length = this->length;
+			this->length = x.length;
+			x.length = length;
 		}
 
 		void					clear(void)
 		{
-			if (this->root)
-			{
-				erase(this->begin(), this->end());
-				erase(this->begin());
-			}
+			erase(this->begin(), this->end());
 		}
 
 		/* Observers */
 		key_compare				key_comp(void) const
 		{
+			return (this->comp);
 		}
 
 		value_compare			value_comp(void) const
 		{
+			return (this->value_compare);
 		}
 
 		/* Operations */
 		iterator				find(const key_type &k)
 		{
-			(void) k;
+			BinaryTreeMap <Key, T>	*node;
+
+			node = this->root;
+			while (node != this->_end)
+			{
+				if (k == node->key)
+					return (iterator(node));
+				if (this->comp(k, node->key))
+					node = node->left;
+				else
+					node = node->right;
+			}
+			return (this->end());
 		}
 
 		const_iterator			find(const key_type &k) const
-		{
-			(void) k;
+		{			
+			BinaryTreeMap <Key, T>	*node;
+
+			node = this->root;
+			while (node != this->_end)
+			{
+				if (k == node->key)
+					return (const_iterator(node));
+				if (this->comp(k, node->key))
+					node = node->left;
+				else
+					node = node->right;
+			}
+			return (this->end());
 		}
 
 		size_type				count(const key_type &k) const
 		{
 			(void) k;
+				
 		}
 
 		iterator				lower_bound(const key_type &k)
@@ -791,47 +829,56 @@ const allocator_type &alloc = allocator_type())
 			(void) k;
 		}
 
-		class	CannotFindKeyException: public std::exception
-		{
-			
-		public:
-
-			CannotFindKeyException() {}
-			virtual	~CannotFindKeyException(void) throw() {}
-			CannotFindKeyException(const CannotFindKeyException &e) {*this = e;}
-			CannotFindKeyException		&operator=(const CannotFindKeyException &e)
-			{
-				(void)e;
-				return (*this);
-			}
-
-			virtual const char		*what(void) const throw()
-			{
-				return ("Cannot Find Key");
-			}
-		};
-
-		class	EmptyMapException: public std::exception
-		{
-
-		public:
-
-			EmptyMapException() {}
-			virtual	~EmptyMapException(void) throw() {}
-			EmptyMapException(const EmptyMapException &e) {*this = e;}
-			EmptyMapException		&operator=(const EmptyMapException &e)
-			{
-				(void)e;
-				return (*this);
-			}
-
-			virtual const char		*what(void) const throw()
-			{
-				return ("Empty Map");
-			}
-		};
-
 	};
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator==(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
+	{
+		(void)lhs;
+		(void)rhs;
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator!=(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
+	{
+		(void)lhs;
+		(void)rhs;
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator<(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
+	{	
+		(void)lhs;
+		(void)rhs;
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator<=(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
+	{	
+		(void)lhs;
+		(void)rhs;
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator>(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
+	{	
+		(void)lhs;
+		(void)rhs;
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator>=(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
+	{
+		(void)lhs;
+		(void)rhs;
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	void swap(ft::Map<Key, T, Compare, Alloc> &x, ft::Map<Key, T, Compare, Alloc> &y)
+	{
+		(void)x;
+		(void)y;
+	}
 
 };
 

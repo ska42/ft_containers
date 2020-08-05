@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 03:38:22 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/06 00:09:26 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,41 +17,24 @@
 # include "List.hpp"
 # include "colors.h"
 
-template <class T>
-void	printMyList(ft::List<T> list)
+template <class container>
+void	printList(container list)
 {
-	typename ft::IteratorList<T> 	i;
+	int								n;
+	typename container::iterator	i;
 	
 	i = list.begin();
+	n = 0;
 	std::cout << _YELLOW << "---------------------- " << "[" << _GREEN;
 	while (i != list.end())
 	{
-		std::cout << _GREEN << *i << ", ";
+		if (n != 0)
+			std::cout << ", ";
+		std::cout << _GREEN << *i << _END;
 		i++;
+		n++;
 	}
-	if (list.size())
-		std::cout << *i << _YELLOW << "]" << _END << std::endl;
-	else
-		std::cout << _YELLOW << "]" << _END << std::endl;
-	std::cout << std::endl;
-}
-
-template <class T>
-void	printList(std::list<T> list)
-{
-	typename std::list<T>::iterator	i;
-	
-	i = list.begin();
-	std::cout << _YELLOW << "---------------------- " << "[" << _GREEN;
-	while (i != list.end())
-	{
-		std::cout << _GREEN << *i << ", ";
-		i++;
-	}
-	if (list.size())
-		std::cout << *i << _YELLOW << "]" << _END << std::endl;
-	else
-		std::cout << _YELLOW << "]" << _END << std::endl;
+	std::cout << _YELLOW << "]" << _END << std::endl;
 	std::cout << std::endl;
 }
 
@@ -64,7 +47,7 @@ void	error_diff(ft::List<T> mylist, std::list<T> list)
 	std::cout << std::setw(30) << "mylist.size(): " << mylist.size() << std::endl;
 	std::cout << std::setw(30) << "list.size(): " << list.size() << std::endl;
 	std::cout << std::setw(30) << "mylist : ";
-	printMyList(mylist);
+	printList(mylist);
 	std::cout << std::setw(30) << "list : ";
 	printList(list);
 }
@@ -94,7 +77,7 @@ void	compareList(std::string function, ft::List<T> mylist, std::list<T> list)
 			my_it++;
 		}
 		std::cout << _GREEN << "OK " << _END;
-		printMyList(mylist);
+		printList(mylist);
 	}
 }
 

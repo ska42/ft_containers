@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/29 18:43:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/06 00:09:06 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ namespace ft
 	private:
 		DoublyLinkedList<T>			*head;
 		DoublyLinkedList<T>			*tail;
+		DoublyLinkedList<T>			*_end;
+		allocator_type				alloc;
 		size_type					length;
 
 	public:
@@ -62,23 +64,20 @@ namespace ft
 		/* Coplien form */
 		explicit List (const allocator_type& alloc = allocator_type())
 		{
-			(void)alloc;
-			this->head = NULL;
-			this->tail = NULL;
+			this->alloc = alloc;
+			this->_end = new DoublyLinkedList<T>();
+			this->_end->next = NULL;
+			this->_end->prev = NULL;
+			this->head = this->_end;
+			this->tail = this->_end;
 			this->length = 0;
 			return ;
 		}
 
 		~List(void)
 		{
-			DoublyLinkedList<T>		*tmp;
-
-			while (this->head)
-			{
-				tmp = this->head->next;
-				delete(this->head);
-				this->head = this->head->next;
-			}
+			this->clear();
+			delete(this->_end);
 			return ;
 		}
 
@@ -92,11 +91,15 @@ namespace ft
 		{
 			DoublyLinkedList<T>		*tmp;
 
-			this->head = NULL;
-			this->tail = NULL;
+			this->alloc = list.alloc;
+			this->_end = new DoublyLinkedList<T>();
+			this->_end->next = NULL;
+			this->_end->prev = NULL;
+			this->head = this->_end;
+			this->tail = this->_end;
 			this->length = 0;
 			tmp = list.head;
-			while (tmp)
+			while (tmp->next)
 			{
 				this->push_back(tmp->element);
 				tmp = tmp->next;
@@ -108,9 +111,12 @@ namespace ft
 		explicit List (size_type n, const value_type &val = value_type(),
 			const allocator_type &alloc = allocator_type())
 		{
-			(void) alloc;
-			this->head = NULL;
-			this->tail = NULL;
+			this->alloc = alloc;
+			this->_end = new DoublyLinkedList<T>();
+			this->_end->next = NULL;
+			this->_end->prev = NULL;
+			this->head = this->_end;
+			this->tail = this->_end;
 			this->length = 0;
 			assign(static_cast<size_type>(n), static_cast<value_type>(val));
 		}
@@ -119,9 +125,12 @@ namespace ft
   		List (InputIterator first, InputIterator last,
 			const allocator_type& alloc = allocator_type())
 		{
-			(void) alloc;
-			this->head = NULL;
-			this->tail = NULL;
+			this->alloc = alloc;
+			this->_end = new DoublyLinkedList<T>();
+			this->_end->next = NULL;
+			this->_end->prev = NULL;
+			this->head = this->_end;
+			this->tail = this->_end;
 			this->length = 0;
 			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
 		}
@@ -139,12 +148,12 @@ namespace ft
 
 		iterator				end(void)
 		{
-			return (iterator(this->tail));
+			return (iterator(this->_end));
 		}
 
 		const_iterator			end(void) const
 		{
-			return (iterator(this->tail));
+			return (iterator(this->_end));
 		}
 
 		reverse_iterator		rbegin(void)
@@ -159,12 +168,12 @@ namespace ft
 
 		reverse_iterator		rend(void)
 		{
-			return (reverse_iterator(this->tail));
+			return (reverse_iterator(this->_end));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			return (reverse_iterator(this->tail));
+			return (reverse_iterator(this->_end));
 		}
 
 		/* Capacity */
@@ -186,29 +195,21 @@ namespace ft
 		/* Element access */
 		reference				front(void)
 		{
-			if (!this->head)
-				throw(std::exception());
 			return (this->head->element);
 		}
 
 		const_reference			front(void) const
 		{
-			if (!this->head)
-				throw(std::exception());
 			return (this->head->element);
 		}
 
 		reference				back(void)
 		{
-			if (!this->tail)
-				throw(std::exception());
 			return (this->tail->element);
 		}
 
 		const_reference			back(void) const
 		{
-			if (!this->tail)
-				throw(std::exception());
 			return (this->tail->element);
 		}
 
@@ -257,7 +258,8 @@ namespace ft
 				if (this->length == 1)
 				{
 					delete(this->head);
-					this->tail = this->head = NULL;
+					this->_end->prev = NULL;
+					this->tail = this->head = this->_end;
 				}
 				else
 				{
@@ -273,7 +275,8 @@ namespace ft
 		{
 			DoublyLinkedList <T>	*ptr = new DoublyLinkedList<T>();
 
-			ptr->next = NULL;
+			ptr->next = this->_end;
+			this->_end->prev = ptr;
 			ptr->prev = NULL;
 			ptr->element = val;
 			if (!this->length)
@@ -294,13 +297,15 @@ namespace ft
 				if (this->length == 1)
 				{
 					delete(this->tail);
-					this->head = this->tail = NULL;
+					this->_end->prev = NULL;
+					this->head = this->tail = this->_end;
 				}
 				else
 				{
 					this->tail = this->tail->prev;
 					delete(this->tail->next);
-					this->tail->next = NULL;
+					this->tail->next = this->_end;
+					this->_end->prev = this->tail;
 				}
 				this->length--;
 			}
@@ -317,14 +322,37 @@ namespace ft
 			add->element = val;
 			ptr = position.getPtr();
 			if (!ptr->prev)
-				this->head = add;
-			if (!ptr->next)
-				this->tail = add;
-			add->prev = ptr->prev;
-			if (ptr->prev)
-				ptr->prev->next = add;
-			add->next = ptr;
-			ptr->prev = add;
+			{
+				if (!this->length)
+					this->tail = this->head = add;
+				else
+				{
+					this->head->prev = add;
+					add->next = this->head;
+					this->head = add;
+				}
+			}
+			else if (!ptr->next)
+			{
+				add->next = this->_end;
+				this->_end->prev = add;
+				if (!this->length)
+					this->head = this->tail = add;
+				else
+				{
+					this->tail->next = add;
+					add->prev = this->tail;
+					this->tail = this->tail->next;
+				}
+			}
+			else
+			{
+				add->prev = ptr->prev;
+				if (ptr->prev)
+					ptr->prev->next = add;
+				add->next = ptr;
+				ptr->prev = add;
+			}
 			this->length++;
 			return (iterator(add));
 		}
@@ -339,27 +367,36 @@ namespace ft
 		void					insert(iterator position, InputIterator first, InputIterator last)
 		{
 			for (InputIterator it = first; it != last; it++)
-				this->insert(position, first);
+				this->insert(position, it);
 		}
 
 		iterator				erase(iterator position)
 		{
 			DoublyLinkedList<T>		*ptr;
 
+			if (position == this->end())
+				return (this->end());
 			ptr = position.getPtr();
 			if (!ptr->prev)
 			{
 				this->head = ptr->next;
 				if (this->head)
 					this->head->prev = NULL;
+				if (this->head == this->_end)
+					this->tail = this->head;
 			}
 			else
 				ptr->prev->next = ptr->next;
-			if (!ptr->next)
+			if (ptr->next == this->_end)
 			{
 				this->tail = ptr->prev;
-				if (this->tail)
-					this->tail->next = NULL;
+				if (!this->tail)
+					this->tail = this->head;
+				else
+				{
+					this->tail->next = this->_end;
+					this->_end->prev = this->tail;
+				}
 			}
 			else
 				ptr->next->prev = ptr->prev;
@@ -378,7 +415,6 @@ namespace ft
 				first++;
 				this->erase(tmp);
 			}
-			this->erase(last);
 			return (iterator(this->head));
 		}
 
@@ -393,6 +429,9 @@ namespace ft
 			tmp = x.tail;
 			x.tail = this->tail;
 			this->tail = tmp;
+			tmp = x._end;
+			x._end = this->_end;
+			this->_end = tmp;
 			tmp_length = x.length;
 			x.length = this->length;
 			this->length = tmp_length;
@@ -435,22 +474,17 @@ namespace ft
 		{
 			iterator	it;
 			iterator	tmp;
-			iterator	end;
 			
 			if (this->length)
 			{
-				it = iterator(this->head);
-				end = iterator(this->tail);
-				while (it != end)
+				it = this->begin();
+				while (it != this->end())
 				{
 					tmp = it;
 					it++;
 					if (*tmp == val)
 						this->erase(tmp);
 				}
-				tmp = it;
-				if (*tmp == val)
-					this->erase(tmp);
 			}
 		}
 
@@ -459,22 +493,17 @@ namespace ft
 		{
 			iterator	it;
 			iterator	tmp;
-			iterator	end;
 			
 			if (this->length)
 			{
-				it = iterator(this->head);
-				end = iterator(this->tail);
-				while (it != end)
+				it = this->begin();
+				while (it != this->end())
 				{
 					tmp = it;
 					it++;
 					if (pred(*tmp))
 						this->erase(tmp);
 				}
-				tmp = it;
-				if (pred(*tmp))
-					this->erase(tmp);
 			}
 		}
 
@@ -484,17 +513,21 @@ namespace ft
 			iterator	it2;
 			iterator 	tmp;
 
-			it = iterator(this->head);	
+			it = this->begin();	
 			while (it != this->end())
 			{
 				it2 = it;
+				tmp = it2;
+				it2++;
 				while (it2 != this->end())
 				{
+					if (*it2 == *it)
+					{
+						this->erase(it2);
+						it2 = tmp;
+					}
 					tmp = it2;
 					it2++;
-					if (*it2 == *it)
-						this->erase(it2);
-					it2 = tmp;
 				}
 				it++;
 			}
@@ -511,13 +544,17 @@ namespace ft
 			while (it != this->end())
 			{
 				it2 = it;
+				tmp = it2;
+				it2++;
 				while (it2 != this->end())
 				{
+					if (binary_pred(*it2, *it))
+					{
+						this->erase(it2);
+						it2 = tmp;
+					}
 					tmp = it2;
 					it2++;
-					if (binary_pred(*it2, *it))
-						this->erase(it2);
-					it2 = tmp;
 				}
 				it++;
 			}
@@ -594,14 +631,16 @@ namespace ft
 			while (size--)
 			{
 				it = this->begin();
-				while (it != this->end())
+				it2 = it;
+				it2++;
+				while (it2 != this->end())
 				{
-					it2 = it;
-					it2++;
 					if (*it2 < *it)
 						this->splice(it, *this, it2);
 					else
 						it++;
+					it2 = it;
+					it2++;
 				}
 			}
 		}
@@ -617,14 +656,16 @@ namespace ft
 			while (size--)
 			{
 				it = this->begin();
-				while (it != this->end())
+				it2 = it;
+				it2++;
+				while (it2 != this->end())
 				{
-					it2 = it;
-					it2++;
 					if (comp(*it2, *it))
 						this->splice(it, *this, it2);
 					else
 						it++;
+					it2 = it;
+					it2++;
 				}
 			}
 		}
@@ -639,7 +680,7 @@ namespace ft
 				n = this->length - 1;
 				it = this->begin();
 				while (n--)
-					this->splice(it, *this, this->end());
+					this->splice(it, *this, iterator(this->tail));
 			}
 		}
 		
