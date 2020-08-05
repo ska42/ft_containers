@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/01 21:09:49 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/05 02:25:46 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,11 +459,11 @@ namespace ft
 		IteratorMap				&operator++(void)
 		{
 			if (this->ptr && this->ptr->right)
-				this-ptr = this->ptr->right;
+				this->ptr = this->ptr->right;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<Key, T> tmp = this->ptr;
-				BinaryTreeMap<Key, T> prev = this->ptr;
+				BinaryTreeMap<Key, T> *tmp = this->ptr;
+				BinaryTreeMap<Key, T> *prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->right)
 				{

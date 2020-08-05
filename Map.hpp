@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/05 02:05:40 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/05 03:09:01 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,6 @@ namespace ft
 	};
 
 	private:
-		Compare						comp;
-		BinaryTreeMap<Key, T>		*root;
-		size_type					length;
-
 		/* TEST PURPOSE */
 		void	print_binary_tree(BinaryTreeMap<Key, T> *x, int n = 0)
 		{
@@ -296,10 +292,10 @@ namespace ft
 			}
 			else if (node->left && node->right)
 			{
+				// 2 CHILD
 				BinaryTreeMap<Key, T>	*tmp;
 
 				to_balance = NULL;
-				// 2 CHILD
 				child = node->left;
 				while (child->right)
 					child = child->right;
@@ -368,6 +364,11 @@ namespace ft
 				balance(to_balance, 1);
 		}
 
+		allocator_type				alloc;
+		Compare						comp;
+		BinaryTreeMap<Key, T>		*root;
+		size_type					length;
+
 	public:
 
 	/* ********************************************************************** */
@@ -379,7 +380,7 @@ namespace ft
 const allocator_type &alloc = allocator_type())
 		{
 			this->comp = comp;
-			(void) alloc;
+			this->alloc = alloc;
 			this->root = NULL;
 			this->length = 0;
 			return ;
@@ -387,7 +388,8 @@ const allocator_type &alloc = allocator_type())
 
 		~Map(void)
 		{
-			// TO COMPLETE
+			this->clear();
+			return ;
 		}
 
 		Map(const Map &map)
@@ -407,10 +409,11 @@ const allocator_type &alloc = allocator_type())
 		template <class InputIterator>
 		Map (InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
 		{
+			// TO COMPLETE
 			this->comp = comp;
+			this->alloc = alloc;
 			(void) first;
 			(void) last;
-			(void) alloc;
 		}
 
 		/* Iterators */
@@ -418,7 +421,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->left)
 				node = node->left;
 			return (iterator(node));
@@ -428,7 +431,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->left)
 				node = node->left;
 			return (iterator(node));
@@ -438,7 +441,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->right)
 				node = node->right;
 			return (iterator(node));
@@ -448,7 +451,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->right)
 				node = node->right;
 			return (iterator(node));
@@ -458,7 +461,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->left)
 				node = node->left;
 			return (reverse_iterator(node));
@@ -468,7 +471,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->left)
 				node = node->left;
 			return (reverse_iterator(node));
@@ -478,7 +481,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->right)
 				node = node->right;
 			return (reverse_iterator(node));
@@ -488,7 +491,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			BinaryTreeMap<Key, T>		*node;
 
-			node = root;
+			node = this->root;
 			while (node->right)
 				node = node->right;
 			return (reverse_iterator(node));
@@ -513,7 +516,32 @@ const allocator_type &alloc = allocator_type())
 		/* Element access */
 		mapped_type				&operator[](const key_type &k)
 		{
-			(void) k;	
+			BinaryTreeMap<Key, T>	*node;
+
+			if (this->root)
+			{
+				node = this->root;
+				while (node)
+				{
+					if (k == node->key)
+						return (node->value);
+					if (this->comp(k, node->key))
+					{
+						if (node->left)
+							node = node->left;
+						else
+							throw(CannotFindKeyException());
+					}
+					else
+					{
+						if (node->right)
+							node = node->right;	
+						else
+							throw(CannotFindKeyException());
+					}
+				}
+			}
+			throw(EmptyMapException());
 		}
 
 		/* Modifiers */
@@ -701,6 +729,11 @@ const allocator_type &alloc = allocator_type())
 
 		void					clear(void)
 		{
+			if (this->root)
+			{
+				erase(this->begin(), this->end());
+				erase(this->begin());
+			}
 		}
 
 		/* Observers */
@@ -757,6 +790,46 @@ const allocator_type &alloc = allocator_type())
 		{
 			(void) k;
 		}
+
+		class	CannotFindKeyException: public std::exception
+		{
+			
+		public:
+
+			CannotFindKeyException() {}
+			virtual	~CannotFindKeyException(void) throw() {}
+			CannotFindKeyException(const CannotFindKeyException &e) {*this = e;}
+			CannotFindKeyException		&operator=(const CannotFindKeyException &e)
+			{
+				(void)e;
+				return (*this);
+			}
+
+			virtual const char		*what(void) const throw()
+			{
+				return ("Cannot Find Key");
+			}
+		};
+
+		class	EmptyMapException: public std::exception
+		{
+
+		public:
+
+			EmptyMapException() {}
+			virtual	~EmptyMapException(void) throw() {}
+			EmptyMapException(const EmptyMapException &e) {*this = e;}
+			EmptyMapException		&operator=(const EmptyMapException &e)
+			{
+				(void)e;
+				return (*this);
+			}
+
+			virtual const char		*what(void) const throw()
+			{
+				return ("Empty Map");
+			}
+		};
 
 	};
 
