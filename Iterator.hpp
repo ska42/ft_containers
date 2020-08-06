@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/05 21:15:46 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/06 03:32:25 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,9 +220,10 @@ namespace ft
 	};
 
 	template <class T, class Category = random_access_iterator_tag>
-	class IteratorVector: public IteratorList<T>
+	class IteratorVector
 	{
 	private:
+		pointer									ptr;
 		
 	public:
 	/* ********************************************************************** */
@@ -256,9 +257,55 @@ namespace ft
 		}
 
 		
-		IteratorVector(DoublyLinkedList<T> *list)
+		IteratorVector(pointer ptr)
 		{
-			this->ptr = list;
+			this->ptr = ptr;
+		}
+
+		IteratorList				&operator++(void)
+		{
+			this->ptr++;
+			return (*this);
+		}
+
+		IteratorList				operator++(int)
+		{
+			IteratorList tmp(*this);
+			this->operator++();	
+			return (tmp);
+		}
+
+		IteratorList				&operator--(void)
+		{
+			this->ptr--;
+			return (*this);
+		}
+
+		IteratorList				operator--(int)
+		{
+			IteratorList tmp(*this);
+			this->operator--();
+			return (tmp);
+		}
+
+  		bool						operator==(const IteratorList &rhs) const
+		{
+			return (this->ptr == rhs.ptr);			
+		}
+
+  		bool						operator!=(const IteratorList &rhs) const
+		{
+			return (this->ptr != rhs.ptr);
+		}
+
+		T							&operator*(void) // dereferenced lvalue
+		{
+			return (*this->ptr);	
+		}
+
+		T							*operator->(void) // dereferenced rvalue
+		{ 
+			return (&this->ptr);	
 		}
 
 		IteratorVector				operator+(int n) const
@@ -266,7 +313,7 @@ namespace ft
 			IteratorVector		iv(*this);
 
 			iv += n;
-			return (iv);	
+			return (iv);
 		}
 
 		IteratorVector				operator-(int n) const
@@ -279,22 +326,22 @@ namespace ft
 
 		bool						operator<(const IteratorVector &rhs) const
 		{
-			return (this->ptr->element < rhs.ptr->element);
+			return (*this->ptr < *rhs->ptr);
 		}
 
 		bool						operator>(const IteratorVector &rhs) const
 		{
-			return (this->ptr->element > rhs.ptr->element);
+			return (*this->ptr > *rhs.ptr);
 		}
 
 		bool						operator<=(const IteratorVector &rhs) const
 		{
-			return (this->ptr->element <= rhs.ptr->element);
+			return (*this->ptr <= *rhs.ptr);
 		}
 
 		bool						operator>=(const IteratorVector &rhs) const
 		{
-			return (this->ptr->element >= rhs.ptr->element);
+			return (*this->ptr >= *rhs.ptr);
 		}
 
 		IteratorVector				&operator+=(int n) const
@@ -335,7 +382,7 @@ namespace ft
 	};
 
 	template <class T>
-	class ReverseIteratorVector : public ReverseIteratorList<T>, public IteratorVector<T>
+	class ReverseIteratorVector : public IteratorVector<T>
 	{
 
 	private:
@@ -343,11 +390,6 @@ namespace ft
 	public:
 		ReverseIteratorVector(void) {}
 		~ReverseIteratorVector(void) {}
-
-		ReverseIteratorVector(DoublyLinkedList<T> *list)
-		{
-			this->ptr = list;
-		}
 
 		ReverseIteratorVector(const ReverseIteratorVector &it)
 		{
@@ -358,6 +400,32 @@ namespace ft
 		{
 			this->ptr = it.ptr;
 			return (*this);
+		}
+
+		ReverseIteratorList			&operator++(void)
+		{
+			this->ptr--;
+			return (*this);
+		}
+
+		ReverseIteratorList			operator++(int)
+		{
+			ReverseIteratorList tmp(*this);
+			this->operator++();
+			return (tmp);
+		}
+
+		ReverseIteratorList			&operator--(void)
+		{
+			this->ptr++;
+			return (*this);
+		}
+
+		ReverseIteratorList			operator--(int)
+		{
+			ReverseIteratorList tmp(*this);
+			this->operator--();
+			return (tmp);
 		}
 
 		ReverseIteratorVector			&operator+=(int n) const
@@ -392,7 +460,7 @@ namespace ft
 
 		T								&operator[](int n) const
 		{
-			return (*(*this + n));
+			return (*(*this - n));
 		}
 
 	};

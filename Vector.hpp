@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/06 00:10:10 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/06 03:45:47 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ namespace ft
 		typedef size_t														size_type;
 
 	private:
-		DoublyLinkedList<T>		*head;
+		allocator_type			alloc;
+		pointer					array;
 		size_type				length;
 
 	public:
@@ -60,22 +61,16 @@ namespace ft
 
 		explicit Vector(const allocator_type& alloc = allocator_type())
 		{
-			(void)alloc;
-			this->head = NULL;
+			this->alloc = alloc;
+			this->array = new value_type[1];
+			this->array[0] = NULL;
 			this->length = 0;
 			return ;
 		}
 
 		~Vector(void)
 		{
-			DoublyLinkedList<T>		*tmp;
-
-			while(this->head)
-			{
-				tmp = this->head->next;
-				delete(this->head);
-				this->head = this->head->next;
-			}
+			this->clear();
 			return ;
 		}
 
@@ -87,26 +82,17 @@ namespace ft
 
 		Vector				&operator=(const Vector &vector)
 		{
-			DoublyLinkedList<T>		*tmp;
-
-			this->head = NULL;
-			this->length = 0;
-			tmp = list.head;
-			while (tmp)
-			{
-				this->push_back(tmp->element);
-				tmp = tmp->next;
-			}
+			// TO COMPLETE
 			return (*this);
-
 		}
 
 		/* Non-Default Constructor */
 		explicit Vector(size_type n, const value_type &val = value_type(),
 const allocator_type &alloc = allocator_type())
 		{
-			(void) alloc;
-			this->head = NULL;
+			this->alloc = alloc;
+			this->array = new value_type[1];
+			this->array[0] = NULL;
 			this->length = 0;
 			assign(static_cast<size_type>(n), static_cast<value_type>(val));
 		}
@@ -115,8 +101,10 @@ const allocator_type &alloc = allocator_type())
 		Vector(InputIterator first, InputIterator last,
 const allocator_type& alloc = allocator_type())
 		{
-			(void) alloc;
-			this->head = NULL;
+			this->alloc = alloc;
+			this->array = new value_type[1];
+			this->array[0] = NULL;
+			this->length = 0;
 			this->length = 0;
 			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
 		}
@@ -124,42 +112,42 @@ const allocator_type& alloc = allocator_type())
 		/* Iterators */
 		iterator				begin(void)
 		{
-			return (iterator(this->head));
+			return (iterator(&this->array[0]));
 		}
 
 		const_iterator			begin(void) const
 		{
-			return (iterator(this->head));
+			return (const_iterator(&this->array[0]));
 		}
 
 		iterator				end(void)
 		{
-			return (iterator(this->tail) + this->length);
+			return (iterator(&this->array[this->length]));
 		}
 
 		const_iterator			end(void) const
 		{
-			return (iterator(this->tail) + this->length);
+			return (const_iterator(&this->array[this->length]));
 		}
 
 		reverse_iterator		rbegin(void)
 		{
-			return (reverse_iterator(this->head));
+			return (reverse_iterator(&this->array[0]));
 		}
 
 		const_reverse_iterator	rbegin(void) const
 		{
-			return (reverse_iterator(this->head));
+			return (const_reverse_iterator(&this->array[0]));
 		}
 
 		reverse_iterator		rend(void)
 		{
-			return (reverse_iterator(this->tail) - this->length);
+			return (reverse_iterator(&this->array[this->length]));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			return (reverse_iterator(this->tail) - this->length);
+			return (const_reverse_iterator(&this->array[this->length]));
 		}
 
 		/* Capacity */
@@ -199,63 +187,53 @@ const allocator_type& alloc = allocator_type())
 		/* Element access */
 		reference				operator[](size_type n)
 		{
-			return (iterator(this->head)[n]);
+			return (this->array[n]);
 		}
 
 		const_reference			operator[](size_type n) const
 		{
-			return (iterator(this->head)[n]);
+			return (this->array[n]);
 		}
 
 		reference				at(size_type n)
 		{
-			return (iterator(this->head)[n]);
+			if (n > this->length)
+				throw(std::out_of_range());
+			return (this->array[n]);
 		}
 
 		const_reference			at(size_type n) const
 		{
-			return (iterator(this->head)[n]);
+			if (n > this->length)
+				throw(std::out_of_range());
+			return (this->array[n]);
 		}
 
 		reference				front(void)
 		{
-			if (!this->head)
-				throw(std::exception());
-			return (this->head->element);
+			return (this->array[0]);
 		}
 
 		const_reference			front(void) const
 		{
-			if (!this->head)
-				throw(std::exception());
-			return (this->head->element);
+			return (this->array[0]);
 		}
 
 		reference				back(void)
 		{
-			if (!this->head)
-				throw(std::exception());
-			return (iterator(this->head)[this->length]);
+			return (this->array[this->length]);
 		}
 
 		const_reference			back(void) const
 		{
-			if (!this->head)
-				throw(std::exception());
-			return (iterator(this->head)[this->length]);
+			return (this->array[this->length]);
 		}
 
 		/* Modifiers */
 		template <class InputIterator>
 		void					assign(InputIterator first, InputIterator last)
 		{
-			this->clear();
-			while (first != last)
-			{
-				this->push_back(*first);
-				first++;
-			}
-			this->push_back(*last);
+			// TO COMPLETE
 		}
 
 		void					assign(size_type n, const value_type &val)
@@ -267,139 +245,60 @@ const allocator_type& alloc = allocator_type())
 
 		void					push_back(const value_type &val)
 		{
-			DoublyLinkedList <T>	*tail;
-			DoublyLinkedList <T>	*ptr = new DoublyLinkedList<T>();
-
-			ptr->next = NULL;
-			ptr->prev = NULL;
-			ptr->element = val;
-			if (!this->length)
-				this->head = ptr;
-			else
-			{
-				tail = this->head;
-				while (tail->next)
-					tail = tail->next;
-				tail->next = ptr;
-				ptr->prev = tail;
-			}
-			this->length++;
+			// TO COMPLETE
 		}
 
 		void					pop_back(void)
 		{
-			DoublyLinkedList <T>	*tail;
-
-			if (this->length)
-			{
-				tail = this->head;
-				while (tail->next)
-					tail = tail->next;
-				if (this->length == 1)
-				{
-					delete(tail);
-					this->head = NULL;
-				}
-				else
-				{
-					tail = tail->prev;
-					delete(tail->next);
-					tail->next = NULL;
-				}
-				this->length--;
-			}
+			// TO COMPLETE
 		}
 
 		iterator				insert(iterator position, const value_type &val)
 		{
-			DoublyLinkedList<T>		*add;
-			DoublyLinkedList<T>		*ptr;
-			
-			add = new DoublyLinkedList<T>();
-			add->next = NULL;
-			add->prev = NULL;
-			add->element = val;
-			ptr = position.getPtr();
-			if (!ptr->prev)
-				this->head = add;
-			add->prev = ptr->prev;
-			if (ptr->prev)
-				ptr->prev->next = add;
-			add->next = ptr;
-			ptr->prev = add;
-			this->length++;
-			return (iterator(add));
+			// TO COMPLETE
 		}
 
 		void					insert(iterator position, size_type n, const value_type &val)
 		{
-			while (n--)
-				this->insert(position, val);
+			
+			// TO COMPLETE
+
 		}
 
 		template <class InputIterator>
 		void					insert(iterator position, InputIterator first, InputIterator last)
 		{
-			for (InputIterator it = first; it != last; it++)
-				this->insert(position, first);
+			
+			// TO COMPLETE
+
 		}
 
 		iterator				erase(iterator position)
 		{
-			DoublyLinkedList<T>		*ptr;
 
-			ptr = position.getPtr();
-			if (!ptr->prev)
-			{
-				this->head = ptr->next;
-				if (this->head)
-					this->head->prev = NULL;
-			}
-			else
-				ptr->prev->next = ptr->next;
-			if (!ptr->next)
-			{
-				if (ptr->prev)
-					ptr->prev->next = NULL;
-			}
-			else
-				ptr->next->prev = ptr->prev;
-			delete(ptr);
-			this->length--;
-			return (iterator(this->head));
+			// TO COMPLETE
+
 		}
 
 		iterator				erase(iterator first, iterator last)
 		{
-			iterator tmp;
-		
-			while (first != last)
-			{
-				tmp = first;
-				first++;
-				this->erase(tmp);
-			}
-			this->erase(last);
-			return (iterator(this->head));
+
+			// TO COMPLETE
+
 		}
 
 		void					swap(Vector &x)
 		{
-			DoublyLinkedList<T>	*tmp;
-			size_type			tmp_length;
-			
-			tmp = x.head;
-			x.head = this->head;
-			this->head = tmp;
-			tmp_length = x.length;
-			x.length = this->length;
-			this->length = tmp_length;
+
+			// TO COMPLETE
+
 		}
 
 		void					clear(void)
 		{
-			while (this->length)
-				this->pop_back();
+
+			// TO COMPLETE
+
 		}
 
 	};
