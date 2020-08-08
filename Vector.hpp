@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/06 03:45:47 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/08 14:37:44 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ const allocator_type& alloc = allocator_type())
 			this->array = new value_type[1];
 			this->array[0] = NULL;
 			this->length = 0;
-			this->length = 0;
 			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
 		}
 
@@ -171,7 +170,7 @@ const allocator_type& alloc = allocator_type())
 
 		size_type				capacity(void) const
 		{
-			// A FAIRE
+			return (sizeof(this->array) / sizeof(this->array[0]) - 1);
 		}
 
 		bool					empty(void) const
@@ -181,7 +180,12 @@ const allocator_type& alloc = allocator_type())
 
 		void					reserve(size_type n)
 		{
-			// A FAIRE
+			if (n > this->max_size)
+				throw(std::length_error());
+			if (n > this->capacity())
+			{
+				this->alloc.allocate();
+			}
 		}
 
 		/* Element access */
@@ -197,14 +201,14 @@ const allocator_type& alloc = allocator_type())
 
 		reference				at(size_type n)
 		{
-			if (n > this->length)
+			if (n >= this->length)
 				throw(std::out_of_range());
 			return (this->array[n]);
 		}
 
 		const_reference			at(size_type n) const
 		{
-			if (n > this->length)
+			if (n >= this->length)
 				throw(std::out_of_range());
 			return (this->array[n]);
 		}
@@ -221,26 +225,26 @@ const allocator_type& alloc = allocator_type())
 
 		reference				back(void)
 		{
-			return (this->array[this->length]);
+			return (this->array[this->length - 1]);
 		}
 
 		const_reference			back(void) const
 		{
-			return (this->array[this->length]);
+			return (this->array[this->length - 1]);
 		}
 
 		/* Modifiers */
 		template <class InputIterator>
 		void					assign(InputIterator first, InputIterator last)
 		{
-			// TO COMPLETE
+			this->clear();
+			this->insert(this->begin(), first, last);
 		}
 
 		void					assign(size_type n, const value_type &val)
 		{
-			this->clear();	
-			while (n--)
-				this->push_back(val);
+			this->clear();
+			this->insert(this->begin(), n, val);
 		}
 
 		void					push_back(const value_type &val)
@@ -268,37 +272,27 @@ const allocator_type& alloc = allocator_type())
 		template <class InputIterator>
 		void					insert(iterator position, InputIterator first, InputIterator last)
 		{
-			
 			// TO COMPLETE
-
 		}
 
 		iterator				erase(iterator position)
 		{
-
 			// TO COMPLETE
-
 		}
 
 		iterator				erase(iterator first, iterator last)
 		{
-
 			// TO COMPLETE
-
 		}
 
 		void					swap(Vector &x)
 		{
-
 			// TO COMPLETE
-
 		}
 
 		void					clear(void)
 		{
-
-			// TO COMPLETE
-
+			erase(this->begin(), this->end());
 		}
 
 	};
