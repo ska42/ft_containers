@@ -6,7 +6,7 @@
 #    By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/30 21:31:46 by lmartin           #+#    #+#              #
-#    Updated: 2020/08/03 20:54:33 by lmartin          ###   ########.fr        #
+#    Updated: 2020/08/09 20:43:36 by lmartin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #
@@ -75,21 +75,29 @@ LIST_SRC		=	test_list.cpp
 
 LIST_SRCS		=	$(LIST_SRC)
 
+VECTOR_SRC		=	test_vector.cpp
+
+VECTOR_SRCS		=	$(VECTOR_SRC)
+
 # COMPILED_SOURCES #
 
 MAP_OBJS	=	$(MAP_SRCS:%.cpp=$(DIR_OBJS)%.o)
 
 LIST_OBJS	=	$(LIST_SRCS:%.cpp=$(DIR_OBJS)%.o)
 
+VECTOR_OBJS	=	$(VECTOR_SRCS:%.cpp=$(DIR_OBJS)%.o)
+
 TEST_MAP	=	test_map
 
 TEST_LIST 	=	test_list
+
+TEST_VECTOR =	test_vector
 
 # **************************************************************************** #
 
 ## RULES ##
 
-all:			$(TEST_LIST) $(TEST_MAP)
+all:			$(TEST_LIST) $(TEST_MAP) $(TEST_VECTOR)
 
 # VARIABLES RULES #
 
@@ -103,11 +111,18 @@ $(TEST_LIST):	$(LIST_OBJS)
 				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(LIST_OBJS) -o $(TEST_LIST)
 				@printf "$(_GREEN) Executable '$(TEST_LIST)' created. $(_END)✅\n"
 
+$(TEST_VECTOR):	$(VECTOR_OBJS)
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(VECTOR_OBJS)'. $(_END)✅\n"
+				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(VECTOR_OBJS) -o $(TEST_VECTOR)
+				@printf "$(_GREEN) Executable '$(TEST_VECTOR)' created. $(_END)✅\n"
+
 # COMPILED_SOURCES RULES #
 
 $(MAP_OBJS):		| $(DIR_OBJS)
 
 $(LIST_OBJS):		| $(DIR_OBJS)
+
+$(VECTOR_OBJS):		| $(DIR_OBJS)
 
 $(DIR_OBJS)%.o: $(DIR_SRCS)%.cpp
 				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) -c $< -o $@
@@ -128,6 +143,8 @@ fclean:			clean
 				@printf "$(_RED) '"$(TEST_MAP)"' has been deleted. $(_END)🗑️\n"
 				@$(RM) $(TEST_LIST)
 				@printf "$(_RED) '"$(TEST_LIST)"' has been deleted. $(_END)🗑️\n"
+				@$(RM) $(TEST_VECTOR)
+				@printf "$(_RED) '"$(TEST_VECTOR)"' has been deleted. $(_END)🗑️\n"
 
 re:				fclean all
 

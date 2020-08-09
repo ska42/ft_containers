@@ -6,13 +6,15 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/09 20:32:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/09 21:31:06 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+# include <memory>
+# include <stdexcept>
 # include "Iterator.hpp"
 
 namespace ft
@@ -23,7 +25,7 @@ namespace ft
 	/* https://www.cplusplus.com/reference/vector/vector                      */
 	/* ********************************************************************** */
 
-	template <class T, class Alloc = allocator<T> >
+	template <class T, class Alloc = std::allocator<T> >
 	class Vector
 	{
 
@@ -63,8 +65,7 @@ namespace ft
 		explicit Vector(const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = alloc.allocate(1);
-			this->array[0] = NULL;
+			this->array = this->alloc.allocate(1);
 			this->length = 0;
 			this->real_length = 0;
 			return ;
@@ -87,7 +88,6 @@ namespace ft
 			this->alloc = vector.alloc;
 			this->real_length = vector.real_length;
 			this->array = alloc.allocate(this->real_length + 1);
-			this->array[0] = NULL;
 			this->length = 0;
 			Vector::iterator it;
 			
@@ -106,7 +106,6 @@ const allocator_type &alloc = allocator_type())
 		{
 			this->alloc = alloc;
 			this->array = alloc.allocate(1);
-			this->array[0] = NULL;
 			this->length = 0;
 			this->real_length = 0;
 			assign(static_cast<size_type>(n), static_cast<value_type>(val));
@@ -174,6 +173,7 @@ const allocator_type& alloc = allocator_type())
 		size_type				max_size(void) const
 		{
 			// A FAIRE
+			return (std::numeric_limits<size_type>::max()/sizeof(value_type));
 		}
 
 		void					resize(size_type n, value_type val = value_type())
@@ -197,7 +197,7 @@ const allocator_type& alloc = allocator_type())
 		void					reserve(size_type n)
 		{
 			if (n > this->max_size())
-				throw(std::length_error());
+				throw(std::length_error("max_size reached"));
 			if (n > this->real_length)
 			{
 				size_type				tmp;
@@ -210,11 +210,10 @@ const allocator_type& alloc = allocator_type())
 				{
 					n--;
 					if (n < this->length)
-						this->new_array[n] = this->array[n];
+						new_array[n] = this->array[n];
 				}
-				this->new_array[this->length] = NULL;
 				this->alloc.deallocate(this->array, tmp + 1);
-				this->array = this->new_array;
+				this->array = new_array;
 			}
 		}
 
@@ -232,14 +231,14 @@ const allocator_type& alloc = allocator_type())
 		reference				at(size_type n)
 		{
 			if (n >= this->length)
-				throw(std::out_of_range());
+				throw(std::out_of_range("n is outside the array"));
 			return (this->array[n]);
 		}
 
 		const_reference			at(size_type n) const
 		{
 			if (n >= this->length)
-				throw(std::out_of_range());
+				throw(std::out_of_range("n is outside the array"));
 			return (this->array[n]);
 		}
 
@@ -282,13 +281,11 @@ const allocator_type& alloc = allocator_type())
 			if ((this->length + 1) > this->capacity())
 				reserve(this->length + 1);
 			array[this->length++] = val;
-			array[this->length] = NULL;
 		}
 
 		void					pop_back(void)
 		{
-			delete(array[--this->length]);
-			array[this->length] = NULL;
+			this->length--;
 		}
 
 		iterator				insert(iterator position, const value_type &val)
@@ -299,7 +296,6 @@ const allocator_type& alloc = allocator_type())
 			if ((this->length + 1) > this->capacity())
 				reserve(this->length + 1);
 			i = this->length++;
-			array[this->length] = NULL;
 			end = this->rend();
 			while (end++ != position)
 			{
@@ -328,10 +324,9 @@ const allocator_type& alloc = allocator_type())
 		iterator				erase(iterator position)
 		{
 			size_t				i;
+			iterator			next;
 			reverse_iterator	end;
-			value_type			val;
 
-			delete(val);
 			i = this->length - 1;
 			end = this->rend();
 			while (end++ != position)
@@ -340,12 +335,14 @@ const allocator_type& alloc = allocator_type())
 				i--;
 			}
 			this->length--;
+			return (position);
 		}
 
 		iterator				erase(iterator first, iterator last)
 		{
 			while (first != last)
 				erase(first++);
+			return (first);
 		}
 
 		void					swap(Vector &x)
@@ -377,43 +374,43 @@ const allocator_type& alloc = allocator_type())
 
 	/* Function overloads */
 	template <class T, class Alloc>
-	bool						operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	bool						operator==(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
 		return (lhs == rhs);
 	}
 
 	template <class T, class Alloc>
-	bool						operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	bool						operator!=(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
 		return (lhs != rhs);
 	}
 
 	template <class T, class Alloc>
-	bool						operator<(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	bool						operator<(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
 		return (lhs < rhs);
 	}
 
 	template <class T, class Alloc>
-	bool						operator<=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	bool						operator<=(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
 		return (lhs <= rhs);
 	}
 
 	template <class T, class Alloc>
-	bool						operator>(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	bool						operator>(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
 		return (lhs > rhs);
 	}
 
 	template <class T, class Alloc>
-	bool						operator>=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	bool						operator>=(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
 		return (lhs >= rhs);
 	}
 
 	template <class T, class Alloc>
-	void						swap(vector<T,Alloc> &x, vector<T,Alloc> &y)
+	void						swap(Vector<T,Alloc> &x, Vector<T,Alloc> &y)
 	{
 		x.swap(y);
 	}

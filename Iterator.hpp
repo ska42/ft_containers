@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/06 03:32:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/09 21:20:42 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,9 +222,6 @@ namespace ft
 	template <class T, class Category = random_access_iterator_tag>
 	class IteratorVector
 	{
-	private:
-		pointer									ptr;
-		
 	public:
 	/* ********************************************************************** */
 	/*   Member types                                                         */
@@ -236,6 +233,10 @@ namespace ft
 		typedef Category						category;
 		typedef std::ptrdiff_t					difference_type;
 
+	protected:
+		pointer									ptr;
+		
+	public:
 	/* ********************************************************************** */
 	/*   Member functions                                                     */
 	/* ********************************************************************** */
@@ -262,38 +263,38 @@ namespace ft
 			this->ptr = ptr;
 		}
 
-		IteratorList				&operator++(void)
+		IteratorVector				&operator++(void)
 		{
 			this->ptr++;
 			return (*this);
 		}
 
-		IteratorList				operator++(int)
+		IteratorVector				operator++(int)
 		{
-			IteratorList tmp(*this);
+			IteratorVector tmp(*this);
 			this->operator++();	
 			return (tmp);
 		}
 
-		IteratorList				&operator--(void)
+		IteratorVector				&operator--(void)
 		{
 			this->ptr--;
 			return (*this);
 		}
 
-		IteratorList				operator--(int)
+		IteratorVector				operator--(int)
 		{
-			IteratorList tmp(*this);
+			IteratorVector tmp(*this);
 			this->operator--();
 			return (tmp);
 		}
 
-  		bool						operator==(const IteratorList &rhs) const
+  		bool						operator==(const IteratorVector &rhs) const
 		{
 			return (this->ptr == rhs.ptr);			
 		}
 
-  		bool						operator!=(const IteratorList &rhs) const
+  		bool						operator!=(const IteratorVector &rhs) const
 		{
 			return (this->ptr != rhs.ptr);
 		}
@@ -381,9 +382,20 @@ namespace ft
 
 	};
 
-	template <class T>
-	class ReverseIteratorVector : public IteratorVector<T>
+	template <class T, class Category = random_access_iterator_tag>
+	class ReverseIteratorVector : public IteratorVector<T, Category>
 	{
+
+	public:
+	/* ********************************************************************** */
+	/*   Member types                                                         */
+	/* ********************************************************************** */
+
+		typedef T								value_type;
+		typedef T								&reference;
+		typedef T								*pointer;
+		typedef Category						category;
+		typedef std::ptrdiff_t					difference_type;
 
 	private:
 
@@ -396,34 +408,39 @@ namespace ft
 			*this = it;
 		}
 
+		ReverseIteratorVector(pointer ptr)
+		{
+			this->ptr = ptr;
+		}
+
 		ReverseIteratorVector			&operator=(const ReverseIteratorVector &it)
 		{
 			this->ptr = it.ptr;
 			return (*this);
 		}
 
-		ReverseIteratorList			&operator++(void)
+		ReverseIteratorVector			&operator++(void)
 		{
 			this->ptr--;
 			return (*this);
 		}
 
-		ReverseIteratorList			operator++(int)
+		ReverseIteratorVector			operator++(int)
 		{
-			ReverseIteratorList tmp(*this);
+			ReverseIteratorVector tmp(*this);
 			this->operator++();
 			return (tmp);
 		}
 
-		ReverseIteratorList			&operator--(void)
+		ReverseIteratorVector			&operator--(void)
 		{
 			this->ptr++;
 			return (*this);
 		}
 
-		ReverseIteratorList			operator--(int)
+		ReverseIteratorVector			operator--(int)
 		{
-			ReverseIteratorList tmp(*this);
+			ReverseIteratorVector tmp(*this);
 			this->operator--();
 			return (tmp);
 		}

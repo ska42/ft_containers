@@ -6,16 +6,16 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/06 00:09:26 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/09 21:28:22 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <iostream>
-# include <iomanip>
-# include <list>
-# include "Iterator.hpp"
-# include "List.hpp"
-# include "colors.h"
+#include <iostream>
+#include <iomanip>
+#include <list>
+#include "Iterator.hpp"
+#include "List.hpp"
+#include "colors.h"
 
 template <class container>
 void	printList(container list)
