@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:39:11 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/09 22:41:49 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 01:52:30 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int			main(void)
 	v.pop_back();
 	printVector(v);
 	v.assign((size_t)10, (int)8);
+	printVector(v);
+	v.erase(v.begin());
 	printVector(v);
 	return (0);
 }
