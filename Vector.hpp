@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/08 14:37:44 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/09 20:32:25 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,9 @@ namespace ft
 
 	private:
 		allocator_type			alloc;
-		pointer					array;
+		value_type				*array;
 		size_type				length;
+		size_type				real_length;
 
 	public:
 
@@ -62,9 +63,10 @@ namespace ft
 		explicit Vector(const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = new value_type[1];
+			this->array = alloc.allocate(1);
 			this->array[0] = NULL;
 			this->length = 0;
+			this->real_length = 0;
 			return ;
 		}
 
@@ -82,7 +84,19 @@ namespace ft
 
 		Vector				&operator=(const Vector &vector)
 		{
-			// TO COMPLETE
+			this->alloc = vector.alloc;
+			this->real_length = vector.real_length;
+			this->array = alloc.allocate(this->real_length + 1);
+			this->array[0] = NULL;
+			this->length = 0;
+			Vector::iterator it;
+			
+			it = vector.begin();
+			while (it != vector.end())
+			{
+				this->push_back(*it);
+				it++;
+			}
 			return (*this);
 		}
 
@@ -91,9 +105,10 @@ namespace ft
 const allocator_type &alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = new value_type[1];
+			this->array = alloc.allocate(1);
 			this->array[0] = NULL;
 			this->length = 0;
+			this->real_length = 0;
 			assign(static_cast<size_type>(n), static_cast<value_type>(val));
 		}
 
@@ -102,9 +117,10 @@ const allocator_type &alloc = allocator_type())
 const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = new value_type[1];
+			this->array = alloc.allocate(1);
 			this->array[0] = NULL;
 			this->length = 0;
+			this->real_length = 0;
 			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
 		}
 
@@ -170,7 +186,7 @@ const allocator_type& alloc = allocator_type())
 
 		size_type				capacity(void) const
 		{
-			return (sizeof(this->array) / sizeof(this->array[0]) - 1);
+			return (this->real_length);
 		}
 
 		bool					empty(void) const
@@ -180,11 +196,25 @@ const allocator_type& alloc = allocator_type())
 
 		void					reserve(size_type n)
 		{
-			if (n > this->max_size)
+			if (n > this->max_size())
 				throw(std::length_error());
-			if (n > this->capacity())
+			if (n > this->real_length)
 			{
-				this->alloc.allocate();
+				size_type				tmp;
+				value_type				*new_array;
+
+				new_array = this->alloc.allocate(n + 1);
+				tmp = this->real_length;
+				this->real_length = n;
+				while (n)
+				{
+					n--;
+					if (n < this->length)
+						this->new_array[n] = this->array[n];
+				}
+				this->new_array[this->length] = NULL;
+				this->alloc.deallocate(this->array, tmp + 1);
+				this->array = this->new_array;
 			}
 		}
 
@@ -249,45 +279,89 @@ const allocator_type& alloc = allocator_type())
 
 		void					push_back(const value_type &val)
 		{
-			// TO COMPLETE
+			if ((this->length + 1) > this->capacity())
+				reserve(this->length + 1);
+			array[this->length++] = val;
+			array[this->length] = NULL;
 		}
 
 		void					pop_back(void)
 		{
-			// TO COMPLETE
+			delete(array[--this->length]);
+			array[this->length] = NULL;
 		}
 
 		iterator				insert(iterator position, const value_type &val)
 		{
-			// TO COMPLETE
+			size_t				i;
+			reverse_iterator 	end;
+
+			if ((this->length + 1) > this->capacity())
+				reserve(this->length + 1);
+			i = this->length++;
+			array[this->length] = NULL;
+			end = this->rend();
+			while (end++ != position)
+			{
+				array[i] = array[i - 1];
+				i--;
+			}
+			array[i] = val;
 		}
 
 		void					insert(iterator position, size_type n, const value_type &val)
 		{
-			
-			// TO COMPLETE
-
+			while (n--)
+				insert(position, val);
 		}
 
 		template <class InputIterator>
 		void					insert(iterator position, InputIterator first, InputIterator last)
 		{
-			// TO COMPLETE
+			while (first != last)
+			{
+				insert(position, *first);
+				first++;
+			}
 		}
 
 		iterator				erase(iterator position)
 		{
-			// TO COMPLETE
+			size_t				i;
+			reverse_iterator	end;
+			value_type			val;
+
+			delete(val);
+			i = this->length - 1;
+			end = this->rend();
+			while (end++ != position)
+			{
+				array[i] = array[i + 1];
+				i--;
+			}
+			this->length--;
 		}
 
 		iterator				erase(iterator first, iterator last)
 		{
-			// TO COMPLETE
+			while (first != last)
+				erase(first++);
 		}
 
 		void					swap(Vector &x)
 		{
-			// TO COMPLETE
+			value_type		*array_tmp;
+			size_t			tmp;
+			
+			array_tmp = x.array;
+			x.array = this->array;
+			this->array = array_tmp;
+			tmp = x.length;
+			x.length = this->length;
+			this->length = tmp;
+			tmp = x.real_length;
+			x.real_length = this->real_length;
+			this->real_length = tmp;
 		}
 
 		void					clear(void)
