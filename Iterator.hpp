@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/09 21:20:42 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 01:32:05 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 namespace ft
 {
+
 	/* ********************************************************************** */
 	/* references:                                                            */
 	/* https://www.cplusplus.com/references/iterator                          */
@@ -234,7 +235,8 @@ namespace ft
 		typedef std::ptrdiff_t					difference_type;
 
 	protected:
-		pointer									ptr;
+		pointer									*array;
+		size_t									index;
 		
 	public:
 	/* ********************************************************************** */
@@ -253,19 +255,22 @@ namespace ft
 
 		IteratorVector				&operator=(const IteratorVector &rhs)
 		{
-			this->ptr = rhs.ptr;
+			this->array = rhs.array;
+			this->index = rhs.index;
 			return (*this);
 		}
 
 		
-		IteratorVector(pointer ptr)
+		IteratorVector(pointer	*array, size_t index)
 		{
-			this->ptr = ptr;
+			this->array = array;
+			this->index = index;
 		}
 
 		IteratorVector				&operator++(void)
 		{
-			this->ptr++;
+			this->index++;
+			(void)(*this->array)[this->index];
 			return (*this);
 		}
 
@@ -278,7 +283,8 @@ namespace ft
 
 		IteratorVector				&operator--(void)
 		{
-			this->ptr--;
+			this->index--;
+			(void)(*this->array)[this->index];
 			return (*this);
 		}
 
@@ -291,22 +297,22 @@ namespace ft
 
   		bool						operator==(const IteratorVector &rhs) const
 		{
-			return (this->ptr == rhs.ptr);			
+			return ((*this->array)[this->index] == (*rhs.array)[rhs.index]);
 		}
 
   		bool						operator!=(const IteratorVector &rhs) const
 		{
-			return (this->ptr != rhs.ptr);
+			return ((*this->array)[this->index] != (*rhs.array)[rhs.index]);
 		}
 
 		T							&operator*(void) // dereferenced lvalue
 		{
-			return (*this->ptr);	
+			return ((*this->array)[this->index]);
 		}
 
 		T							*operator->(void) // dereferenced rvalue
 		{ 
-			return (&this->ptr);	
+			return (&(*this->array)[this->index]);
 		}
 
 		IteratorVector				operator+(int n) const
@@ -327,22 +333,22 @@ namespace ft
 
 		bool						operator<(const IteratorVector &rhs) const
 		{
-			return (*this->ptr < *rhs->ptr);
+			return ((*this->array)[this->index] < (*rhs.array)[rhs.index]);
 		}
 
 		bool						operator>(const IteratorVector &rhs) const
 		{
-			return (*this->ptr > *rhs.ptr);
+			return ((*this->array)[this->index] > (*rhs.array)[rhs.index]);
 		}
 
 		bool						operator<=(const IteratorVector &rhs) const
 		{
-			return (*this->ptr <= *rhs.ptr);
+			return ((*this->array)[this->index] <= (*rhs.array)[rhs.index]);
 		}
 
 		bool						operator>=(const IteratorVector &rhs) const
 		{
-			return (*this->ptr >= *rhs.ptr);
+			return ((*this->array)[this->index] >= (*rhs.array)[rhs.index]);
 		}
 
 		IteratorVector				&operator+=(int n) const
@@ -383,7 +389,7 @@ namespace ft
 	};
 
 	template <class T, class Category = random_access_iterator_tag>
-	class ReverseIteratorVector : public IteratorVector<T, Category>
+	class ReverseIteratorVector : public IteratorVector<T>
 	{
 
 	public:
@@ -408,20 +414,23 @@ namespace ft
 			*this = it;
 		}
 
-		ReverseIteratorVector(pointer ptr)
+		ReverseIteratorVector(pointer *array, size_t index)
 		{
-			this->ptr = ptr;
+			this->array = array;
+			this->index = index;
 		}
 
 		ReverseIteratorVector			&operator=(const ReverseIteratorVector &it)
 		{
-			this->ptr = it.ptr;
+			this->array = it.array;
+			this->index = it.index;
 			return (*this);
 		}
 
 		ReverseIteratorVector			&operator++(void)
 		{
-			this->ptr--;
+			this->index--;
+			(void)(*this->array)[this->index];
 			return (*this);
 		}
 
@@ -434,7 +443,8 @@ namespace ft
 
 		ReverseIteratorVector			&operator--(void)
 		{
-			this->ptr++;
+			this->index++;
+			(void)(*this->array)[this->index];
 			return (*this);
 		}
 

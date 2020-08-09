@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/09 21:31:06 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 01:34:40 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ namespace ft
 
 	private:
 		allocator_type			alloc;
+		pointer					*ptr;
 		value_type				*array;
 		size_type				length;
 		size_type				real_length;
@@ -66,6 +67,7 @@ namespace ft
 		{
 			this->alloc = alloc;
 			this->array = this->alloc.allocate(1);
+			this->ptr = &this->array;
 			this->length = 0;
 			this->real_length = 0;
 			return ;
@@ -85,18 +87,16 @@ namespace ft
 
 		Vector				&operator=(const Vector &vector)
 		{
+			int		n;
+
 			this->alloc = vector.alloc;
 			this->real_length = vector.real_length;
 			this->array = alloc.allocate(this->real_length + 1);
-			this->length = 0;
-			Vector::iterator it;
-			
-			it = vector.begin();
-			while (it != vector.end())
-			{
-				this->push_back(*it);
-				it++;
-			}
+			this->ptr = &this->array;
+			this->length = vector.length;
+			n = vector.length;
+			while (n--)
+				this->array[n] = vector.array[n];
 			return (*this);
 		}
 
@@ -106,6 +106,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			this->alloc = alloc;
 			this->array = alloc.allocate(1);
+			this->ptr = &this->array;
 			this->length = 0;
 			this->real_length = 0;
 			assign(static_cast<size_type>(n), static_cast<value_type>(val));
@@ -117,7 +118,7 @@ const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
 			this->array = alloc.allocate(1);
-			this->array[0] = NULL;
+			this->ptr = &this->array;
 			this->length = 0;
 			this->real_length = 0;
 			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
@@ -126,42 +127,42 @@ const allocator_type& alloc = allocator_type())
 		/* Iterators */
 		iterator				begin(void)
 		{
-			return (iterator(&this->array[0]));
+			return (iterator(this->ptr, 0));
 		}
 
 		const_iterator			begin(void) const
 		{
-			return (const_iterator(&this->array[0]));
+			return (const_iterator(this->ptr, 0));
 		}
 
 		iterator				end(void)
 		{
-			return (iterator(&this->array[this->length]));
+			return (iterator(this->ptr, this->length));
 		}
 
 		const_iterator			end(void) const
 		{
-			return (const_iterator(&this->array[this->length]));
+			return (const_iterator(this->ptr, this->length));
 		}
 
 		reverse_iterator		rbegin(void)
 		{
-			return (reverse_iterator(&this->array[0]));
+			return (reverse_iterator(this->ptr, 0));
 		}
 
 		const_reverse_iterator	rbegin(void) const
 		{
-			return (const_reverse_iterator(&this->array[0]));
+			return (const_reverse_iterator(this->ptr, 0));
 		}
 
 		reverse_iterator		rend(void)
 		{
-			return (reverse_iterator(&this->array[this->length]));
+			return (reverse_iterator(this->ptr, this->length));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			return (const_reverse_iterator(&this->array[this->length]));
+			return (const_reverse_iterator(this->ptr, this->length));
 		}
 
 		/* Capacity */
@@ -214,6 +215,7 @@ const allocator_type& alloc = allocator_type())
 				}
 				this->alloc.deallocate(this->array, tmp + 1);
 				this->array = new_array;
+				this->ptr = &this->array;
 			}
 		}
 
@@ -295,7 +297,7 @@ const allocator_type& alloc = allocator_type())
 
 			if ((this->length + 1) > this->capacity())
 				reserve(this->length + 1);
-			i = this->length++;
+			i = this->length;
 			end = this->rend();
 			while (end++ != position)
 			{
@@ -303,6 +305,8 @@ const allocator_type& alloc = allocator_type())
 				i--;
 			}
 			array[i] = val;
+			this->length++;
+			return (iterator(this->ptr, i));
 		}
 
 		void					insert(iterator position, size_type n, const value_type &val)
@@ -316,6 +320,7 @@ const allocator_type& alloc = allocator_type())
 		{
 			while (first != last)
 			{
+				std::cout << *position << std::endl;
 				insert(position, *first);
 				first++;
 			}

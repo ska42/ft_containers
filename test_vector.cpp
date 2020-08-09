@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:39:11 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/09 21:29:21 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/09 22:41:49 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ int			main(void)
 	ft::Vector<int>	v;
 
 	v.push_back(4);
+	printVector(v);
+	v.push_back(-19);
+	printVector(v);
+	v.pop_back();
+	printVector(v);
+	v.assign((size_t)10, (int)8);
 	printVector(v);
 	return (0);
 }
