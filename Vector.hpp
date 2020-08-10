@@ -6,12 +6,14 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 15:31:35 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 16:25:09 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
+
+# include <iostream>
 
 # include <memory>
 # include <stdexcept>
@@ -295,6 +297,7 @@ const allocator_type& alloc = allocator_type())
 			size_t				i;
 			reverse_iterator 	end;
 
+			std::cout << val << std::endl;
 			if ((this->length + 1) > this->capacity())
 				reserve(this->length + 1);
 			i = this->length;
@@ -312,7 +315,7 @@ const allocator_type& alloc = allocator_type())
 		void					insert(iterator position, size_type n, const value_type &val)
 		{
 			while (n--)
-				insert(position, val);
+				position = this->insert(position, val);
 		}
 
 		template <class InputIterator>
@@ -320,7 +323,7 @@ const allocator_type& alloc = allocator_type())
 		{
 			while (first != last)
 			{
-				insert(position, *first);
+				position = this->insert(position, *first);
 				first++;
 			}
 		}
@@ -345,7 +348,7 @@ const allocator_type& alloc = allocator_type())
 		iterator				erase(iterator first, iterator last)
 		{
 			while (first != last)
-				erase(first++);
+				first = erase(first++);
 			return (first);
 		}
 

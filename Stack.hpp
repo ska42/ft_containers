@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 03:38:54 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 15:06:18 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 16:08:52 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ namespace ft
 			return (*this);
 		}
 
-		bool empty(void) const
+		bool					empty(void) const
 		{
 			return (container.empty());
 		}

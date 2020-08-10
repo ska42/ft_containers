@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 04:32:17 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 15:31:10 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 16:11:45 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ namespace ft
 
 		~Queue(void)
 		{
-			~this->container();
 			return ;
 		}
 
@@ -63,7 +62,7 @@ namespace ft
 		Queue				&operator=(const Queue &queue)
 		{
 			this->container = queue.container;
-			return ;
+			return (*this);
 		}
 		
 		value_type			&back(void)
