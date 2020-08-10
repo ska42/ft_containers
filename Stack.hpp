@@ -6,12 +6,14 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 03:38:54 by lmartin           #+#    #+#             */
-/*   Updated: 2020/07/28 17:58:30 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:15:22 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_HPP
 # define STACK_HPP
+
+# include <deque>
 
 namespace ft
 {
@@ -21,12 +23,11 @@ namespace ft
 	/* https://www.cplusplus.com/reference/stack/stack                        */
 	/* ********************************************************************** */
 
-	template <class T, class C>
+	template <class T, class C = std::deque<T>>
 	class Stack
 	{
 
 	public:
-
 	/* ********************************************************************** */
 	/*   Member types                                                         */
 	/* ********************************************************************** */
@@ -35,50 +36,66 @@ namespace ft
 		typedef C				container_type;
 		typedef size_t			syze_type;
 
-	public:
+	private:
+		container_type<T>		container;
 
+	public:
 	/* ********************************************************************** */
 	/*   Member functions                                                     */
 	/* ********************************************************************** */
 		
 		explicit Stack (const container_type &ctnr = container_type())
 		{
+			this->container = ctnr;
 			return ;
 		}
 
 		~Stack(void)
 		{
+			~this->container();
 			return ;
 		}
 
 		Stack(const Stack &stack)
 		{
+			*this = stack;
 			return ;
 		}
 
 		Stack					&operator=(const Stack &stack)
 		{
+			this->container = stack.container;
 			return ;
 		}
 
 		bool empty(void) const
 		{
+			return (container.empty());
 		}
 
-		void push (const value_type &val)
+		void					push (const value_type &val)
 		{
+			container.push_back(val);
+		}
+		
+		void					pop (void)
+		{
+			container.pop_back();
 		}
 
 		size_type				size(void) const
 		{
+			return (container.size());
 		}
 
 		value_type				&top(void)
 		{
+			return (container.back());
 		}
 
 		const value_type		&top(void) const
 		{
+			return (container.back());
 		}
 	};
 
@@ -89,33 +106,38 @@ namespace ft
 template <class T, class C>
 bool	operator==(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
+	return (lhs == rhs);
 }
 
 template <class T, class C>
 bool	operator!=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
+	return (lhs != rhs);
 }
 
 template <class T, class C>
 bool	operator<(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
+	eeturn (lhs < rhs);
 }
 
 template <class T, class C>
 bool	operator<=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
+	return (lhs <= rhs);
 }
 
 template <class T, class C>
 bool	operator>(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
+	return (lhs > rhs);
 }
 
 template <class T, class C>
 bool	operator>=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
 {
 }
-
+	return (lhs >= rhs);
 };
 
 #endif
