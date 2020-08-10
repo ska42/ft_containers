@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 15:54:40 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 22:20:23 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,8 +235,7 @@ namespace ft
 		typedef std::ptrdiff_t					difference_type;
 
 	protected:
-		pointer									*array;
-		size_t									index;
+		pointer									ptr;
 		
 	public:
 	/* ********************************************************************** */
@@ -255,22 +254,19 @@ namespace ft
 
 		IteratorVector				&operator=(const IteratorVector &rhs)
 		{
-			this->array = rhs.array;
-			this->index = rhs.index;
+			this->ptr = rhs.ptr;
 			return (*this);
 		}
 
 		
-		IteratorVector(pointer	*array, size_t index)
+		IteratorVector(pointer ptr)
 		{
-			this->array = array;
-			this->index = index;
+			this->ptr = ptr;
 		}
 
 		IteratorVector				&operator++(void)
 		{
-			this->index++;
-			(void)(*this->array)[this->index];
+			this->ptr++;
 			return (*this);
 		}
 
@@ -283,8 +279,7 @@ namespace ft
 
 		IteratorVector				&operator--(void)
 		{
-			this->index--;
-			(void)(*this->array)[this->index];
+			this->ptr--;
 			return (*this);
 		}
 
@@ -297,22 +292,22 @@ namespace ft
 
   		bool						operator==(const IteratorVector &rhs) const
 		{
-			return ((*this->array)[this->index] == (*rhs.array)[rhs.index]);
+			return (this->ptr == rhs.ptr);
 		}
 
   		bool						operator!=(const IteratorVector &rhs) const
 		{
-			return ((*this->array)[this->index] != (*rhs.array)[rhs.index]);
+			return (this->ptr != rhs.ptr);
 		}
 
 		T							&operator*(void) // dereferenced lvalue
 		{
-			return ((*this->array)[this->index]);
+			return (*this->ptr);
 		}
 
 		T							*operator->(void) // dereferenced rvalue
 		{ 
-			return (&(*this->array)[this->index]);
+			return (this->ptr);
 		}
 
 		IteratorVector				operator+(int n) const
@@ -333,22 +328,22 @@ namespace ft
 
 		bool						operator<(const IteratorVector &rhs) const
 		{
-			return ((*this->array)[this->index] < (*rhs.array)[rhs.index]);
+			return (this->ptr < rhs.ptr);
 		}
 
 		bool						operator>(const IteratorVector &rhs) const
 		{
-			return ((*this->array)[this->index] > (*rhs.array)[rhs.index]);
+			return (this->ptr > rhs.ptr);
 		}
 
 		bool						operator<=(const IteratorVector &rhs) const
 		{
-			return ((*this->array)[this->index] <= (*rhs.array)[rhs.index]);
+			return (this->ptr <= rhs.ptr);
 		}
 
 		bool						operator>=(const IteratorVector &rhs) const
 		{
-			return ((*this->array)[this->index] >= (*rhs.array)[rhs.index]);
+			return (this->ptr >= rhs.ptr);
 		}
 
 		IteratorVector				&operator+=(int n)
@@ -368,7 +363,7 @@ namespace ft
 
 		IteratorVector				&operator-=(int n)
 		{
-			while (n > 0)	
+			while (n > 0)
 			{
 				n--;
 				this->operator--();
@@ -384,6 +379,11 @@ namespace ft
 		T							&operator[](int n) const
 		{
 			return (*(*this + n));
+		}
+
+		pointer						getPtr(void) const
+		{
+			return (this->ptr);
 		}
 
 	};
@@ -414,23 +414,20 @@ namespace ft
 			*this = it;
 		}
 
-		ReverseIteratorVector(pointer *array, size_t index)
+		ReverseIteratorVector(pointer ptr)
 		{
-			this->array = array;
-			this->index = index;
+			this->ptr = ptr;
 		}
 
 		ReverseIteratorVector			&operator=(const ReverseIteratorVector &it)
 		{
-			this->array = it.array;
-			this->index = it.index;
+			this->ptr = it.ptr;
 			return (*this);
 		}
 
 		ReverseIteratorVector			&operator++(void)
 		{
-			this->index--;
-			(void)(*this->array)[this->index];
+			this->ptr--;
 			return (*this);
 		}
 
@@ -443,8 +440,7 @@ namespace ft
 
 		ReverseIteratorVector			&operator--(void)
 		{
-			this->index++;
-			(void)(*this->array)[this->index];
+			this->ptr++;
 			return (*this);
 		}
 

@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 16:25:09 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 23:13:56 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ namespace ft
 
 	private:
 		allocator_type			alloc;
-		pointer					*ptr;
 		value_type				*array;
 		size_type				length;
 		size_type				real_length;
@@ -68,8 +67,7 @@ namespace ft
 		explicit Vector(const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = this->alloc.allocate(1);
-			this->ptr = &this->array;
+			this->array = this->alloc.allocate(2);
 			this->length = 0;
 			this->real_length = 0;
 			return ;
@@ -78,6 +76,7 @@ namespace ft
 		~Vector(void)
 		{
 			this->clear();
+			this->alloc.deallocate(this->array, this->real_length + 2);
 			return ;
 		}
 
@@ -93,10 +92,9 @@ namespace ft
 
 			this->alloc = vector.alloc;
 			this->real_length = vector.real_length;
-			this->array = this->alloc.allocate(this->real_length + 1);
-			this->ptr = &this->array;
+			this->array = this->alloc.allocate(this->real_length + 2);
 			this->length = vector.length;
-			n = vector.length;
+			n = vector.length + 1;
 			while (n--)
 				this->array[n] = vector.array[n];
 			return (*this);
@@ -107,8 +105,7 @@ namespace ft
 const allocator_type &alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = this->alloc.allocate(1);
-			this->ptr = &this->array;
+			this->array = this->alloc.allocate(2);
 			this->length = 0;
 			this->real_length = 0;
 			assign(static_cast<size_type>(n), static_cast<value_type>(val));
@@ -119,8 +116,7 @@ const allocator_type &alloc = allocator_type())
 const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = this->alloc.allocate(1);
-			this->ptr = &this->array;
+			this->array = this->alloc.allocate(2);
 			this->length = 0;
 			this->real_length = 0;
 			assign(static_cast<InputIterator>(first), static_cast<InputIterator>(last));
@@ -129,42 +125,42 @@ const allocator_type& alloc = allocator_type())
 		/* Iterators */
 		iterator				begin(void)
 		{
-			return (iterator(this->ptr, 0));
+			return (iterator(&(this->array[0 + 1])));
 		}
 
 		const_iterator			begin(void) const
 		{
-			return (const_iterator(this->ptr, 0));
+			return (const_iterator(&(this->array[0 + 1])));
 		}
 
 		iterator				end(void)
 		{
-			return (iterator(this->ptr, this->length));
+			return (iterator(&(this->array[this->length + 1])));
 		}
 
 		const_iterator			end(void) const
 		{
-			return (const_iterator(this->ptr, this->length));
+			return (const_iterator(&(this->array[this->length + 1])));
 		}
 
 		reverse_iterator		rbegin(void)
 		{
-			return (reverse_iterator(this->ptr, 0));
+			return (reverse_iterator(&(this->array[this->length])));
 		}
 
 		const_reverse_iterator	rbegin(void) const
 		{
-			return (const_reverse_iterator(this->ptr, 0));
+			return (const_reverse_iterator(&(this->array[this->length])));
 		}
 
 		reverse_iterator		rend(void)
 		{
-			return (reverse_iterator(this->ptr, this->length));
+			return (reverse_iterator(&(this->array[0])));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			return (const_reverse_iterator(this->ptr, this->length));
+			return (const_reverse_iterator(&(this->array[0])));
 		}
 
 		/* Capacity */
@@ -206,64 +202,63 @@ const allocator_type& alloc = allocator_type())
 				size_type				tmp;
 				value_type				*new_array;
 
-				new_array = this->alloc.allocate(n + 1);
+				new_array = this->alloc.allocate(n + 2);
 				tmp = this->real_length;
 				this->real_length = n;
 				while (n)
 				{
-					n--;
-					if (n < this->length)
+					if (n <= this->length + 1)
 						new_array[n] = this->array[n];
+					n--;
 				}
-				this->alloc.deallocate(this->array, tmp + 1);
+				this->alloc.deallocate(this->array, tmp + 2);
 				this->array = new_array;
-				this->ptr = &this->array;
 			}
 		}
 
 		/* Element access */
 		reference				operator[](size_type n)
 		{
-			return (this->array[n]);
+			return (this->array[n + 1]);
 		}
 
 		const_reference			operator[](size_type n) const
 		{
-			return (this->array[n]);
+			return (this->array[n + 1]);
 		}
 
 		reference				at(size_type n)
 		{
 			if (n >= this->length)
 				throw(std::out_of_range("n is outside the array"));
-			return (this->array[n]);
+			return (this->array[n + 1]);
 		}
 
 		const_reference			at(size_type n) const
 		{
 			if (n >= this->length)
 				throw(std::out_of_range("n is outside the array"));
-			return (this->array[n]);
+			return (this->array[n + 1]);
 		}
 
 		reference				front(void)
 		{
-			return (this->array[0]);
+			return (this->array[0 + 1]);
 		}
 
 		const_reference			front(void) const
 		{
-			return (this->array[0]);
+			return (this->array[0 + 1]);
 		}
 
 		reference				back(void)
 		{
-			return (this->array[this->length - 1]);
+			return (this->array[this->length]);
 		}
 
 		const_reference			back(void) const
 		{
-			return (this->array[this->length - 1]);
+			return (this->array[this->length]);
 		}
 
 		/* Modifiers */
@@ -284,7 +279,7 @@ const allocator_type& alloc = allocator_type())
 		{
 			if ((this->length + 1) > this->capacity())
 				reserve(this->length + 1);
-			array[this->length++] = val;
+			array[this->length++ + 1] = val;
 		}
 
 		void					pop_back(void)
@@ -294,22 +289,21 @@ const allocator_type& alloc = allocator_type())
 
 		iterator				insert(iterator position, const value_type &val)
 		{
+			iterator			end;
 			size_t				i;
-			reverse_iterator 	end;
 
-			std::cout << val << std::endl;
-			if ((this->length + 1) > this->capacity())
-				reserve(this->length + 1);
-			i = this->length;
-			end = this->rend();
-			while (end++ != position)
+			i = this->length + 1;
+			end = this->end();
+			while (position++ != end)
 			{
-				array[i] = array[i - 1];
+				this->array[i] = this->array[i - 1];
 				i--;
 			}
 			array[i] = val;
+			if ((this->length + 1) > this->capacity())
+				reserve(this->length + 1);
 			this->length++;
-			return (iterator(this->ptr, i));
+			return (iterator(&this->array[i]));
 		}
 
 		void					insert(iterator position, size_type n, const value_type &val)
@@ -323,8 +317,8 @@ const allocator_type& alloc = allocator_type())
 		{
 			while (first != last)
 			{
-				position = this->insert(position, *first);
-				first++;
+				position = this->insert(position, *first++);
+				position++;
 			}
 		}
 
@@ -347,8 +341,24 @@ const allocator_type& alloc = allocator_type())
 
 		iterator				erase(iterator first, iterator last)
 		{
-			while (first != last)
-				first = erase(first++);
+			iterator			tmp2;
+			iterator			tmp;
+
+			tmp2 = last;
+			tmp = first;
+			while (last != this->end())
+			{
+				*tmp = *last;
+				tmp++;
+				last++;
+			}
+			last = tmp2;
+			tmp = first;
+			while (tmp != last)
+			{
+				tmp++;
+				this->length--;
+			}
 			return (first);
 		}
 
@@ -383,37 +393,62 @@ const allocator_type& alloc = allocator_type())
 	template <class T, class Alloc>
 	bool						operator==(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
-		return (lhs == rhs);
+		size_t			i;
+
+		if (lhs.size() != rhs.size())
+			return (false);
+		i = 0;
+		while (i < lhs.size())
+		{
+			if (lhs.at(i) != rhs.at(i))
+				return (false);
+			i++;
+		}
+		return (true);
 	}
 
 	template <class T, class Alloc>
 	bool						operator!=(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
-		return (lhs != rhs);
+		return (!(lhs == rhs));
 	}
 
 	template <class T, class Alloc>
 	bool						operator<(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
-		return (lhs < rhs);
+		size_t		i;
+		size_t		n;
+
+		if (lhs.size() > rhs.size())
+			n = rhs.size();
+		else
+			n = lhs.size();
+		i = 0;
+		while (i < n)
+		{
+			if (lhs.at(i) != rhs.at(i))
+				return (lhs.at(i) < rhs.at(i));
+			i++;
+		}
+		return (lhs.size() < rhs.size());
 	}
 
 	template <class T, class Alloc>
 	bool						operator<=(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
-		return (lhs <= rhs);
+		return (lhs < rhs || lhs == rhs);
 	}
 
 	template <class T, class Alloc>
 	bool						operator>(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
-		return (lhs > rhs);
+		return (!(lhs < rhs) && !(lhs == rhs));
 	}
 
 	template <class T, class Alloc>
 	bool						operator>=(const Vector<T,Alloc> &lhs, const Vector<T,Alloc> &rhs)
 	{
-		return (lhs >= rhs);
+		return (!(lhs < rhs));
 	}
 
 	template <class T, class Alloc>
