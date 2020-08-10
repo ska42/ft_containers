@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 17:31:40 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 01:10:57 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,16 @@ namespace ft
 		typedef	T												*pointer;
 		typedef	const T											*const_pointer;
 		typedef ft::IteratorList<T>								iterator;
-		typedef ft::IteratorList<const T>						const_iterator;
+		typedef iterator										const_iterator;
 		typedef ft::ReverseIteratorList<T>						reverse_iterator;
-		typedef ft::ReverseIteratorList<const T>				const_reverse_iterator;
+		typedef reverse_iterator								const_reverse_iterator;
 		typedef typename ft::IteratorList<T>::difference_type	difference_type;
 		typedef size_t											size_type;
 
 	private:
 		DoublyLinkedList<T>			*head;
 		DoublyLinkedList<T>			*tail;
+		DoublyLinkedList<T>			*_start;
 		DoublyLinkedList<T>			*_end;
 		allocator_type				alloc;
 		size_type					length;
@@ -65,9 +66,12 @@ namespace ft
 		explicit List (const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
+			this->_start = new DoublyLinkedList<T>;
+			this->_start->prev = NULL;
 			this->_end = new DoublyLinkedList<T>;
 			this->_end->next = NULL;
-			this->_end->prev = NULL;
+			this->_start->next = _end;
+			this->_end->prev = _start;
 			this->head = this->_end;
 			this->tail = this->_end;
 			this->length = 0;
@@ -78,6 +82,7 @@ namespace ft
 		{
 			this->clear();
 			delete(this->_end);
+			delete(this->_start);
 			return ;
 		}
 
@@ -92,17 +97,23 @@ namespace ft
 			DoublyLinkedList<T>		*tmp;
 
 			this->alloc = list.alloc;
+			this->_start = new DoublyLinkedList<T>;
+			this->_start->prev = NULL;
 			this->_end = new DoublyLinkedList<T>;
 			this->_end->next = NULL;
-			this->_end->prev = NULL;
+			this->_start->next = _end;
+			this->_end->prev = _start;
 			this->head = this->_end;
 			this->tail = this->_end;
 			this->length = 0;
-			tmp = list.head;
-			while (tmp->next)
+			if (list.length)
 			{
-				this->push_back(*tmp->element);
-				tmp = tmp->next;
+				tmp = list.head;
+				while (tmp != list._end)
+				{
+					this->push_back(*tmp->element);
+					tmp = tmp->next;
+				}
 			}
 			return (*this);
 		}
@@ -112,9 +123,12 @@ namespace ft
 			const allocator_type &alloc = allocator_type())
 		{
 			this->alloc = alloc;
+			this->_start = new DoublyLinkedList<T>;
+			this->_start->prev = NULL;
 			this->_end = new DoublyLinkedList<T>;
 			this->_end->next = NULL;
-			this->_end->prev = NULL;
+			this->_start->next = _end;
+			this->_end->prev = _start;
 			this->head = this->_end;
 			this->tail = this->_end;
 			this->length = 0;
@@ -126,9 +140,12 @@ namespace ft
 			const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
+			this->_start = new DoublyLinkedList<T>;
+			this->_start->prev = NULL;
 			this->_end = new DoublyLinkedList<T>;
 			this->_end->next = NULL;
-			this->_end->prev = NULL;
+			this->_start->next = _end;
+			this->_end->prev = _start;
 			this->head = this->_end;
 			this->tail = this->_end;
 			this->length = 0;
@@ -143,7 +160,7 @@ namespace ft
 
 		const_iterator			begin(void) const
 		{
-			return (iterator(this->head));
+			return (const_iterator((this->head)));
 		}
 
 		iterator				end(void)
@@ -153,27 +170,27 @@ namespace ft
 
 		const_iterator			end(void) const
 		{
-			return (iterator(this->_end));
+			return (const_iterator(this->_end));
 		}
 
 		reverse_iterator		rbegin(void)
 		{
-			return (reverse_iterator(this->head));
+			return (reverse_iterator(this->tail));
 		}
 
 		const_reverse_iterator	rbegin(void) const
 		{
-			return (reverse_iterator(this->head));
+			return (const_reverse_iterator(this->tail));
 		}
 
 		reverse_iterator		rend(void)
 		{
-			return (reverse_iterator(this->_end));
+			return (reverse_iterator(this->_start));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			return (reverse_iterator(this->_end));
+			return (const_reverse_iterator(this->_start));
 		}
 
 		/* Capacity */
@@ -223,7 +240,6 @@ namespace ft
 				this->push_back(*first);
 				first++;
 			}
-			this->push_back(*last);
 		}
 
 		void					assign(size_type n, const value_type &val)
@@ -238,11 +254,16 @@ namespace ft
 			DoublyLinkedList <T>	*ptr = new DoublyLinkedList<T>;
 
 			ptr->next = NULL;
-			ptr->prev = NULL;
+			this->_start->next = ptr;
+			ptr->prev = this->_start;
 			ptr->element = this->alloc.allocate(1);
 			this->alloc.construct(ptr->element, val);
 			if (!this->length)
+			{
 				this->tail = this->head = ptr;
+				this->_end->prev = this->tail;
+				this->tail->next = this->_end;
+			}
 			else
 			{
 				this->head->prev = ptr;
@@ -261,7 +282,8 @@ namespace ft
 					this->alloc.destroy(this->head->element);
 					this->alloc.deallocate(this->head->element, 1);
 					delete(this->head);
-					this->_end->prev = NULL;
+					this->_end->prev = this->_start;
+					this->_start->next = this->_end;
 					this->tail = this->head = this->_end;
 				}
 				else
@@ -270,7 +292,8 @@ namespace ft
 					this->alloc.destroy(this->head->prev->element);
 					this->alloc.deallocate(this->head->prev->element, 1);
 					delete(this->head->prev);
-					this->head->prev = NULL;
+					this->head->prev = this->_start;
+					this->_start->next = this->head;
 				}
 				this->length--;
 			}
@@ -286,7 +309,11 @@ namespace ft
 			ptr->element = this->alloc.allocate(1);
 			this->alloc.construct(ptr->element, val);
 			if (!this->length)
+			{
 				this->head = this->tail = ptr;
+				this->_start->next = this->head;
+				this->head->prev = this->_start;
+			}
 			else
 			{
 				this->tail->next = ptr;
@@ -305,7 +332,8 @@ namespace ft
 					this->alloc.destroy(this->tail->element);
 					this->alloc.deallocate(this->tail->element, 1);
 					delete(this->tail);
-					this->_end->prev = NULL;
+					this->_end->prev = this->_start;
+					this->_start->next = this->_end;
 					this->head = this->tail = this->_end;
 				}
 				else
@@ -332,10 +360,16 @@ namespace ft
 			add->element = this->alloc.allocate(1);
 			this->alloc.construct(add->element, val);	
 			ptr = position.getPtr();
-			if (!ptr->prev)
+			if (ptr->prev == this->_start)
 			{
+				add->prev = this->_start;
+				this->_start->next = add;
 				if (!this->length)
+				{
 					this->tail = this->head = add;
+					add->next = this->_end;
+					this->_end->prev = add;
+				}
 				else
 				{
 					this->head->prev = add;
@@ -348,7 +382,11 @@ namespace ft
 				add->next = this->_end;
 				this->_end->prev = add;
 				if (!this->length)
+				{
 					this->head = this->tail = add;
+					add->prev = this->_start;
+					this->_start->next = add;
+				}
 				else
 				{
 					this->tail->next = add;
@@ -383,39 +421,41 @@ namespace ft
 
 		iterator				erase(iterator position)
 		{
+			DoublyLinkedList<T>		*next;
 			DoublyLinkedList<T>		*ptr;
 
 			if (position == this->end())
 				return (this->end());
 			ptr = position.getPtr();
-			if (!ptr->prev)
+			if (ptr == this->_start)
+				return (iterator(this->_start));
+			if (ptr->prev == this->_start)
 			{
 				this->head = ptr->next;
-				if (this->head)
-					this->head->prev = NULL;
-				if (this->head == this->_end)
-					this->tail = this->head;
+				this->head->prev = this->_start;
+				this->_start->next = this->head;
 			}
 			else
 				ptr->prev->next = ptr->next;
 			if (ptr->next == this->_end)
 			{
-				this->tail = ptr->prev;
-				if (!this->tail)
-					this->tail = this->head;
-				else
+				if (ptr->prev != this->_start)
 				{
+					this->tail = ptr->prev;
 					this->tail->next = this->_end;
 					this->_end->prev = this->tail;
 				}
+				else
+					this->tail = this->_end;
 			}
 			else
 				ptr->next->prev = ptr->prev;
+			next = ptr->next;
 			this->alloc.destroy(ptr->element);
 			this->alloc.deallocate(ptr->element, 1);
 			delete(ptr);
 			this->length--;
-			return (iterator(this->head));
+			return (iterator(next));
 		}
 
 		iterator				erase(iterator first, iterator last)
@@ -707,37 +747,70 @@ namespace ft
 	template <class T, class Alloc>
 	bool						operator==(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
 	{
-		return (lhs == rhs);
+		typename List<T, Alloc>::const_iterator		it = lhs.begin();
+		typename List<T, Alloc>::const_iterator		it2 = rhs.begin();
+		size_t				i;
+
+		if (lhs.size() != rhs.size())
+			return (false);
+		i = 0;
+		while (i < lhs.size())
+		{
+			if (*it != *it2)
+				return (false);
+			it++;
+			it2++;
+			i++;
+		}
+		return (true);
 	}
 
 	template <class T, class Alloc>
 	bool						operator!=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
 	{
-		return (lhs != rhs);
+		return (!(lhs == rhs));
 	}
 
 	template <class T, class Alloc>
 	bool						operator<(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
 	{
-		return (lhs < rhs);
+		typename List<T, Alloc>::const_iterator		it = lhs.begin();
+		typename List<T, Alloc>::const_iterator		it2 = rhs.begin();
+		size_t				n;
+		size_t				i;
+
+		if (lhs.size() > rhs.size())
+			n = rhs.size();
+		else
+			n = lhs.size();
+		i = 0;
+		while (i < n)
+		{
+			if (*it != *it2)
+				return (*it < *it2);
+			it++;
+			it2++;
+			i++;
+		}
+		return (lhs.size() < rhs.size());
 	}
 
 	template <class T, class Alloc>
 	bool						operator<=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
 	{
-		return (lhs <= rhs);
+		return (lhs < rhs || lhs == rhs);
 	}
 
 	template <class T, class Alloc>
 	bool						operator>(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
 	{
-		return (lhs > rhs);
+		return (!(lhs < rhs) && !(lhs == rhs));
 	}
 
 	template <class T, class Alloc>
 	bool						operator>=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs)
 	{
-		return (lhs >= rhs);
+		return (!(lhs < rhs));
 	}
 
 	template <class T, class Alloc>
