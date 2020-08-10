@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 04:32:17 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 13:15:13 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 15:31:10 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
 	/* https://www.cplusplus.com/reference/queue/queue                        */
 	/* ********************************************************************** */
 
-	template <class T, class C = std::deque<T>>
+	template <class T, class C = std::deque<T> >
 	class Queue
 	{
 
@@ -32,10 +32,10 @@ namespace ft
 	
 		typedef T					value_type;
 		typedef C					container_type;
-		typedef size_t				syze_type;
+		typedef size_t				size_type;
 
 	private:
-		container_type<T>			container;
+		container_type				container;
 	
 	public:
 	/* ********************************************************************** */
@@ -107,44 +107,46 @@ namespace ft
 		}
 	};
 
-/* ************************************************************************** */
-/*   Non-member functions                                                     */
-/* ************************************************************************** */
+	/* ************************************************************************** */
+	/*   Non-member functions                                                     */
+	/* ************************************************************************** */
 
-template <class T, class C>
-bool		operator==(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
-{
-	return (lhs == rhs);
-}
+	template <class T, class C>
+	bool		operator==(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
+	{
+		return (lhs == rhs);
+	}
 
-template <class T, class C>
-bool		operator!=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
-{
-	return (lhs != rhs);
-}
+	template <class T, class C>
+	bool		operator!=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
+	{
+		return (lhs != rhs);
+	}
 
-template <class T, class C>
-bool		operator<(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
-{
-	return (lhs < rhs);
-}
+	template <class T, class C>
+	bool		operator<(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
+	{
+		return (lhs < rhs);
+	}
 
-template <class T, class C>
-bool		operator<=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
-{
-	return (lhs <= rhs);
-}
+	template <class T, class C>
+	bool		operator<=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
+	{
+		return (lhs <= rhs);
+	}
 
-template <class T, class C>
-bool		operator>(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
-{
-	return (lhs > rhs);
-}
+	template <class T, class C>
+	bool		operator>(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
+	{
+		return (lhs > rhs);
+	}
 
-template <class T, class C>
-bool		operator>=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
-{
-	return (lhs >= rhs);
+	template <class T, class C>
+	bool		operator>=(const Queue<T,C> &lhs, const Queue<T,C> &rhs)
+	{
+		return (lhs >= rhs);
+	}
+
 };
 
 #endif

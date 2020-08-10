@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 03:54:56 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 15:31:35 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ namespace ft
 
 			this->alloc = vector.alloc;
 			this->real_length = vector.real_length;
-			this->array = alloc.allocate(this->real_length + 1);
+			this->array = this->alloc.allocate(this->real_length + 1);
 			this->ptr = &this->array;
 			this->length = vector.length;
 			n = vector.length;
@@ -105,7 +105,7 @@ namespace ft
 const allocator_type &alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = alloc.allocate(1);
+			this->array = this->alloc.allocate(1);
 			this->ptr = &this->array;
 			this->length = 0;
 			this->real_length = 0;
@@ -117,7 +117,7 @@ const allocator_type &alloc = allocator_type())
 const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->array = alloc.allocate(1);
+			this->array = this->alloc.allocate(1);
 			this->ptr = &this->array;
 			this->length = 0;
 			this->real_length = 0;
@@ -320,7 +320,6 @@ const allocator_type& alloc = allocator_type())
 		{
 			while (first != last)
 			{
-				std::cout << *position << std::endl;
 				insert(position, *first);
 				first++;
 			}

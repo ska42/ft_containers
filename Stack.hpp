@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 03:38:54 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 13:15:22 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 15:06:18 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ namespace ft
 	/* https://www.cplusplus.com/reference/stack/stack                        */
 	/* ********************************************************************** */
 
-	template <class T, class C = std::deque<T>>
+	template <class T, class C = std::deque<T> >
 	class Stack
 	{
 
@@ -34,10 +34,10 @@ namespace ft
 	
 		typedef T				value_type;
 		typedef C				container_type;
-		typedef size_t			syze_type;
+		typedef size_t			size_type;
 
 	private:
-		container_type<T>		container;
+		container_type			container;
 
 	public:
 	/* ********************************************************************** */
@@ -52,7 +52,6 @@ namespace ft
 
 		~Stack(void)
 		{
-			~this->container();
 			return ;
 		}
 
@@ -65,7 +64,7 @@ namespace ft
 		Stack					&operator=(const Stack &stack)
 		{
 			this->container = stack.container;
-			return ;
+			return (*this);
 		}
 
 		bool empty(void) const
@@ -99,45 +98,46 @@ namespace ft
 		}
 	};
 
-/* ************************************************************************** */
-/*   Non-member functions                                                     */
-/* ************************************************************************** */
+	/* ********************************************************************** */
+	/*   Non-member functions                                                 */
+	/* ********************************************************************** */
 
-template <class T, class C>
-bool	operator==(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
-{
-	return (lhs == rhs);
-}
+	template <class T, class C>
+	bool	operator==(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
+	{
+		return (lhs == rhs);
+	}
 
-template <class T, class C>
-bool	operator!=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
-{
-	return (lhs != rhs);
-}
+	template <class T, class C>
+	bool	operator!=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
+	{
+		return (lhs != rhs);
+	}
 
-template <class T, class C>
-bool	operator<(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
-{
-	eeturn (lhs < rhs);
-}
+	template <class T, class C>
+	bool	operator<(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
+	{
+		return (lhs < rhs);
+	}
 
-template <class T, class C>
-bool	operator<=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
-{
-	return (lhs <= rhs);
-}
+	template <class T, class C>
+	bool	operator<=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
+	{
+		return (lhs <= rhs);
+	}
 
-template <class T, class C>
-bool	operator>(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
-{
-	return (lhs > rhs);
-}
+	template <class T, class C>
+	bool	operator>(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
+	{
+		return (lhs > rhs);
+	}
 
-template <class T, class C>
-bool	operator>=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
-{
-}
-	return (lhs >= rhs);
+	template <class T, class C>
+	bool	operator>=(const Stack<T,C> &lhs, const Stack<T,C> &rhs)
+	{
+		return (lhs >= rhs);
+	}
+
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 01:32:05 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 15:54:40 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace ft
 	{
 		DoublyLinkedList	*prev;
 		DoublyLinkedList	*next;
-		T					element;
+		T					*element;
 	};
 
 	struct input_iterator_tag {};
@@ -150,12 +150,12 @@ namespace ft
 
 		T							&operator*(void) // dereferenced lvalue
 		{
-			return (this->ptr->element);	
+			return (*this->ptr->element);
 		}
 
 		T							*operator->(void) // dereferenced rvalue
 		{ 
-			return (&this->ptr->element);	
+			return (this->ptr->element);	
 		}
 		
 		DoublyLinkedList<T>			*getPtr(void)
@@ -351,32 +351,32 @@ namespace ft
 			return ((*this->array)[this->index] >= (*rhs.array)[rhs.index]);
 		}
 
-		IteratorVector				&operator+=(int n) const
+		IteratorVector				&operator+=(int n)
 		{
 			while (n > 0)	
 			{
 				n--;
-				this++;
+				this->operator++();
 			}
 			while (n < 0)
 			{
 				n++;
-				this--;
+				this->operator--();
 			}
 			return (*this);
 		}
 
-		IteratorVector				&operator-=(int n) const
+		IteratorVector				&operator-=(int n)
 		{
 			while (n > 0)	
 			{
 				n--;
-				this--;
+				this->operator--();
 			}
 			while (n < 0)
 			{
 				n++;
-				this++;
+				this->operator++();
 			}
 			return (*this);
 		}
