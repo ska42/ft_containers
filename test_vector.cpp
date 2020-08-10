@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:39:11 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 03:15:18 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 03:55:22 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,8 @@ int			main(void)
 	std::cout << v.back() << std::endl;
 	ft::Vector<int> v2;
 	v2.clear();
+	v2.swap(v);
+	printContainer(v);
+	printContainer(v2);
 	return (0);
 }
