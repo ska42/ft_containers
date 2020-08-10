@@ -6,37 +6,17 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/09 21:28:22 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 03:10:27 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <iomanip>
 #include <list>
+#include "colors.h"
+#include "utils.hpp"
 #include "Iterator.hpp"
 #include "List.hpp"
-#include "colors.h"
-
-template <class container>
-void	printList(container list)
-{
-	int								n;
-	typename container::iterator	i;
-	
-	i = list.begin();
-	n = 0;
-	std::cout << _YELLOW << "---------------------- " << "[" << _GREEN;
-	while (i != list.end())
-	{
-		if (n != 0)
-			std::cout << ", ";
-		std::cout << _GREEN << *i << _END;
-		i++;
-		n++;
-	}
-	std::cout << _YELLOW << "]" << _END << std::endl;
-	std::cout << std::endl;
-}
 
 template <class T>
 void	error_diff(ft::List<T> mylist, std::list<T> list)
@@ -47,9 +27,9 @@ void	error_diff(ft::List<T> mylist, std::list<T> list)
 	std::cout << std::setw(30) << "mylist.size(): " << mylist.size() << std::endl;
 	std::cout << std::setw(30) << "list.size(): " << list.size() << std::endl;
 	std::cout << std::setw(30) << "mylist : ";
-	printList(mylist);
+	printContainer(mylist);
 	std::cout << std::setw(30) << "list : ";
-	printList(list);
+	printContainer(list);
 }
 
 template <class T>
@@ -77,7 +57,7 @@ void	compareList(std::string function, ft::List<T> mylist, std::list<T> list)
 			my_it++;
 		}
 		std::cout << _GREEN << "OK " << _END;
-		printList(mylist);
+		printContainer(mylist);
 	}
 }
 

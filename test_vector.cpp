@@ -6,48 +6,35 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:39:11 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 01:52:30 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 03:15:18 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include "Vector.hpp"
+#include <vector>
+#include "utils.hpp"
 #include "colors.h"
-
-template <class container>
-void	printVector(container vector)
-{
-	int								n;
-	typename container::iterator	i;
-	
-	i = vector.begin();
-	n = 0;
-	std::cout << _YELLOW << "---------------------- " << "[" << _GREEN;
-	while (i != vector.end())
-	{
-		if (n != 0)
-			std::cout << ", ";
-		std::cout << _GREEN << *i << _END;
-		i++;
-		n++;
-	}
-	std::cout << _YELLOW << "]" << _END << std::endl;
-	std::cout << std::endl;
-}
+#include "Vector.hpp"
 
 int			main(void)
 {
 	ft::Vector<int>	v;
 
 	v.push_back(4);
-	printVector(v);
+	printContainer(v);
 	v.push_back(-19);
-	printVector(v);
+	printContainer(v);
 	v.pop_back();
-	printVector(v);
+	printContainer(v);
 	v.assign((size_t)10, (int)8);
-	printVector(v);
+	printContainer(v);
 	v.erase(v.begin());
-	printVector(v);
+	printContainer(v);
+	std::cout << v[5] << std::endl;
+	std::cout << v.front() << std::endl;
+	v.push_back(20);
+	std::cout << v.back() << std::endl;
+	ft::Vector<int> v2;
+	v2.clear();
 	return (0);
 }

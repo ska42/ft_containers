@@ -6,7 +6,7 @@
 #    By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/30 21:31:46 by lmartin           #+#    #+#              #
-#    Updated: 2020/08/09 20:43:36 by lmartin          ###   ########.fr        #
+#    Updated: 2020/08/10 03:12:33 by lmartin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #
@@ -69,15 +69,15 @@ DIR_OBJS	=	./compiled_srcs/
 
 MAP_SRC			=	test_map.cpp
 
-MAP_SRCS		=	$(MAP_SRC)
+MAP_SRCS		=	$(MAP_SRC) 
 
 LIST_SRC		=	test_list.cpp
 
-LIST_SRCS		=	$(LIST_SRC)
+LIST_SRCS		=	$(LIST_SRC) 
 
 VECTOR_SRC		=	test_vector.cpp
 
-VECTOR_SRCS		=	$(VECTOR_SRC)
+VECTOR_SRCS		=	$(VECTOR_SRC) 
 
 # COMPILED_SOURCES #
 
@@ -102,17 +102,17 @@ all:			$(TEST_LIST) $(TEST_MAP) $(TEST_VECTOR)
 # VARIABLES RULES #
 
 $(TEST_MAP):	$(MAP_OBJS)
-				@printf "\033[2K\r$(_GREEN) All files compiled into '$(MAP_OBJS)'. $(_END)✅\n"
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(DIR_OBJS)'. $(_END)✅\n"
 				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(MAP_OBJS) -o $(TEST_MAP)
 				@printf "$(_GREEN) Executable '$(TEST_MAP)' created. $(_END)✅\n"
 
 $(TEST_LIST):	$(LIST_OBJS)
-				@printf "\033[2K\r$(_GREEN) All files compiled into '$(LIST_OBJS)'. $(_END)✅\n"
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(DIR_OBJS)'. $(_END)✅\n"
 				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(LIST_OBJS) -o $(TEST_LIST)
 				@printf "$(_GREEN) Executable '$(TEST_LIST)' created. $(_END)✅\n"
 
 $(TEST_VECTOR):	$(VECTOR_OBJS)
-				@printf "\033[2K\r$(_GREEN) All files compiled into '$(VECTOR_OBJS)'. $(_END)✅\n"
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(DIR_OBJS)'. $(_END)✅\n"
 				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(VECTOR_OBJS) -o $(TEST_VECTOR)
 				@printf "$(_GREEN) Executable '$(TEST_VECTOR)' created. $(_END)✅\n"
 

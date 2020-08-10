@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 01:57:26 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/10 02:44:09 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,15 +328,16 @@ const allocator_type& alloc = allocator_type())
 
 		iterator				erase(iterator position)
 		{
-			size_t				i;
-			reverse_iterator	end;
+			iterator			tmp;
+			iterator			next;
 
-			i = 0;
-			end = this->rend();
-			while (end++ != position)
+			tmp = position;
+			while (tmp != this->end())
 			{
-				this->array[i] = this->array[i + 1];
-				i++;
+				next = tmp;
+				next++;	
+				*tmp = *next;
+				tmp++;
 			}
 			this->length--;
 			return (position);
