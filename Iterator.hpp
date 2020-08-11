@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 16:25:45 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 18:50:36 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -548,21 +548,24 @@ namespace ft
 
 		IteratorMap				&operator++(void)
 		{
-			if (this->ptr && this->ptr->right)
-				this->ptr = this->ptr->right;
-			else if (this->ptr)
+			BinaryTreeMap<Key, T> *next;
+
+			if (!this->ptr)
+				return (*this);
+			if (!this->ptr->right)
 			{
-				BinaryTreeMap<Key, T> *tmp = this->ptr;
-				BinaryTreeMap<Key, T> *prev = this->ptr;
-				this->ptr = this->ptr->parent;
-				while (this->ptr && prev == this->ptr->right)
-				{
-					prev = this->ptr;
-					this->ptr = this->ptr->parent;
-				}
-				if (!this->ptr)
-					this->ptr = tmp;
+				next = this->ptr;
+				while (next->parent && next == next->parent->right)
+					next = next->parent;
+				next = next->parent;
 			}
+			else
+			{
+				next = this->ptr->right;
+				while (next->left)
+					next = next->left;
+			}
+			this->ptr = next;
 			return (*this);
 		}
 
@@ -575,21 +578,22 @@ namespace ft
 
 		IteratorMap				&operator--(void)
 		{
-			if (this->ptr && this->ptr->left)
-				this->ptr = this->ptr->left;
-			else if (this->ptr)
+			BinaryTreeMap<Key, T> *next;
+
+			if (!this->ptr->left)
 			{
-				BinaryTreeMap<Key, T> *tmp = this->ptr;
-				BinaryTreeMap<Key, T> *prev = this->ptr;
-				this->ptr = this->ptr->parent;
-				while (this->ptr && prev == this->ptr->left)
-				{
-					prev = this->ptr;
-					this->ptr = this->ptr->parent;
-				}
-				if (!this->ptr)
-					this->ptr = tmp;
+				next = this->ptr;
+				while (next->parent && next == next->parent->left)
+					next = next->parent;
+				next = next->parent;
 			}
+			else
+			{
+				next = this->ptr->left;
+				while (next->right)
+					next = next->right;
+			}
+			this->ptr = next;
 			return (*this);
 		}
 
@@ -656,21 +660,22 @@ namespace ft
 
 		ReverseIteratorMap			&operator++(void)
 		{
-			if (this->ptr && this->ptr->left)
-				this->ptr = this->ptr->left;
-			else if (this->ptr)
+			BinaryTreeMap<Key, T> *next;
+
+			if (!this->ptr->left)
 			{
-				BinaryTreeMap<Key, T> *tmp = this->ptr;
-				BinaryTreeMap<Key, T> *prev = this->ptr;
-				this->ptr = this->ptr->parent;
-				while (this->ptr && prev == this->ptr->left)
-				{
-					prev = this->ptr;
-					this->ptr = this->ptr->parent;
-				}
-				if (!this->ptr)
-					this->ptr = tmp;
+				next = this->ptr;
+				while (next->parent && next == next->parent->left)
+					next = next->parent;
+				next = next->parent;
 			}
+			else
+			{
+				next = this->ptr->left;
+				while (next->right)
+					next = next->right;
+			}
+			this->ptr = next;
 			return (*this);
 		}
 
@@ -683,23 +688,23 @@ namespace ft
 
 		ReverseIteratorMap			&operator--(void)
 		{
-			if (this->ptr && this->ptr->right)
-				this->ptr = this->ptr->right;
-			else if (this->ptr)
-			{
-				BinaryTreeMap<Key, T> *tmp = this->ptr;
-				BinaryTreeMap<Key, T> *prev = this->ptr;
-				this->ptr = this->ptr->parent;
-				while (this->ptr && prev == this->ptr->right)
-				{
-					prev = this->ptr;
-					this->ptr = this->ptr->parent;
-				}
-				if (!this->ptr)
-					this->ptr = tmp;
-			}
-			return (*this);
+			BinaryTreeMap<Key, T> *next;
 
+			if (!this->ptr->right)
+			{
+				next = this->ptr;
+				while (next->parent && next == next->parent->right)
+					next = next->parent;
+				next = next->parent;
+			}
+			else
+			{
+				next = this->ptr->right;
+				while (next->left)
+					next = next->left;
+			}
+			this->ptr = next;
+			return (*this);
 		}
 
 		ReverseIteratorMap			operator--(int)

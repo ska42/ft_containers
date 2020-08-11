@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 17:19:17 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 18:52:36 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -548,20 +548,20 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end && node != this->_start)
+			while (node && node != this->_end && node != this->_start)
 			{
 				if (k == node->pair.first)
 					return (node->pair.second);
 				if (this->comp(k, node->pair.first))
 				{
-					if (node->left && node->left != this->_start)
+					if (node->left)
 						node = node->left;
 					else
 						insert(iterator(node), value_type(k, 0));
 				}
 				else
 				{
-					if (node->right && node->right != this->_end)
+					if (node->right)
 						node = node->right;	
 					else
 						insert(iterator(node), value_type(k, 0));
@@ -636,8 +636,6 @@ const allocator_type &alloc = allocator_type())
 				this->_start->parent = this->root;
 			}
 			this->balance(new_node, 0);
-			std::cout << "====================" << std::endl;
-			this->print_binary_tree(this->root);
 			this->length++;
 			return (std::pair<iterator, bool>(iterator(new_node), true));
 		}
@@ -722,9 +720,7 @@ const allocator_type &alloc = allocator_type())
 
 		void					erase(iterator position)
 		{
-			std::cout << "REMOOOOOVEEEE " << position->first << std::endl;
 			remove_node(position.getPtr());
-			this->print_binary_tree(this->root);
 			this->length--;
 		}
 
@@ -733,7 +729,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end && node != this->_start)
+			while (node && node != this->_end && node != this->_start)
 			{
 				if (k == node->pair.first)
 				{
@@ -741,19 +737,9 @@ const allocator_type &alloc = allocator_type())
 					return (1);
 				}
 				if (this->comp(k, node->pair.first))
-				{
-					if (node->left && node->left != this->_start)
-						node = node->left;
-					else
-						return (0);
-				}
+					node = node->left;
 				else
-				{
-					if (node->right && node->right != this->_end)
-						node = node->right;	
-					else
-						return (0);
-				}
+					node = node->right;	
 			}
 			return (0);
 		}
@@ -812,7 +798,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap <Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end && node != this->_start)
+			while (node && node != this->_end && node != this->_start)
 			{
 				if (k == node->pair.first)
 					return (iterator(node));
@@ -829,7 +815,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap <Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end && node != this->_start)
+			while (node && node != this->_end && node != this->_start)
 			{
 				if (k == node->pair.first)
 					return (const_iterator(node));

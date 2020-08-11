@@ -25,6 +25,7 @@ static typename ft::Map<Key, T>::reverse_iterator get_n_bwd(
 		if (i-- == index)
 			return ite;
 	}
+	exit(0);
 	std::stringstream ss;
 	ss << "Index " << index << " is out of bound!";
 	throw std::out_of_range(ss.str());
