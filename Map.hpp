@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 22:41:59 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 23:07:56 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # include <algorithm>
 # include <functional>
-# include "Iterator.hpp"
+# include "IteratorMap.hpp"
 
 namespace ft
 {
@@ -81,6 +81,15 @@ namespace ft
 	};
 
 	private:
+	/* ********************************************************************** */
+	/*                         AVL TREE                                       */
+	/* ********************************************************************** */
+
+	   /* ******************************************************************* */
+	   /* references:                                                         */
+	   /* https://www.programiz.com/dsa/avl-tree                              */
+	   /* ******************************************************************* */
+
 		/* TEST PURPOSE */
 		void	print_binary_tree(BinaryTreeMap<Key, T> *x, int n = 0)
 		{
@@ -101,11 +110,6 @@ namespace ft
 			if (x->right)
 				print_binary_tree(x->right, n + 1);
 		}
-
-	   /* ******************************************************************* */
-	   /* references:                                                         */
-	   /* https://www.programiz.com/dsa/avl-tree                              */
-	   /* ******************************************************************* */
 
 		/*
 		**      p                p
@@ -381,6 +385,7 @@ namespace ft
 			if (to_balance)
 				balance(to_balance, 1);
 		}
+		/* ****************************************************************** */
 
 		allocator_type				alloc;
 		key_compare					comp;
