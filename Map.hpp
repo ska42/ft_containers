@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/06 02:52:09 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 03:04:11 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ namespace ft
 			while (i--)
 				std::cout << "   ";
 			if (x == this->_end)
-				std::cout << "N";
+				std::cout << "E";
+			else if (x == this->_start)
+				std::cout << "S";
 			else
 				std::cout << x->key;
 			std::cout << std::endl;
@@ -278,11 +280,16 @@ namespace ft
 			BinaryTreeMap<Key, T>	*child;
 			BinaryTreeMap<Key, T>	*to_balance;
 
-			if (!node->left && (!node->right || node->right == this->_end))
+			if ((!node->left || node->left == this->_start) && (!node->right || node->right == this->_end))
 			{
 				// 0 CHILD
 				if (node->parent && node->parent->left == node)
-					node->parent->left = NULL;
+				{
+					if (node->left == this->_start)
+						node->parent->left = this->_start;
+					else
+						node->parent->left = NULL;
+				}
 				else if (node->parent && node->parent->right == node)
 				{
 					if (node->right == this->_end)
@@ -291,11 +298,15 @@ namespace ft
 						node->parent->right = NULL;
 				}
 				else
+				{
 					this->root = this->_end;
+					this->root->left = this->_start;
+					this->_start->parent = this->root;
+				}
 				to_balance = node->parent;
 				delete (node);
 			}
-			else if (node->left && node->right && node->right != this->_end)
+			else if (node->left && node->left != this->_start && node->right && node->right != this->_end)
 			{
 				// 2 CHILD
 				BinaryTreeMap<Key, T>	*tmp;
@@ -353,7 +364,7 @@ namespace ft
 			else
 			{
 				// 1 CHILD
-				child = (node->left) ? node->left : node->right;
+				child = (node->left && node->left != this->_start) ? node->left : node->right;
 				child->parent = node->parent;
 				if (!child->parent)
 					this->root = child;
@@ -363,6 +374,8 @@ namespace ft
 					child->parent->right = child;
 				to_balance = (child->parent) ? child->parent : child;
 				calcul_height(child);
+				if (node->left == this->_start)
+					child->left = this->_start;
 				delete(node);
 			}
 			if (to_balance)
@@ -372,6 +385,7 @@ namespace ft
 		allocator_type				alloc;
 		key_compare					comp;
 		BinaryTreeMap<Key, T>		*root;
+		BinaryTreeMap<Key, T>		*_start;
 		BinaryTreeMap<Key, T>		*_end;
 		size_type					length;
 
@@ -387,8 +401,12 @@ const allocator_type &alloc = allocator_type())
 		{
 			this->comp = comp;
 			this->alloc = alloc;
+			this->_start = new BinaryTreeMap<Key, T>();
+			this->_start->left = NULL;
+			this->_start->right = NULL;
 			this->_end = new BinaryTreeMap<Key, T>();
-			this->_end->left = NULL;
+			this->_end->left = this->_start;
+			this->_start->parent = this->_end;
 			this->_end->right = NULL;
 			this->_end->parent = NULL;
 			this->root = this->_end;
@@ -400,6 +418,7 @@ const allocator_type &alloc = allocator_type())
 		{
 			this->clear();
 			delete(this->_end);
+			delete(this->_start);
 			return ;
 		}
 
@@ -413,8 +432,12 @@ const allocator_type &alloc = allocator_type())
 		{
 			this->comp = map.comp;
 			this->alloc = map.alloc;
+			this->_start = new BinaryTreeMap<Key, T>();
+			this->_start->left = NULL;
+			this->_start->right = NULL;
 			this->_end = new BinaryTreeMap<Key, T>();
-			this->_end->left = NULL;
+			this->_end->left = this->_start;
+			this->_start->parent = this->_end;
 			this->_end->right = NULL;
 			this->_end->parent = NULL;
 			this->root = this->_end;
@@ -429,8 +452,12 @@ const allocator_type &alloc = allocator_type())
 		{
 			this->comp = comp;
 			this->alloc = alloc;
+			this->_start = new BinaryTreeMap<Key, T>();
+			this->_start->left = NULL;
+			this->_start->right = NULL;
 			this->_end = new BinaryTreeMap<Key, T>();
-			this->_end->left = NULL;
+			this->_end->left = this->_start;
+			this->_start->parent = this->_end;
 			this->_end->right = NULL;
 			this->_end->parent = NULL;
 			this->root = this->_end;
@@ -444,7 +471,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>		*node;
 
 			node = this->root;
-			while (node->left)
+			while (node->left && node->left != this->_start)
 				node = node->left;
 			return (iterator(node));
 		}
@@ -454,7 +481,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>		*node;
 
 			node = this->root;
-			while (node->left)
+			while (node->left && node->left != this->_start)
 				node = node->left;
 			return (iterator(node));
 		}
@@ -474,8 +501,8 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>		*node;
 
 			node = this->root;
-			while (node->left)
-				node = node->left;
+			while (node->right && node->right != this->_end)
+				node = node->right;
 			return (reverse_iterator(node));
 		}
 
@@ -484,19 +511,19 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>		*node;
 
 			node = this->root;
-			while (node->left)
-				node = node->left;
+			while (node->right && node->right != this->_end)
+				node = node->right;
 			return (reverse_iterator(node));
 		}
 
 		reverse_iterator		rend(void)
 		{
-			return (reverse_iterator(this->_end));
+			return (reverse_iterator(this->_start));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			return (reverse_iterator(this->_end));
+			return (reverse_iterator(this->_start));
 		}
 
 		/* Capacity */
@@ -521,13 +548,13 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end)
+			while (node != this->_end && node != this->_start)
 			{
 				if (k == node->key)
 					return (node->value);
 				if (this->comp(k, node->key))
 				{
-					if (node->left)
+					if (node->left && node->left != this->_start)
 						node = node->left;
 					else
 						insert(iterator(node), value_type(k, 0));
@@ -571,12 +598,16 @@ const allocator_type &alloc = allocator_type())
 					}
 					if (this->comp(new_node->key, node->key))
 					{
-						if (node->left)
+						if (node->left && node->left != this->_start)
 							node = node->left;
 						else
 						{
+							if (node->left == this->_start)
+								this->_start->parent = new_node;
 							node->left = new_node;
 							new_node->parent = node;
+							if (this->_start->parent == new_node)
+								new_node->left = this->_start;
 						}
 					}
 					else
@@ -599,9 +630,15 @@ const allocator_type &alloc = allocator_type())
 			{
 				this->root = new_node;
 				this->root->right = this->_end;
+				this->root->left = this->_start;
 				this->_end->parent = this->root;
+				this->_end->left = NULL;
+				this->_end->right = NULL;
+				this->_start->parent = this->root;
 			}
 			this->balance(new_node, 0);
+			std::cout << "====================" << std::endl;
+			this->print_binary_tree(this->root);
 			this->length++;
 			return (std::pair<iterator, bool>(iterator(new_node), true));
 		}
@@ -632,12 +669,16 @@ const allocator_type &alloc = allocator_type())
 					}
 					if (this->comp(new_node->key, node->key))
 					{
-						if (node->left)
+						if (node->left && node->left != this->_start)
 							node = node->left;
 						else
 						{
+							if (node->left == this->_start)
+								this->_start->parent = new_node;
 							node->left = new_node;
 							new_node->parent = node;
+							if (this->_start->parent == new_node)
+								new_node->left = this->_end;
 						}
 					}
 					else
@@ -660,7 +701,11 @@ const allocator_type &alloc = allocator_type())
 			{
 				this->root = new_node;
 				this->root->right = this->_end;
+				this->root->left = this->_start;
 				this->_end->parent = this->root;
+				this->_end->left = NULL;
+				this->_end->right = NULL;
+				this->_start->parent = this->root;
 			}
 			this->balance(new_node, 0);
 			this->length++;
@@ -679,7 +724,9 @@ const allocator_type &alloc = allocator_type())
 
 		void					erase(iterator position)
 		{
+			std::cout << "REMOOOOOVEEEE " << position.getPtr()->key << std::endl;
 			remove_node(position.getPtr());
+			this->print_binary_tree(this->root);
 			this->length--;
 		}
 
@@ -688,7 +735,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap<Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end)
+			while (node != this->_end && node != this->_start)
 			{
 				if (k == node->key)
 				{
@@ -697,7 +744,7 @@ const allocator_type &alloc = allocator_type())
 				}
 				if (this->comp(k, node->key))
 				{
-					if (node->left)
+					if (node->left && node->left != this->_start)
 						node = node->left;
 					else
 						return (0);
@@ -737,6 +784,9 @@ const allocator_type &alloc = allocator_type())
 			tmp = this->_end;
 			this->_end = x._end;
 			x._end = tmp;
+			tmp = this->_start;
+			this->_start = x._start;
+			x._start = tmp;
 			length = this->length;
 			this->length = x.length;
 			x.length = length;
@@ -764,7 +814,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap <Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end)
+			while (node != this->_end && node != this->_start)
 			{
 				if (k == node->key)
 					return (iterator(node));
@@ -781,7 +831,7 @@ const allocator_type &alloc = allocator_type())
 			BinaryTreeMap <Key, T>	*node;
 
 			node = this->root;
-			while (node != this->_end)
+			while (node != this->_end && node != this->_start)
 			{
 				if (k == node->key)
 					return (const_iterator(node));
