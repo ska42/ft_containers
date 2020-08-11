@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 22:56:57 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 01:10:13 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define LIST_HPP
 
 # include <memory>
-# include <iterator>
 # include "IteratorList.hpp"
 
 namespace ft

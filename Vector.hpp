@@ -6,14 +6,12 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 22:54:58 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 01:09:39 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
-
-# include <iostream>
 
 # include <memory>
 # include <stdexcept>
@@ -171,7 +169,6 @@ const allocator_type& alloc = allocator_type())
 
 		size_type				max_size(void) const
 		{
-			// A FAIRE
 			return (std::numeric_limits<size_type>::max()/sizeof(value_type));
 		}
 
@@ -284,7 +281,8 @@ const allocator_type& alloc = allocator_type())
 
 		void					pop_back(void)
 		{
-			this->length--;
+			if (this->length)
+				this->length--;
 		}
 
 		iterator				insert(iterator position, const value_type &val)
@@ -317,7 +315,8 @@ const allocator_type& alloc = allocator_type())
 		{
 			while (first != last)
 			{
-				position = this->insert(position, *first++);
+				position = this->insert(position, *first);
+				first++;
 				position++;
 			}
 		}
