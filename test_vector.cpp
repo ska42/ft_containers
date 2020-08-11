@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:39:11 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 03:55:22 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 22:13:58 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,17 @@
 
 int			main(void)
 {
-	ft::Vector<int>	v;
+
+	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
+	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
+	std::cout << "/* ********************************************************************** */" << _END << std::endl;
+	std::cout << std::endl;
+
+	ft::Vector<int>	myv;
+	std::vector<int> v;
+
+	std::cout << "ft::Vector<" << _PURPLE << "int" << _END << "> myv;" << std::endl;
+	std::cout << "std::vector<" << _PURPLE << "int" << _END << "> v;" << std::endl;
 
 	v.push_back(4);
 	printContainer(v);

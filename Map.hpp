@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 18:52:36 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 22:41:59 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ namespace ft
 	
 		typedef Key												key_type;
 		typedef T												mapped_type;
-		typedef std::pair<const key_type,mapped_type>			value_type;
+		typedef std::pair<const key_type, mapped_type>			value_type;
 		typedef std::less<key_type>								key_compare;
 		typedef Alloc											allocator_type;
 		typedef T												&reference;
@@ -47,9 +47,9 @@ namespace ft
 		typedef	T												*pointer;
 		typedef	const T											*const_pointer;
 		typedef ft::IteratorMap<Key, T>							iterator;
-		typedef ft::IteratorMap<Key, const T>					const_iterator;
+		typedef ft::ConstIteratorMap<Key, T>					const_iterator;
 		typedef ft::ReverseIteratorMap<Key, T>					reverse_iterator;
-		typedef ft::ReverseIteratorMap<Key, const T>			const_reverse_iterator;
+		typedef ft::ConstReverseIteratorMap<Key, T>				const_reverse_iterator;
 		typedef typename ft::IteratorMap<Key, T>::difference_type	difference_type;
 		typedef size_t											size_type;
 

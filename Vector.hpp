@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 23:13:56 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 22:38:12 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ namespace ft
 		typedef	T															*pointer;
 		typedef	const T														*const_pointer;
 		typedef ft::IteratorVector<T>										iterator;
-		typedef ft::IteratorVector<const T>									const_iterator;
+		typedef ft::ConstIteratorVector<T>									const_iterator;
 		typedef ft::ReverseIteratorVector<T>								reverse_iterator;
-		typedef ft::ReverseIteratorVector<const T>							const_reverse_iterator;
+		typedef ft::ConstReverseIteratorVector<T>							const_reverse_iterator;
 		typedef typename ft::ReverseIteratorVector<T>::difference_type		difference_type;
 		typedef size_t														size_type;
 

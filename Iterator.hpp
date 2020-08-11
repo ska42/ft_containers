@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 18:50:36 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 22:41:34 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,64 @@ namespace ft
 			ReverseIteratorList tmp(*this);
 			this->operator--();
 			return (tmp);
+		}
+	};
+
+	template <class T>
+	class ConstIteratorList : public IteratorList<T>
+	{
+	public:
+		ConstIteratorList(void) {}
+		~ConstIteratorList(void) {}
+
+		ConstIteratorList(DoublyLinkedList<T> *list)
+		{
+			this->ptr = list;
+		}
+
+		ConstIteratorList(const ConstIteratorList &it)
+		{
+			*this = it;
+		}
+
+		ConstIteratorList			&operator=(const ConstIteratorList &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		const T						&operator*(void) // dereferenced lvalue
+		{
+			return (*this->ptr->element);
+		}
+	};
+
+	template <class T>
+	class ConstReverseIteratorList : public ReverseIteratorList<T>
+	{
+	public:
+		ConstReverseIteratorList(void) {}
+		~ConstReverseIteratorList(void) {}
+
+		ConstReverseIteratorList(DoublyLinkedList<T> *list)
+		{
+			this->ptr = list;
+		}
+
+		ConstReverseIteratorList(const ConstReverseIteratorList &it)
+		{
+			*this = it;
+		}
+
+		ConstReverseIteratorList			&operator=(const ConstReverseIteratorList &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		const T						&operator*(void) // dereferenced lvalue
+		{
+			return (*this->ptr->element);
 		}
 	};
 
@@ -487,6 +545,64 @@ namespace ft
 
 	};
 	
+	template <class T>
+	class ConstIteratorVector : public IteratorVector<T>
+	{
+	public:
+		ConstIteratorVector(void) {}
+		~ConstIteratorVector(void) {}
+
+		ConstIteratorVector(T *ptr)
+		{
+			this->ptr = ptr;
+		}
+
+		ConstIteratorVector(const ConstIteratorVector &it)
+		{
+			*this = it;
+		}
+
+		ConstIteratorVector			&operator=(const ConstIteratorVector &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		const T						&operator*(void) // dereferenced lvalue
+		{
+			return (*this->ptr);
+		}
+	};
+
+	template <class T>
+	class ConstReverseIteratorVector : public ReverseIteratorVector<T>
+	{
+	public:
+		ConstReverseIteratorVector(void) {}
+		~ConstReverseIteratorVector(void) {}
+
+		ConstReverseIteratorVector(T *ptr)
+		{
+			this->ptr = ptr;
+		}
+
+		ConstReverseIteratorVector(const ConstReverseIteratorVector &it)
+		{
+			*this = it;
+		}
+
+		ConstReverseIteratorVector			&operator=(const ConstReverseIteratorVector &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		const T						&operator*(void) // dereferenced lvalue
+		{
+			return (*this->ptr);
+		}
+	};
+
 	template <class Key, class T, class Category = bidirectional_iterator_tag>
 	class IteratorMap
 	{
@@ -712,6 +828,64 @@ namespace ft
 			ReverseIteratorMap tmp(*this);
 			this->operator--();
 			return (tmp);
+		}
+	};
+
+	template <class Key, class T>
+	class ConstIteratorMap : public IteratorMap<Key, T>
+	{
+	public:
+		ConstIteratorMap(void) {}
+		~ConstIteratorMap(void) {}
+
+		ConstIteratorMap(BinaryTreeMap<Key, T> *map)
+		{
+			this->ptr = map;
+		}
+
+		ConstIteratorMap(const ConstIteratorMap &it)
+		{
+			*this = it;
+		}
+
+		ConstIteratorMap			&operator=(const ConstIteratorMap &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		const std::pair<Key, T>		&operator*(void) // dereferenced lvalue
+		{
+			return (*this->ptr->pair);
+		}
+	};
+
+	template <class Key, class T>
+	class ConstReverseIteratorMap : public ReverseIteratorMap<Key, T>
+	{
+	public:
+		ConstReverseIteratorMap(void) {}
+		~ConstReverseIteratorMap(void) {}
+
+		ConstReverseIteratorMap(BinaryTreeMap<Key, T> *map)
+		{
+			this->ptr = map;
+		}
+
+		ConstReverseIteratorMap(const ConstReverseIteratorMap &it)
+		{
+			*this = it;
+		}
+
+		ConstReverseIteratorMap			&operator=(const ConstReverseIteratorMap &it)
+		{
+			this->ptr = it.ptr;
+			return (*this);
+		}
+
+		const std::pair<Key, T>		&operator*(void) // dereferenced lvalue
+		{
+			return (*this->ptr->pair);
 		}
 	};
 
