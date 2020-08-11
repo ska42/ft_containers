@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 23:07:56 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 01:44:35 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -488,7 +488,7 @@ const allocator_type &alloc = allocator_type())
 			node = this->root;
 			while (node->left && node->left != this->_start)
 				node = node->left;
-			return (iterator(node));
+			return (const_iterator(node));
 		}
 
      	iterator				end(void)
@@ -498,7 +498,7 @@ const allocator_type &alloc = allocator_type())
 
 		const_iterator			end(void) const
 		{
-			return (iterator(this->_end));
+			return (const_iterator(this->_end));
 		}
 
 		reverse_iterator		rbegin(void)
@@ -518,7 +518,7 @@ const allocator_type &alloc = allocator_type())
 			node = this->root;
 			while (node->right && node->right != this->_end)
 				node = node->right;
-			return (reverse_iterator(node));
+			return (const_reverse_iterator(node));
 		}
 
 		reverse_iterator		rend(void)
@@ -528,7 +528,7 @@ const allocator_type &alloc = allocator_type())
 
 		const_reverse_iterator	rend(void) const
 		{
-			return (reverse_iterator(this->_start));
+			return (const_reverse_iterator(this->_start));
 		}
 
 		/* Capacity */
@@ -544,7 +544,7 @@ const allocator_type &alloc = allocator_type())
 
 		size_type				max_size(void) const
 		{
-			// TO COMPLETE
+			return (std::numeric_limits<size_type>::max()/sizeof(this->root));
 		}
 
 		/* Element access */
@@ -843,7 +843,7 @@ const allocator_type &alloc = allocator_type())
 			iterator it2 = this->end();
 
 			while (it != it2) {
-				if (!this->key_comp()(*it.first, k))
+				if (!this->key_comp()((*it).first, k))
 					return (iterator(it));
 				++it;
 			}
@@ -856,7 +856,7 @@ const allocator_type &alloc = allocator_type())
 			const_iterator it2 = this->end();
 
 			while (it != it2) {
-				if (!this->key_comp()(*it.first, k))
+				if (!this->key_comp()((*it).first, k))
 					return (const_iterator(it));
 				++it;
 			}
@@ -869,7 +869,7 @@ const allocator_type &alloc = allocator_type())
 			iterator it2 = this->end();
 
 			while (it != it2) {
-				if (this->key_comp()(*it.first, k))
+				if (this->key_comp()((*it).first, k))
 					return (iterator(it));
 				++it;
 			}
@@ -882,7 +882,7 @@ const allocator_type &alloc = allocator_type())
 			const_iterator it2 = this->end();
 
 			while (it != it2) {
-				if (this->key_comp()(*it.first, k))
+				if (this->key_comp()((*it).first, k))
 					return (const_iterator(it));
 				++it;
 			}
@@ -920,7 +920,7 @@ const allocator_type &alloc = allocator_type())
 			typename Map<Key, T, Compare, Alloc>::const_iterator it2 = rhs.find(it->first);
 			if (it2 == rhs.end())
 				return (false);
-			if (it2->first != it->first && it2->second != it->second)
+			if (it2->first != it->first || it2->second != it->second)
 				return (false);
 			it++;
 			i++;

@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 22:49:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 22:51:14 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 01:32:40 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,7 @@ namespace ft
 
 		const std::pair<Key, T>		&operator*(void) // dereferenced lvalue
 		{
-			return (*this->ptr->pair);
+			return (this->ptr->pair);
 		}
 	};
 
@@ -309,7 +309,7 @@ namespace ft
 			*this = it;
 		}
 
-		ConstReverseIteratorMap			&operator=(const ConstReverseIteratorMap &it)
+		ConstReverseIteratorMap		&operator=(const ConstReverseIteratorMap &it)
 		{
 			this->ptr = it.ptr;
 			return (*this);
@@ -317,7 +317,7 @@ namespace ft
 
 		const std::pair<Key, T>		&operator*(void) // dereferenced lvalue
 		{
-			return (*this->ptr->pair);
+			return (this->ptr->pair);
 		}
 	};
 };
