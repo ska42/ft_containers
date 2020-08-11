@@ -6,7 +6,7 @@
 /*   By: cchudant <cchudant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 06:27:31 by cchudant          #+#    #+#             */
-/*   Updated: 2020/01/30 23:15:43 by cchudant         ###   ########.fr       */
+/*   Updated: 2020/08/11 13:53:29 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../List.hpp"
 # include "../Stack.hpp"
 # include "../Queue.hpp"
+# include "../Map.hpp"
 # include <iostream>
 # include <assert.h>
 
@@ -48,5 +49,6 @@ void test_vector();
 void test_list();
 void test_stack();
 void test_queue();
+void test_map();
 
 #endif

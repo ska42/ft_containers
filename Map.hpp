@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 03:04:11 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:19:17 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ namespace ft
 			else if (x == this->_start)
 				std::cout << "S";
 			else
-				std::cout << x->key;
+				std::cout << x->pair.first;
 			std::cout << std::endl;
 			if (x->right)
 				print_binary_tree(x->right, n + 1);
@@ -550,9 +550,9 @@ const allocator_type &alloc = allocator_type())
 			node = this->root;
 			while (node != this->_end && node != this->_start)
 			{
-				if (k == node->key)
-					return (node->value);
-				if (this->comp(k, node->key))
+				if (k == node->pair.first)
+					return (node->pair.second);
+				if (this->comp(k, node->pair.first))
 				{
 					if (node->left && node->left != this->_start)
 						node = node->left;
@@ -568,7 +568,7 @@ const allocator_type &alloc = allocator_type())
 				}
 			}
 			insert(value_type(k, 0));
-			return (this->root->value);
+			return (this->root->pair.second);
 		}
 
 		/* Modifiers */
@@ -581,8 +581,7 @@ const allocator_type &alloc = allocator_type())
 			new_node->parent = NULL;
 			new_node->left = NULL;
 			new_node->right = NULL;
-			new_node->key = val.first;
-			new_node->value = val.second;
+			new_node->pair = val;
 			new_node->left_height = 0;
 			new_node->right_height = 0;
 			if (this->root != this->_end)
@@ -590,13 +589,13 @@ const allocator_type &alloc = allocator_type())
 				node = this->root;
 				while (!new_node->parent)
 				{
-					if (new_node->key == node->key)
+					if (new_node->pair.first == node->pair.first)
 					{
-						node->value = new_node->value;
+						node->pair.second = new_node->pair.second;
 						delete(new_node);
 						return (std::pair<iterator, bool>(iterator(node), false));
 					}
-					if (this->comp(new_node->key, node->key))
+					if (this->comp(new_node->pair.first, node->pair.first))
 					{
 						if (node->left && node->left != this->_start)
 							node = node->left;
@@ -652,8 +651,7 @@ const allocator_type &alloc = allocator_type())
 			new_node->parent = NULL;
 			new_node->left = NULL;
 			new_node->right = NULL;
-			new_node->key = val.first;
-			new_node->value = val.second;
+			new_node->pair = val;
 			new_node->left_height = 0;
 			new_node->right_height = 0;
 			if (this->root != this->_end)
@@ -661,13 +659,13 @@ const allocator_type &alloc = allocator_type())
 				node = position.getPtr();
 				while (!new_node->parent)
 				{
-					if (new_node->key == node->key)
+					if (new_node->pair.first == node->pair.first)
 					{
-						node->value = new_node->value;
+						node->pair.second = new_node->pair.second;
 						delete(new_node);
 						return (iterator(node));
 					}
-					if (this->comp(new_node->key, node->key))
+					if (this->comp(new_node->pair.first, node->pair.second))
 					{
 						if (node->left && node->left != this->_start)
 							node = node->left;
@@ -678,7 +676,7 @@ const allocator_type &alloc = allocator_type())
 							node->left = new_node;
 							new_node->parent = node;
 							if (this->_start->parent == new_node)
-								new_node->left = this->_end;
+								new_node->left = this->_start;
 						}
 					}
 					else
@@ -717,14 +715,14 @@ const allocator_type &alloc = allocator_type())
 		{
 			while (first != last)
 			{
-				insert(value_type(first.getPtr()->key, first.getPtr()->value));
+				insert(*first);
 				first++;
 			}
 		}
 
 		void					erase(iterator position)
 		{
-			std::cout << "REMOOOOOVEEEE " << position.getPtr()->key << std::endl;
+			std::cout << "REMOOOOOVEEEE " << position->first << std::endl;
 			remove_node(position.getPtr());
 			this->print_binary_tree(this->root);
 			this->length--;
@@ -737,12 +735,12 @@ const allocator_type &alloc = allocator_type())
 			node = this->root;
 			while (node != this->_end && node != this->_start)
 			{
-				if (k == node->key)
+				if (k == node->pair.first)
 				{
 					erase(iterator(node));
 					return (1);
 				}
-				if (this->comp(k, node->key))
+				if (this->comp(k, node->pair.first))
 				{
 					if (node->left && node->left != this->_start)
 						node = node->left;
@@ -816,9 +814,9 @@ const allocator_type &alloc = allocator_type())
 			node = this->root;
 			while (node != this->_end && node != this->_start)
 			{
-				if (k == node->key)
+				if (k == node->pair.first)
 					return (iterator(node));
-				if (this->comp(k, node->key))
+				if (this->comp(k, node->pair.first))
 					node = node->left;
 				else
 					node = node->right;
@@ -833,9 +831,9 @@ const allocator_type &alloc = allocator_type())
 			node = this->root;
 			while (node != this->_end && node != this->_start)
 			{
-				if (k == node->key)
+				if (k == node->pair.first)
 					return (const_iterator(node));
-				if (this->comp(k, node->key))
+				if (this->comp(k, node->pair.first))
 					node = node->left;
 				else
 					node = node->right;
@@ -854,7 +852,7 @@ const allocator_type &alloc = allocator_type())
 			iterator it2 = this->end();
 
 			while (it != it2) {
-				if (!this->key_comp()(*it, k))
+				if (!this->key_comp()(*it.first, k))
 					return (iterator(it));
 				++it;
 			}
@@ -867,7 +865,7 @@ const allocator_type &alloc = allocator_type())
 			const_iterator it2 = this->end();
 
 			while (it != it2) {
-				if (!this->key_comp()(*it, k))
+				if (!this->key_comp()(*it.first, k))
 					return (const_iterator(it));
 				++it;
 			}
@@ -880,7 +878,7 @@ const allocator_type &alloc = allocator_type())
 			iterator it2 = this->end();
 
 			while (it != it2) {
-				if (this->key_comp()(*it, k))
+				if (this->key_comp()(*it.first, k))
 					return (iterator(it));
 				++it;
 			}
@@ -893,7 +891,7 @@ const allocator_type &alloc = allocator_type())
 			const_iterator it2 = this->end();
 
 			while (it != it2) {
-				if (this->key_comp()(*it, k))
+				if (this->key_comp()(*it.first, k))
 					return (const_iterator(it));
 				++it;
 			}
@@ -920,37 +918,90 @@ const allocator_type &alloc = allocator_type())
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator==(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
 	{
-		return (lhs == rhs);
+		typename Map<Key, T, Compare, Alloc>::const_iterator	it = lhs.begin();
+		size_t				i;
+
+		if (lhs.size() != rhs.size())
+			return (false);
+		i = 0;
+		while (i < lhs.size())
+		{
+			typename Map<Key, T, Compare, Alloc>::const_iterator it2 = rhs.find(it->first);
+			if (it2 == rhs.end())
+				return (false);
+			if (it2->first != it->first && it2->second != it->second)
+				return (false);
+			it++;
+			i++;
+		}
+		return (true);
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator!=(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
 	{
-		return (lhs != rhs);
+		return (!(lhs == rhs));
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator<(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
 	{	
-		return (lhs < rhs);
+		typename Map<Key, T, Compare, Alloc>::const_iterator	it = rhs.begin();
+		size_t				n;
+		size_t				i;
+
+		if (lhs.size() > rhs.size())
+			n = rhs.size();
+		else
+		{
+			it = lhs.begin();
+			n = lhs.size();
+		}
+		i = 0;
+		while (i < n)
+		{
+			if (lhs.size() > rhs.size())
+			{
+				typename Map<Key, T, Compare, Alloc>::const_iterator it2 = lhs.find(it->first);
+				if (it2 == lhs.end())
+					return (true);
+				if (it->first != it2->first)
+					return (it2->first < it->first);
+				if (it->second != it2->second)
+					return (it2->second < it->second);
+			}
+			else
+			{
+				typename Map<Key, T, Compare, Alloc>::const_iterator it2 = rhs.find(it->first);
+				if (it2 == rhs.end())
+					return (false);
+				if (it->first != it2->first)
+					return (it->first < it2->first);
+				if (it->second != it2->second)
+					return (it->second < it2->second);
+			}
+			it++;
+			i++;
+		}
+		return (lhs.size() < rhs.size());
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator<=(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
-	{	
-		return (lhs <= rhs);
+	{
+		return (lhs < rhs || lhs == rhs);
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator>(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
 	{	
-		return (lhs > rhs);
+		return (!(lhs < rhs) && !(lhs == rhs));
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator>=(const ft::Map<Key, T, Compare, Alloc> &lhs, const ft::Map<Key, T, Compare, Alloc> &rhs)
 	{
-		return (lhs >= rhs);
+		return (!(lhs < rhs));
 	}
 
 	template <class Key, class T, class Compare, class Alloc>

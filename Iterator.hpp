@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 09:21:08 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 00:14:25 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/11 16:25:45 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ namespace ft
 		BinaryTreeMap		*parent;
 		BinaryTreeMap		*left;
 		BinaryTreeMap		*right;
-		Key					key;
-		T					value;
+		std::pair<Key,T>	pair;
 		size_t				left_height;
 		size_t				right_height;
 	};
@@ -577,11 +576,11 @@ namespace ft
 		IteratorMap				&operator--(void)
 		{
 			if (this->ptr && this->ptr->left)
-				this-ptr = this->ptr->left;
+				this->ptr = this->ptr->left;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<Key, T> tmp = this->ptr;
-				BinaryTreeMap<Key, T> prev = this->ptr;
+				BinaryTreeMap<Key, T> *tmp = this->ptr;
+				BinaryTreeMap<Key, T> *prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->left)
 				{
@@ -611,14 +610,14 @@ namespace ft
 			return (this->ptr != rhs.ptr);
 		}
 
-		T							&operator*(void) // dereferenced lvalue
+		std::pair<Key, T>			&operator*(void) // dereferenced lvalue
 		{
-			return (this->ptr->value);	
+			return (this->ptr->pair);
 		}
 
-		T							*operator->(void) // dereferenced rvalue
+		std::pair<Key, T>			*operator->(void) // dereferenced rvalue
 		{ 
-			return (&this->ptr->value);	
+			return (&this->ptr->pair);
 		}
 		
 		BinaryTreeMap<Key, T>			*getPtr(void)
@@ -661,8 +660,8 @@ namespace ft
 				this->ptr = this->ptr->left;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<Key, T> tmp = this->ptr;
-				BinaryTreeMap<Key, T> prev = this->ptr;
+				BinaryTreeMap<Key, T> *tmp = this->ptr;
+				BinaryTreeMap<Key, T> *prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->left)
 				{
@@ -688,8 +687,8 @@ namespace ft
 				this->ptr = this->ptr->right;
 			else if (this->ptr)
 			{
-				BinaryTreeMap<Key, T> tmp = this->ptr;
-				BinaryTreeMap<Key, T> prev = this->ptr;
+				BinaryTreeMap<Key, T> *tmp = this->ptr;
+				BinaryTreeMap<Key, T> *prev = this->ptr;
 				this->ptr = this->ptr->parent;
 				while (this->ptr && prev == this->ptr->right)
 				{
