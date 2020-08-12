@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/29 06:27:20 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 01:44:35 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 03:56:27 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -596,7 +596,6 @@ const allocator_type &alloc = allocator_type())
 				{
 					if (new_node->pair.first == node->pair.first)
 					{
-						node->pair.second = new_node->pair.second;
 						delete(new_node);
 						return (std::pair<iterator, bool>(iterator(node), false));
 					}
@@ -647,9 +646,13 @@ const allocator_type &alloc = allocator_type())
 
 		iterator				insert(iterator position, const value_type &val)
 		{
+			iterator it;
 			BinaryTreeMap<Key, T>	*node;
 			BinaryTreeMap<Key, T>	*new_node;
 
+			it = find(val.first);
+			if (it != this->end())
+				return (it);
 			new_node = new BinaryTreeMap<Key, T>();
 			new_node->parent = NULL;
 			new_node->left = NULL;
@@ -662,13 +665,9 @@ const allocator_type &alloc = allocator_type())
 				node = position.getPtr();
 				while (!new_node->parent)
 				{
-					if (new_node->pair.first == node->pair.first)
-					{
-						node->pair.second = new_node->pair.second;
-						delete(new_node);
-						return (iterator(node));
-					}
-					if (this->comp(new_node->pair.first, node->pair.second))
+					if (node == this->_end || node == this->_start)
+						node = this->root;
+					if (this->comp(new_node->pair.first, node->pair.first))
 					{
 						if (node->left && node->left != this->_start)
 							node = node->left;
@@ -843,7 +842,7 @@ const allocator_type &alloc = allocator_type())
 			iterator it2 = this->end();
 
 			while (it != it2) {
-				if (!this->key_comp()((*it).first, k))
+				if (this->key_comp()((*it).first, k) <= 0)
 					return (iterator(it));
 				++it;
 			}
@@ -856,7 +855,7 @@ const allocator_type &alloc = allocator_type())
 			const_iterator it2 = this->end();
 
 			while (it != it2) {
-				if (!this->key_comp()((*it).first, k))
+				if (this->key_comp()((*it).first, k) <= 0) 
 					return (const_iterator(it));
 				++it;
 			}
@@ -869,7 +868,9 @@ const allocator_type &alloc = allocator_type())
 			iterator it2 = this->end();
 
 			while (it != it2) {
-				if (this->key_comp()((*it).first, k))
+				if (((*it).first == k))
+					return (iterator(++it));
+				if (this->key_comp()((*it).first, k) <= 0)
 					return (iterator(it));
 				++it;
 			}
@@ -882,8 +883,10 @@ const allocator_type &alloc = allocator_type())
 			const_iterator it2 = this->end();
 
 			while (it != it2) {
-				if (this->key_comp()((*it).first, k))
-					return (const_iterator(it));
+				if (((*it).first == k))
+					return (iterator(++it));
+				if (this->key_comp()((*it).first, k) <= 0)
+					return (iterator(it));
 				++it;
 			}
 			return (this->end());

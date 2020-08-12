@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 20:58:37 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 01:45:57 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:01:33 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,51 +113,167 @@ int					main(void)
 	map.insert(std::pair<std::string, int>("one", 1));
 	compareMap("map.insert(\"one\", 1)", mymap, map);
 
+
+	std::cout << _WHITE << "# testing upper/lower_bound" << _END << std::endl;
 	ft::Map<std::string, int>::iterator mit;
 	std::map<std::string, int>::iterator it;
 	mit = mymap.lower_bound("aaa");
 	it = map.lower_bound("aaa");
-	std::cout << "mymap.lower_bound(\"aaa\"): " << mit->first << ":" << mit->second << std::endl;;
-	std::cout << "map.lower_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;
+	std::cout << std::setw(40) << "mymap.lower_bound(\"aaa\"): " << mit->first << ":" << mit->second << std::endl;;
+	std::cout << std::setw(40) << "map.lower_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;
+	std::cout << std::endl;
+	mit = mymap.lower_bound("one");
+	it = map.lower_bound("one");
+	std::cout << std::setw(40) << "mymap.lower_bound(\"one\"): " << mit->first << ":" << mit->second << std::endl;;
+	std::cout << std::setw(40) << "map.lower_bound(\"one\"): " << it->first << ":" << it->second << std::endl;
+	std::cout << std::endl;
+	mit = mymap.lower_bound("oae");
+	it = map.lower_bound("oae");
+	std::cout << std::setw(40) << "mymap.lower_bound(\"oae\"): " << mit->first << ":" << mit->second << std::endl;;
+	std::cout << std::setw(40) << "map.lower_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;
+	std::cout << std::endl;
+	mit = mymap.lower_bound("ft");
+	it = map.lower_bound("ft");
+	std::cout << std::setw(40) << "mymap.lower_bound(\"ft\"): " << mit->first << ":" << mit->second << std::endl;;
+	std::cout << std::setw(40) << "map.lower_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;
+	std::cout << std::endl;
+	mit = mymap.lower_bound("zzz");
+	it = map.lower_bound("zzz");
+	if (mit == mymap.end())
+		std::cout << std::setw(40) << "mymap.lower_bound(\"zzz\"): mymap.end()" << std::endl;
+	if (it == map.end())
+		std::cout << std::setw(40) << "map.lower_bound(\"zzz\"): map.end()" << std::endl;
+	std::cout << std::endl;
+	mit = mymap.upper_bound("aaa");
+	it = map.upper_bound("aaa");
+	std::cout << std::setw(40) << "mymap.upper_bound(\"aaa\"): " << mit->first << ":" << mit->second << std::endl;;
+	std::cout << std::setw(40) << "map.upper_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;;
+	std::cout << std::endl;
+	mit = mymap.upper_bound("oae");
+	it = map.upper_bound("oae");
+	std::cout << std::setw(40) << "mymap.upper_bound(\"oae\"): " << mit->first << ":" << mit->second << std::endl;;
+	std::cout << std::setw(40) << "map.upper_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;;
+	std::cout << std::endl;
+	mit = mymap.upper_bound("one");
+	it = map.upper_bound("one");
+	if (mit == mymap.end())
+		std::cout << std::setw(40) << "mymap.upper_bound(\"one\"): mymap.end()" << std::endl;
+	if (it == map.end())
+		std::cout << std::setw(40) << "map.upper_bound(\"one\"): map.end()" << std::endl;
+	std::cout << std::endl;
+	mit = mymap.upper_bound("ft");
+	it = map.upper_bound("ft");
+	std::cout << std::setw(40) << "mymap.upper_bound(\"ft\"): " << mit->first << ":" << mit->second << std::endl;;
+	std::cout << std::setw(40) << "map.upper_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;;
+	std::cout << std::endl;
+	mit = mymap.upper_bound("zzz");
+	it = map.upper_bound("zzz");
+	if (mit == mymap.end())
+		std::cout << std::setw(40) << "mymap.upper_bound(\"zzz\"): mymap.end()" << std::endl;
+	if (it == map.end())
+		std::cout << std::setw(40) << "map.upper_bound(\"zzz\"): map.end()" << std::endl;
+	std::cout << std::endl;
 
-	/*
-	map.insert(ft::Map<int, int>::value_type(1, 1));
-	map.insert(ft::Map<int, int>::value_type(4, 1));
-	map.insert(ft::Map<int, int>::value_type(3, 1));
-	map.insert(ft::Map<int, int>::value_type(5, 1));
-	map.insert(ft::Map<int, int>::value_type(9, 1));
-	map.insert(ft::Map<int, int>::value_type(2, 1));
-	map.insert(ft::Map<int, int>::value_type(8, 199));
-	map.insert(ft::Map<int, int>::value_type(7, 1));
-	map.insert(ft::Map<int, int>::value_type(6, 1));
-	map.insert(ft::Map<int, int>::value_type(6, 1));
-	map.insert(ft::Map<int, int>::value_type(0, 1));
-	std::cout << map[8] << std::endl;
-	try
-	{
-		std::cout << map[100] << std::endl;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "Error: " << e.what() << std::endl;
-	}
-	map.erase(6);
-	map.erase(7);
-	map.erase(7);
-	map.erase(3);
-	map.erase(2);
-	map.erase(8);
-	map.erase(1);
-	map.erase(5);
+	mymap.erase("undefined");
+	map.erase("undefined");
+	compareMap("map.erase(\"undefined\")", mymap, map);
+	mymap.erase("ft");
+	map.erase("ft");
+	compareMap("map.erase(\"ft\")", mymap, map);
+	std::cout << _WHITE << "# double clear" << _END << std::endl;
+	mymap.clear();
 	map.clear();
-	try
-	{
-		std::cout << map[100] << std::endl;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "Error: " << e.what() << std::endl;
-	}
-	*/
+	compareMap("map.clear()", mymap, map);
+	mymap.clear();
+	map.clear();
+	compareMap("map.clear()", mymap, map);
+	mymap["lol"];
+	map["lol"];
+	compareMap("map[\"lol\"", mymap, map);
+	mymap.insert(std::pair<std::string, int>("xD", 123));
+	map.insert(std::pair<std::string, int>("xD", 123));
+	compareMap("map.insert(\"xD\", 123)", mymap, map);
+	mymap.insert(mymap.end(), std::pair<std::string, int>("uch", 442));
+	map.insert(map.end(), std::pair<std::string, int>("uch", 442));
+	compareMap("map.insert(map.end(), \"uch\", 442)", mymap, map);
+	mymap.insert(mymap.begin(), std::pair<std::string, int>("uch", 22));
+	map.insert(map.begin(), std::pair<std::string, int>("uch", 22));
+	compareMap("map.insert(map.begin(), \"uch\", 22)", mymap, map);
+	mymap.insert(mymap.end(), std::pair<std::string, int>("uch", 23));
+	map.insert(map.end(), std::pair<std::string, int>("uch", 23));
+	compareMap("map.insert(map.end(), \"uch\", 23)", mymap, map);
+	mymap.insert(std::pair<std::string, int>("uch", 23));
+	map.insert(std::pair<std::string, int>("uch", 23));
+	compareMap("map.insert(\"uch\", 23)", mymap, map);
+	mymap["lol"] = 8;
+	map["lol"] = 8;
+	compareMap("map[\"lol\"] = 8", mymap, map);
+
+
+	ft::Map<std::string, int> mymap2;
+	std::map<std::string, int> map2;
+
+	std::cout << "ft::Map<" << _PURPLE << "std::string" << _END << ", " << _PURPLE << "int" << _END << "> mymap2;" << std::endl;
+	std::cout << "std::map<" << _PURPLE << "std::string" << _END << ", " << _PURPLE << "int" << _END <<"> map2;" << std::endl;
+
+	swap(mymap, mymap2);
+	swap(map, map2);
+	compareMap("swap(map, map2)", mymap, map);
+	compareMap("map 2", mymap2, map2);
+
+	mymap = mymap2;
+	map = map2;
+	compareMap("map = map2", mymap, map);
+
+	std::cout << std::setw(40) << "mymap == mymap2: " << (mymap == mymap2) << std::endl;
+	std::cout << std::setw(40) << "map == map2: " << (map == map2) << std::endl;
+	std::cout << std::endl;
+
+	mymap.clear();
+	map.clear();
+	compareMap("map.clear()", mymap, map);
+
+	mymap["satan"] = 666;
+	map["satan"] = 666;
+	compareMap("map[\"satan\"] = 666", mymap, map);
+	std::cout << std::setw(40) << "mymap == mymap2: " << (mymap == mymap2) << std::endl;
+	std::cout << std::setw(40) << "map == map2: " << (map == map2) << std::endl;
+	std::cout << std::endl;
+	std::cout << std::setw(40) << "mymap <= mymap2: " << (mymap <= mymap2) << std::endl;
+	std::cout << std::setw(40) << "map <= map2: " << (map <= map2) << std::endl;
+	std::cout << std::endl;
+	std::cout << std::setw(40) << "mymap >= mymap2: " << (mymap >= mymap2) << std::endl;
+	std::cout << std::setw(40) << "map >= map2: " << (map >= map2) << std::endl;
+	std::cout << std::endl;
+	std::cout << std::setw(40) << "mymap > mymap2: " << (mymap > mymap2) << std::endl;
+	std::cout << std::setw(40) << "map > map2: " << (map > map2) << std::endl;
+	std::cout << std::endl;
+	std::cout << std::setw(40) << "mymap < mymap2: " << (mymap > mymap2) << std::endl;
+	std::cout << std::setw(40) << "map < map2: " << (map > map2) << std::endl;
+	std::cout << std::endl;
+
+
+	// TO SHOW AVL TREE ?
+	ft::Map<int, int> mymap3;
+	mymap3.insert(ft::Map<int, int>::value_type(1, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(4, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(3, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(5, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(9, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(2, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(8, 199));
+	mymap3.insert(ft::Map<int, int>::value_type(7, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(6, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(6, 1));
+	mymap3.insert(ft::Map<int, int>::value_type(0, 1));
+	mymap3.erase(6);
+	mymap3.erase(7);
+	mymap3.erase(7);
+	mymap3.erase(3);
+	mymap3.erase(2);
+	mymap3.erase(8);
+	mymap3.erase(1);
+	mymap3.erase(5);
+	mymap3.clear();
 	return (0);
 }
