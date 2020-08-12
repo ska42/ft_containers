@@ -68,8 +68,8 @@ void		test_list(void)
 	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
 	std::cout << "/* ********************************************************************** */" << _END << std::endl;
 	std::cout << std::endl;
-	ft::List<int> mylist = ft::List<int>();
-	std::list<int> list = std::list<int>();
+	ft::List<int> mylist;
+	std::list<int> list;
 
 	std::cout << "ft::List<" << _PURPLE << "int" << _END << "> mylist = ft::List<" << _PURPLE << "int" << _END << ">();" << std::endl;
 	std::cout << "std::list<" << _PURPLE << "int" << _END << "> list = std::list<" << _PURPLE << "int" << _END << ">();" << std::endl;

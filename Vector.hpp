@@ -81,14 +81,20 @@ namespace ft
 
 		Vector(const Vector &vector)
 		{
+			this->alloc = vector.alloc;
+			this->array = this->alloc.allocate(2);
+			this->length = 0;
+			this->real_length = 0;
 			*this = vector;
 			return ;
 		}
 
 		Vector				&operator=(const Vector &vector)
 		{
-			int		n;
+			size_type		n;
 
+			this->clear();
+			this->alloc.deallocate(this->array, this->real_length + 2);
 			this->alloc = vector.alloc;
 			this->real_length = vector.real_length;
 			this->array = this->alloc.allocate(this->real_length + 2);

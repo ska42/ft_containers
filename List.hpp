@@ -66,9 +66,9 @@ namespace ft
 		explicit List (const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->_start = new DoublyLinkedList<T>;
+			this->_start = new DoublyLinkedList<T>();
 			this->_start->prev = NULL;
-			this->_end = new DoublyLinkedList<T>;
+			this->_end = new DoublyLinkedList<T>();
 			this->_end->next = NULL;
 			this->_start->next = _end;
 			this->_end->prev = _start;
@@ -81,30 +81,32 @@ namespace ft
 		~List(void)
 		{
 			this->clear();
-			delete(this->_end);
 			delete(this->_start);
+			delete(this->_end);
 			return ;
 		}
 
 		List(const List &list)
 		{
+			this->_start = new DoublyLinkedList<T>();
+			this->_end = new DoublyLinkedList<T>();
+			this->_end->next = NULL;
+			this->_start->prev = NULL;
+			this->_start->next = _end;
+			this->_end->prev = _start;
+			this->head = this->_end;
+			this->tail = this->_end;
+			this->length = 0;
 			*this = list;
-			return ;	
+			return ;
 		}
 
 		List					&operator=(const List &list)
 		{
 			DoublyLinkedList<T>		*tmp;
 
+			this->clear();
 			this->alloc = list.alloc;
-			this->_start = new DoublyLinkedList<T>;
-			this->_start->prev = NULL;
-			this->_end = new DoublyLinkedList<T>;
-			this->_end->next = NULL;
-			this->_start->next = _end;
-			this->_end->prev = _start;
-			this->head = this->_end;
-			this->tail = this->_end;
 			this->length = 0;
 			if (list.length)
 			{
@@ -123,9 +125,9 @@ namespace ft
 			const allocator_type &alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->_start = new DoublyLinkedList<T>;
+			this->_start = new DoublyLinkedList<T>();
 			this->_start->prev = NULL;
-			this->_end = new DoublyLinkedList<T>;
+			this->_end = new DoublyLinkedList<T>();
 			this->_end->next = NULL;
 			this->_start->next = _end;
 			this->_end->prev = _start;
@@ -140,9 +142,9 @@ namespace ft
 			const allocator_type& alloc = allocator_type())
 		{
 			this->alloc = alloc;
-			this->_start = new DoublyLinkedList<T>;
+			this->_start = new DoublyLinkedList<T>();
 			this->_start->prev = NULL;
-			this->_end = new DoublyLinkedList<T>;
+			this->_end = new DoublyLinkedList<T>();
 			this->_end->next = NULL;
 			this->_start->next = _end;
 			this->_end->prev = _start;

@@ -429,14 +429,6 @@ const allocator_type &alloc = allocator_type())
 
 		Map(const Map &map)
 		{
-			*this = map;
-			return ;
-		}
-
-		Map						&operator=(const Map &map)
-		{
-			this->comp = map.comp;
-			this->alloc = map.alloc;
 			this->_start = new BinaryTreeMap<Key, T>();
 			this->_start->left = NULL;
 			this->_start->right = NULL;
@@ -447,6 +439,15 @@ const allocator_type &alloc = allocator_type())
 			this->_end->parent = NULL;
 			this->root = this->_end;
 			this->length = 0;
+			*this = map;
+			return ;
+		}
+
+		Map						&operator=(const Map &map)
+		{
+			this->clear();
+			this->comp = map.comp;
+			this->alloc = map.alloc;
 			this->insert(map.begin(), map.end());
 			return (*this);
 		}

@@ -6,7 +6,6 @@ NAME=test_all
 .PHONY: run all clean fclean re
 
 all: clean run
-	./test_all
 
 run: $(NAME)
 	./test_all
