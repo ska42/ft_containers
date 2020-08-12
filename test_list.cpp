@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 03:10:27 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:05:58 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,5 +229,8 @@ int		main(void)
 	ft::swap<int>(mylist, mylist2);
 	std::swap<int>(list, list2);
 	compareList("ft::swap(list, list2)", mylist, list);
+	mylist2 = mylist;
+	list2 = list;
+	compareList("mylist2 = mylist", mylist2, list2);
 	return (0);
 }
