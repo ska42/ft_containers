@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:39:11 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 01:08:17 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:47:51 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void	compareVector(std::string function, ft::Vector<T> myv, std::vector<T> vecto
 	}
 }
 
-int			main(void)
+void		test_vector(void)
 {
-
+	std::cout << _WHITE << "# test_vector" << _END << std::endl;
 	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
 	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
 	std::cout << "/* ********************************************************************** */" << _END << std::endl;
@@ -230,5 +230,4 @@ int			main(void)
 	std::cout << std::endl;
 	std::cout << std::setw(30) << "myv >= myv2: " << (myv >= myv2) << std::endl;
 	std::cout << std::setw(30) << "vector >= vector2: " << (vector >= vector2) << std::endl;
-	return (0);
 }

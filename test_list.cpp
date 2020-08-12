@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 04:32:26 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 04:05:58 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:48:08 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,9 @@ void	compareList(std::string function, ft::List<T> mylist, std::list<T> list)
 	}
 }
 
-int		main(void)
+void		test_list(void)
 {
+	std::cout << _WHITE << "# test_list" << _END << std::endl;
 	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
 	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
 	std::cout << "/* ********************************************************************** */" << _END << std::endl;
@@ -232,5 +233,4 @@ int		main(void)
 	mylist2 = mylist;
 	list2 = list;
 	compareList("mylist2 = mylist", mylist2, list2);
-	return (0);
 }

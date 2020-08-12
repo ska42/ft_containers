@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 02:50:36 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/10 03:11:43 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:46:08 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,11 @@ void	printContainer(Container c)
 	std::cout << _YELLOW << "]" << _END << std::endl;
 	std::cout << std::endl;
 }
+
+void		test_queue(void);
+void		test_map(void);
+void		test_stack(void);
+void		test_list(void);
+void		test_vector(void);
 
 #endif

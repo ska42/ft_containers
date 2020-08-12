@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 04:28:01 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 04:33:28 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:50:11 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@
 #include "List.hpp"
 #include "Queue.hpp"
 
-int			main(void)
+void		test_queue(void)
 {
+	std::cout << _WHITE << "# test_queue" << _END << std::endl;
+	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
+	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
+	std::cout << "/* ********************************************************************** */" << _END << std::endl;
 	ft::Queue<int> myqueue;
 
 	std::cout << "ft::Queue<" << _PURPLE << "int" << _END << "> myqueue" << std::endl;
@@ -90,5 +94,4 @@ int			main(void)
 	cpyqueue.push(7);
 	std::cout << "cpyqueue.push(7)" << std::endl;
 	std::cout << "cpyqueue == myqueue:" << (cpyqueue == myqueue) << std::endl;
-	return (0);
 }

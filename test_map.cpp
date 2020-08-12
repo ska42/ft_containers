@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 20:58:37 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 04:01:33 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:48:21 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ void	compareMap(std::string function, ft::Map<Key, T> mymap, std::map<Key, T> ma
 	}
 }
 
-int					main(void)
+void		test_map(void)
 {
-
+	std::cout << _WHITE << "# test_map" << _END << std::endl;
 	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
 	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
 	std::cout << "/* ********************************************************************** */" << _END << std::endl;
@@ -275,5 +275,4 @@ int					main(void)
 	mymap3.erase(1);
 	mymap3.erase(5);
 	mymap3.clear();
-	return (0);
 }

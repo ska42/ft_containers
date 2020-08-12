@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 04:08:02 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 04:27:03 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:50:17 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@
 #include "List.hpp"
 #include "Stack.hpp"
 
-int			main(void)
+void		test_stack(void)
 {
+	std::cout << _WHITE << "# test_stack" << _END << std::endl;
+	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
+	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
+	std::cout << "/* ********************************************************************** */" << _END << std::endl;
 	ft::Stack<int> mystack;
 
 	std::cout << "ft::Stack<" << _PURPLE << "int" << _END << "> mystack" << std::endl;
@@ -85,5 +89,4 @@ int			main(void)
 	cpystack.push(7);
 	std::cout << "cpystack.push(7)" << std::endl;
 	std::cout << "cpystack == mystack:" << (cpystack == mystack) << std::endl;
-	return (0);
 }
