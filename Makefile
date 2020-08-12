@@ -6,7 +6,7 @@
 #    By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/30 21:31:46 by lmartin           #+#    #+#              #
-#    Updated: 2020/08/10 03:12:33 by lmartin          ###   ########.fr        #
+#    Updated: 2020/08/12 04:34:07 by lmartin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #
@@ -67,6 +67,14 @@ DIR_OBJS	=	./compiled_srcs/
 
 # FILES #
 
+QUEUE_SRC		=	test_queue.cpp
+
+QUEUE_SRCS		=	$(QUEUE_SRC)
+
+STACK_SRC		=	test_stack.cpp
+
+STACK_SRCS		=	$(STACK_SRC)
+
 MAP_SRC			=	test_map.cpp
 
 MAP_SRCS		=	$(MAP_SRC) 
@@ -81,6 +89,10 @@ VECTOR_SRCS		=	$(VECTOR_SRC)
 
 # COMPILED_SOURCES #
 
+STACK_OBJS	=	$(STACK_SRCS:%.cpp=$(DIR_OBJS)%.o)
+
+QUEUE_OBJS	=	$(QUEUE_SRCS:%.cpp=$(DIR_OBJS)%.o)
+
 MAP_OBJS	=	$(MAP_SRCS:%.cpp=$(DIR_OBJS)%.o)
 
 LIST_OBJS	=	$(LIST_SRCS:%.cpp=$(DIR_OBJS)%.o)
@@ -93,13 +105,28 @@ TEST_LIST 	=	test_list
 
 TEST_VECTOR =	test_vector
 
+TEST_STACK	=	test_stack
+
+TEST_QUEUE	=	test_queue
+
 # **************************************************************************** #
 
 ## RULES ##
 
-all:			$(TEST_LIST) $(TEST_MAP) $(TEST_VECTOR)
+all:			$(TEST_LIST) $(TEST_MAP) $(TEST_VECTOR) $(TEST_STACK) $(TEST_QUEUE)
 
 # VARIABLES RULES #
+
+
+$(TEST_QUEUE):	$(QUEUE_OBJS)
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(DIR_OBJS)'. $(_END)✅\n"
+				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(QUEUE_OBJS) -o $(TEST_QUEUE)
+				@printf "$(_GREEN) Executable '$(TEST_QUEUE)' created. $(_END)✅\n"
+
+$(TEST_STACK):	$(STACK_OBJS)
+				@printf "\033[2K\r$(_GREEN) All files compiled into '$(DIR_OBJS)'. $(_END)✅\n"
+				@$(CC) $(CC_FLAGS) -I $(DIR_HEADERS) $(STACK_OBJS) -o $(TEST_STACK)
+				@printf "$(_GREEN) Executable '$(TEST_STACK)' created. $(_END)✅\n"
 
 $(TEST_MAP):	$(MAP_OBJS)
 				@printf "\033[2K\r$(_GREEN) All files compiled into '$(DIR_OBJS)'. $(_END)✅\n"
@@ -117,6 +144,10 @@ $(TEST_VECTOR):	$(VECTOR_OBJS)
 				@printf "$(_GREEN) Executable '$(TEST_VECTOR)' created. $(_END)✅\n"
 
 # COMPILED_SOURCES RULES #
+
+$(QUEUE_OBJS):		| $(DIR_OBJS)
+
+$(STACK_OBJS):		| $(DIR_OBJS)
 
 $(MAP_OBJS):		| $(DIR_OBJS)
 
@@ -139,6 +170,10 @@ clean:
 				@printf "$(_RED) '"$(DIR_OBJS)"' has been deleted. $(_END)🗑️\n"
 
 fclean:			clean
+				@$(RM) $(TEST_QUEUE)
+				@printf "$(_RED) '"$(TEST_QUEUE)"' has been deleted. $(_END)🗑️\n"
+				@$(RM) $(TEST_STACK)
+				@printf "$(_RED) '"$(TEST_STACK)"' has been deleted. $(_END)🗑️\n"
 				@$(RM) $(TEST_MAP)
 				@printf "$(_RED) '"$(TEST_MAP)"' has been deleted. $(_END)🗑️\n"
 				@$(RM) $(TEST_LIST)

@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 04:32:17 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/11 01:58:19 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 04:31:51 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ namespace ft
 			return (this->container.push_back(val));
 		}
 
-		size_type size(void) const
+		size_type			size(void) const
 		{
 			return (this->container.size());
 		}
