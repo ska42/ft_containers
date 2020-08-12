@@ -6,13 +6,14 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 04:01:16 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 01:10:13 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 05:01:06 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_HPP
 # define LIST_HPP
 
+# include <limits>
 # include <memory>
 # include "IteratorList.hpp"
 

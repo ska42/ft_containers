@@ -6,13 +6,14 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 18:00:52 by lmartin           #+#    #+#             */
-/*   Updated: 2020/08/12 01:09:39 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/08/12 05:01:19 by lmartin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+# include <limits>
 # include <memory>
 # include <stdexcept>
 # include "IteratorVector.hpp"
